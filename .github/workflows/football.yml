@@ -1,0 +1,42 @@
+name: PitchPrism checks and public demo
+on:
+  push:
+    branches: [main, codex/football]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pitchprism-pages
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci --prefix product --ignore-scripts --no-audit --no-fund
+      - run: python product/scripts/check.py --full
+      - run: sudo apt-get update && sudo apt-get install -y ffmpeg fonts-dejavu-core
+      - run: pip install -r product/football/requirements.txt
+      - run: python product/football/scripts/render.py
+      - run: python product/football/scripts/export_demo.py
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: product/football/build/site
+  deploy:
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy the explicitly labelled local-evidence demo
+        id: deployment
+        uses: actions/deploy-pages@v4

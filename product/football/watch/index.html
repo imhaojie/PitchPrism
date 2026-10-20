@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PitchPrism — A different way to see the game</title>
+<meta name="description" content="An AI-powered football companion that turns match data into visual stories and personalized insights.">
+<link rel="icon" href="/mark.svg" type="image/svg+xml"><link rel="stylesheet" href="/shared/media/media.css"><link rel="stylesheet" href="/style.css"></head>
+<body>
+<header class="site-header"><a class="brand" href="/" aria-label="PitchPrism home"><img src="/mark.svg" alt="" width="30" height="34"><span>PitchPrism</span></a>
+<nav aria-label="Main"><a class="nav-active" href="#watch">Match room</a><button id="recap-open">Match recap</button><button id="about-open">About the project <span>↗</span></button></nav><div class="room-status"><span class="status-dot"></span> THE MATCH, THROUGH YOUR LENS</div></header>
+<main id="watch">
+<section class="match-heading"><div><div class="eyebrow">THE MATCH ROOM <span>/</span> ORIGINAL SYNTHETIC SCENARIO</div><h1>A different way to <em>see the game.</em></h1></div><p>Beyond the scoreline.<br>Closer to the story.</p></section>
+<div class="workspace">
+<div class="watch-column">
+<section id="stage" class="stage" aria-label="Football match player">
+<video id="match-video" poster="/poster.jpg" playsinline preload="auto" muted aria-label="Original synthetic football simulation"></video>
+<canvas id="tactics" aria-label="Editorial football pitch and event map" hidden></canvas>
+<div class="scorebug"><div class="score-teams"><span class="team-dot home"></span><b>NBR</b><strong id="score">0 <span>–</span> 0</strong><b>RIV</b><span class="team-dot away"></span></div><div class="score-clock"><span class="live-dot"></span><span id="clock">68:00</span><span id="replay-indicator" hidden>REPLAY</span></div></div>
+<div class="view-switch" role="group" aria-label="Camera view"><button id="match-view" class="active" aria-pressed="true">Match</button><button id="tactical-view" aria-pressed="false">Tactical</button></div>
+<div id="focus-tag" class="focus-tag" hidden></div>
+<div class="scene-note" id="scene-note">ORIGINAL SYNTHETIC SIMULATION · EDITORIAL OVERLAYS</div>
+<div id="controls-host"></div><div id="media-error" hidden role="alert">Video unavailable. Run the media renderer or download the release media; the Tactical view remains available.</div>
+</section>
+<div class="under-player"><div class="fixture"><span class="mini-badge">N</span><div><strong>Northbridge <span>vs</span> Riverside</strong><small>A fictional match. A real way to understand it.</small></div></div><div class="media-switch" role="group" aria-label="Video version"><button id="source-version" aria-pressed="false">Source</button><button id="enhanced-version" class="active" aria-pressed="true">✧ Enhanced</button></div></div>
+<section class="moments"><div class="section-label"><h2>The moments that matter</h2><span>CHOOSE A CHAPTER <span aria-hidden="true">↙</span></span></div><div class="chapter-grid">
+<button class="chapter" data-second="11"><span class="chapter-index">01</span><div><small>67:51 · BUILD-UP</small><strong>Find the wide outlet</strong></div><span class="chapter-play">↗</span></button>
+<button class="chapter active" data-second="20"><span class="chapter-index">02</span><div><small>68:00 · SWITCH</small><strong>A different picture</strong></div><span class="chapter-play">↗</span></button>
+<button class="chapter" data-second="32"><span class="chapter-index">03</span><div><small>68:12 · CHANCE</small><strong>Quality meets outcome</strong></div><span class="chapter-play">↗</span></button>
+<button class="chapter" data-second="45"><span class="chapter-index">04</span><div><small>68:25 · GOAL</small><strong>Win it. Move it. Finish.</strong></div><span class="chapter-play">↗</span></button>
+</div></section>
+<section class="numbers"><div class="section-label"><h2>The story in numbers</h2><span>PLAYED EXCERPT ONLY</span></div><div class="stat-table" id="stat-table"></div><p class="data-footnote">Calculated from the synthetic event feed at the displayed match time. No season or full-match statistics.</p></section>
+</div>
+<aside class="intelligence" aria-label="Personalized match intelligence">
+<div class="intel-top"><span class="prism-spark">✧</span><h2>Your match lens</h2><span class="intel-status" id="provider-badge">LOCAL</span></div>
+<div class="audience-switch" role="group" aria-label="Audience"><button class="active" data-mode="casual" aria-pressed="true">For the fan</button><button data-mode="analyst" aria-pressed="false">For the analyst</button></div>
+<div class="lens-form"><label for="team">Your team<select id="team"><option value="all">Both sides</option><option value="NBR">Northbridge AFC</option><option value="RIV">Riverside United</option></select></label><label for="player">Follow a player<select id="player"><option value="all">The whole pitch</option></select></label></div>
+<div class="insight-block"><div class="eyebrow"><span class="status-dot"></span> THE STORY SO FAR <span id="story-clock">68:00</span></div><h3 id="story-title">One switch.<br>A different picture.</h3><p id="story-copy">The ball moves to the other side. Follow the receiving player and explore the event trail.</p><div class="evidence-link"><button id="evidence-open">↳ <span id="citation-count">Source events</span></button><span id="story-kind">EVIDENCE MODE</span></div></div>
+<div class="fact-card"><span class="fact-caption" id="fact-label">LATEST PASS DISTANCE</span><div><strong id="fact-value">—</strong><span class="fact-unit" id="fact-unit">m</span><svg viewBox="0 0 100 45" aria-hidden="true"><path d="M3 36 30 31 50 12 68 20 96 4"/><path d="m84 4 12 0 0 12"/></svg></div><p id="fact-note">Derived from synthetic event coordinates</p></div>
+<button class="explain-button" id="explain"><span>✧</span> Explain this moment <span>↗</span></button><p class="provider-note" id="provider-note">Local, evidence-based explanation. Azure Foundry is not connected.</p>
+<div class="event-trail"><div class="section-label"><h2>Event trail</h2><span id="event-count">0 EVENTS</span></div><ol id="events"></ol></div>
+</aside>
+</div>
+<footer><span class="footer-brand">PitchPrism <span> / </span> EVERY ANGLE TELLS A STORY.</span><span>An AI-powered football companion that turns match data into visual stories and personalized insights.</span><button id="sources-open">Data &amp; transparency ↗</button></footer>
+</main>
+<dialog id="details"><div class="dialog-header"><span id="dialog-eyebrow" class="eyebrow">PITCHPRISM</span><button id="details-close" aria-label="Close dialog">✕</button></div><div id="dialog-body"></div></dialog>
+<div id="notice" role="status" hidden></div><script type="module" src="/app.js"></script></body></html>

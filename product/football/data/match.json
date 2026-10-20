@@ -1,0 +1,638 @@
+{
+  "id": "synthetic-nbr-riv-001",
+  "schemaVersion": 1,
+  "synthetic": true,
+  "title": "The switch that changed the attack",
+  "seed": "pitchprism-football-v1",
+  "durationSeconds": 48,
+  "clockStartSeconds": 4060,
+  "coordinateSystem": {
+    "unit": "percent",
+    "lengthMetres": 105,
+    "widthMetres": 68,
+    "homeAttacks": "left-to-right"
+  },
+  "provenance": "Original fictional scenario; names, events, coordinates and shot xG inputs are synthetic.",
+  "teams": [
+    {
+      "id": "NBR",
+      "name": "Northbridge AFC",
+      "short": "Northbridge",
+      "color": "#dfff83"
+    },
+    {
+      "id": "RIV",
+      "name": "Riverside United",
+      "short": "Riverside",
+      "color": "#b9bcff"
+    }
+  ],
+  "roster": [
+    {
+      "id": "NBR-1",
+      "name": "Ellis Ward",
+      "number": 1,
+      "team": "NBR",
+      "position": [
+        6,
+        50
+      ]
+    },
+    {
+      "id": "NBR-2",
+      "name": "Leo Bennett",
+      "number": 2,
+      "team": "NBR",
+      "position": [
+        22,
+        20
+      ]
+    },
+    {
+      "id": "NBR-3",
+      "name": "Noah Reed",
+      "number": 3,
+      "team": "NBR",
+      "position": [
+        19,
+        42
+      ]
+    },
+    {
+      "id": "NBR-4",
+      "name": "Oscar Shaw",
+      "number": 4,
+      "team": "NBR",
+      "position": [
+        19,
+        63
+      ]
+    },
+    {
+      "id": "NBR-5",
+      "name": "Ethan Cole",
+      "number": 5,
+      "team": "NBR",
+      "position": [
+        25,
+        82
+      ]
+    },
+    {
+      "id": "NBR-6",
+      "name": "Theo Hayes",
+      "number": 6,
+      "team": "NBR",
+      "position": [
+        40,
+        34
+      ]
+    },
+    {
+      "id": "NBR-7",
+      "name": "Jude Morgan",
+      "number": 7,
+      "team": "NBR",
+      "position": [
+        42,
+        63
+      ]
+    },
+    {
+      "id": "NBR-8",
+      "name": "Finn Brooks",
+      "number": 8,
+      "team": "NBR",
+      "position": [
+        58,
+        14
+      ]
+    },
+    {
+      "id": "NBR-9",
+      "name": "Luca Vale",
+      "number": 9,
+      "team": "NBR",
+      "position": [
+        62,
+        45
+      ]
+    },
+    {
+      "id": "NBR-10",
+      "name": "Milo Hart",
+      "number": 10,
+      "team": "NBR",
+      "position": [
+        59,
+        81
+      ]
+    },
+    {
+      "id": "NBR-11",
+      "name": "Arlo Blake",
+      "number": 11,
+      "team": "NBR",
+      "position": [
+        75,
+        53
+      ]
+    },
+    {
+      "id": "RIV-1",
+      "name": "Hugo Bell",
+      "number": 1,
+      "team": "RIV",
+      "position": [
+        94,
+        50
+      ]
+    },
+    {
+      "id": "RIV-2",
+      "name": "Louis West",
+      "number": 2,
+      "team": "RIV",
+      "position": [
+        78,
+        80
+      ]
+    },
+    {
+      "id": "RIV-3",
+      "name": "Owen Fox",
+      "number": 3,
+      "team": "RIV",
+      "position": [
+        81,
+        58
+      ]
+    },
+    {
+      "id": "RIV-4",
+      "name": "Max Stone",
+      "number": 4,
+      "team": "RIV",
+      "position": [
+        81,
+        37
+      ]
+    },
+    {
+      "id": "RIV-5",
+      "name": "Eli Park",
+      "number": 5,
+      "team": "RIV",
+      "position": [
+        75,
+        18
+      ]
+    },
+    {
+      "id": "RIV-6",
+      "name": "Jack Lane",
+      "number": 6,
+      "team": "RIV",
+      "position": [
+        60,
+        66
+      ]
+    },
+    {
+      "id": "RIV-7",
+      "name": "Kai Ross",
+      "number": 7,
+      "team": "RIV",
+      "position": [
+        58,
+        37
+      ]
+    },
+    {
+      "id": "RIV-8",
+      "name": "Alex Frost",
+      "number": 8,
+      "team": "RIV",
+      "position": [
+        42,
+        86
+      ]
+    },
+    {
+      "id": "RIV-9",
+      "name": "Sam Wells",
+      "number": 9,
+      "team": "RIV",
+      "position": [
+        38,
+        55
+      ]
+    },
+    {
+      "id": "RIV-10",
+      "name": "Ben Lake",
+      "number": 10,
+      "team": "RIV",
+      "position": [
+        41,
+        19
+      ]
+    },
+    {
+      "id": "RIV-11",
+      "name": "Jay Cross",
+      "number": 11,
+      "team": "RIV",
+      "position": [
+        25,
+        47
+      ]
+    }
+  ],
+  "events": [
+    {
+      "id": "evt-001",
+      "second": 1,
+      "type": "recovery",
+      "team": "NBR",
+      "playerId": "NBR-3",
+      "recipientId": null,
+      "start": [
+        20,
+        42
+      ],
+      "end": [
+        20,
+        42
+      ],
+      "outcome": "success",
+      "source": "pitchprism-synthetic-v1"
+    },
+    {
+      "id": "evt-002",
+      "second": 3,
+      "type": "pass",
+      "team": "NBR",
+      "playerId": "NBR-3",
+      "recipientId": "NBR-6",
+      "start": [
+        20,
+        42
+      ],
+      "end": [
+        39,
+        34
+      ],
+      "outcome": "complete",
+      "source": "pitchprism-synthetic-v1"
+    },
+    {
+      "id": "evt-003",
+      "second": 6,
+      "type": "pressure",
+      "team": "RIV",
+      "playerId": "RIV-9",
+      "recipientId": null,
+      "start": [
+        42,
+        36
+      ],
+      "end": [
+        39,
+        34
+      ],
+      "outcome": "applied",
+      "source": "pitchprism-synthetic-v1"
+    },
+    {
+      "id": "evt-004",
+      "second": 8,
+      "type": "pass",
+      "team": "NBR",
+      "playerId": "NBR-6",
+      "recipientId": "NBR-2",
+      "start": [
+        39,
+        34
+      ],
+      "end": [
+        29,
+        18
+      ],
+      "outcome": "complete",
+      "source": "pitchprism-synthetic-v1"
+    },
+    {
+      "id": "evt-005",
+      "second": 11,
+      "type": "pass",
+      "team": "NBR",
+      "playerId": "NBR-2",
+      "recipientId": "NBR-8",
+      "start": [
+        29,
+        18
+      ],
+      "end": [
+        55,
+        14
+      ],
+      "outcome": "complete",
+      "source": "pitchprism-synthetic-v1"
+    },
+    {
+      "id": "evt-006",
+      "second": 14,
+      "type": "pressure",
+      "team": "RIV",
+      "playerId": "RIV-8",
+      "recipientId": null,
+      "start": [
+        58,
+        20
+      ],
+      "end": [
+        55,
+        14
+      ],
+      "outcome": "applied",
+      "source": "pitchprism-synthetic-v1"
+    },
+    {
+      "id": "evt-007",
+      "second": 16,
+      "type": "pass",
+      "team": "NBR",
+      "playerId": "NBR-8",
+      "recipientId": "NBR-6",
+      "start": [
+        55,
+        14
+      ],
+      "end": [
+        48,
+        34
+      ],
+      "outcome": "complete",
+      "source": "pitchprism-synthetic-v1"
+    },
+    {
+      "id": "evt-008",
+      "second": 20,
+      "type": "pass",
+      "team": "NBR",
+      "playerId": "NBR-6",
+      "recipientId": "NBR-10",
+      "start": [
+        48,
+        34
+      ],
+      "end": [
+        64,
+        80
+      ],
+      "outcome": "complete",
+      "source": "pitchprism-synthetic-v1"
+    },
+    {
+      "id": "evt-009",
+      "second": 24,
+      "type": "pass",
+      "team": "NBR",
+      "playerId": "NBR-10",
+      "recipientId": "NBR-7",
+      "start": [
+        64,
+        80
+      ],
+      "end": [
+        70,
+        62
+      ],
+      "outcome": "complete",
+      "source": "pitchprism-synthetic-v1"
+    },
+    {
+      "id": "evt-010",
+      "second": 27,
+      "type": "pressure",
+      "team": "RIV",
+      "playerId": "RIV-5",
+      "recipientId": null,
+      "start": [
+        74,
+        64
+      ],
+      "end": [
+        70,
+        62
+      ],
+      "outcome": "applied",
+      "source": "pitchprism-synthetic-v1"
+    },
+    {
+      "id": "evt-011",
+      "second": 29,
+      "type": "pass",
+      "team": "NBR",
+      "playerId": "NBR-7",
+      "recipientId": "NBR-9",
+      "start": [
+        70,
+        62
+      ],
+      "end": [
+        83,
+        47
+      ],
+      "outcome": "complete",
+      "source": "pitchprism-synthetic-v1"
+    },
+    {
+      "id": "evt-012",
+      "second": 32,
+      "type": "shot",
+      "team": "NBR",
+      "playerId": "NBR-9",
+      "recipientId": null,
+      "start": [
+        83,
+        47
+      ],
+      "end": [
+        100,
+        51
+      ],
+      "outcome": "saved",
+      "source": "pitchprism-synthetic-v1",
+      "xg": 0.18
+    },
+    {
+      "id": "evt-013",
+      "second": 33,
+      "type": "recovery",
+      "team": "RIV",
+      "playerId": "RIV-1",
+      "recipientId": null,
+      "start": [
+        96,
+        50
+      ],
+      "end": [
+        96,
+        50
+      ],
+      "outcome": "success",
+      "source": "pitchprism-synthetic-v1"
+    },
+    {
+      "id": "evt-014",
+      "second": 35,
+      "type": "pass",
+      "team": "RIV",
+      "playerId": "RIV-1",
+      "recipientId": "RIV-3",
+      "start": [
+        96,
+        50
+      ],
+      "end": [
+        81,
+        58
+      ],
+      "outcome": "complete",
+      "source": "pitchprism-synthetic-v1"
+    },
+    {
+      "id": "evt-015",
+      "second": 37,
+      "type": "pass",
+      "team": "RIV",
+      "playerId": "RIV-3",
+      "recipientId": "RIV-6",
+      "start": [
+        81,
+        58
+      ],
+      "end": [
+        62,
+        60
+      ],
+      "outcome": "incomplete",
+      "source": "pitchprism-synthetic-v1"
+    },
+    {
+      "id": "evt-016",
+      "second": 38,
+      "type": "tackle",
+      "team": "NBR",
+      "playerId": "NBR-7",
+      "recipientId": null,
+      "start": [
+        64,
+        60
+      ],
+      "end": [
+        64,
+        60
+      ],
+      "outcome": "won",
+      "source": "pitchprism-synthetic-v1"
+    },
+    {
+      "id": "evt-017",
+      "second": 40,
+      "type": "pass",
+      "team": "NBR",
+      "playerId": "NBR-7",
+      "recipientId": "NBR-9",
+      "start": [
+        64,
+        60
+      ],
+      "end": [
+        82,
+        48
+      ],
+      "outcome": "complete",
+      "source": "pitchprism-synthetic-v1"
+    },
+    {
+      "id": "evt-018",
+      "second": 42,
+      "type": "pass",
+      "team": "NBR",
+      "playerId": "NBR-9",
+      "recipientId": "NBR-11",
+      "start": [
+        82,
+        48
+      ],
+      "end": [
+        89,
+        54
+      ],
+      "outcome": "complete",
+      "source": "pitchprism-synthetic-v1"
+    },
+    {
+      "id": "evt-019",
+      "second": 45,
+      "type": "shot",
+      "team": "NBR",
+      "playerId": "NBR-11",
+      "recipientId": null,
+      "start": [
+        89,
+        54
+      ],
+      "end": [
+        100,
+        48
+      ],
+      "outcome": "goal",
+      "source": "pitchprism-synthetic-v1",
+      "xg": 0.42
+    }
+  ],
+  "production": {
+    "mode": "editorial",
+    "timeline": [
+      {
+        "kind": "live",
+        "outputStart": 0,
+        "outputEnd": 20,
+        "sourceStart": 0,
+        "sourceEnd": 20
+      },
+      {
+        "kind": "freeze",
+        "outputStart": 20,
+        "outputEnd": 24,
+        "sourceStart": 20,
+        "sourceEnd": 20
+      },
+      {
+        "kind": "live",
+        "outputStart": 24,
+        "outputEnd": 52,
+        "sourceStart": 20,
+        "sourceEnd": 48
+      },
+      {
+        "kind": "replay",
+        "outputStart": 52,
+        "outputEnd": 60,
+        "sourceStart": 38,
+        "sourceEnd": 46
+      },
+      {
+        "kind": "freeze",
+        "outputStart": 60,
+        "outputEnd": 64,
+        "sourceStart": 46,
+        "sourceEnd": 46
+      }
+    ]
+  }
+}

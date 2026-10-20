@@ -1,0 +1,4 @@
+# Local server/analytics use only Python's standard library.
+# These dependencies add the optional renderer and keyless Azure identity.
+Pillow==12.1.1
+azure-identity>=1.25.0,<2
