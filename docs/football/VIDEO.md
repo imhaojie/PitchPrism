@@ -1,6 +1,6 @@
 # English demonstration video
 
-Target: approximately 100 seconds, strictly under two minutes. Show the actual application, with English captions. The initial recording must accurately disclose that the public demo is LOCAL and live Azure verification is pending. Replace that segment only after real cloud validation exists.
+Delivered preview: **89.5 seconds**, **1920 × 1080**, strictly under two minutes. The table below is the original storyboard; actual caption timing is reflected in the rendered video. Show the actual application, with English captions. The initial recording must accurately disclose that the public demo is LOCAL and live Azure verification is pending. Replace that segment only after real cloud validation exists.
 
 | Time | Screen | English caption |
 |---|---|---|

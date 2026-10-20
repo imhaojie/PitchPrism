@@ -1,0 +1,66 @@
+{
+  "synthetic": true,
+  "renderer": "original Pillow software scene + FFmpeg",
+  "modelUsedForRender": false,
+  "notTracking": true,
+  "outputs": [
+    {
+      "path": "source.mp4",
+      "sha256": "df1dbed9ec25418d246f5ace65703fa40755f43e69ca46565bd13a1d4d26c803",
+      "durationSeconds": 48,
+      "width": 960,
+      "height": 540,
+      "fps": 24,
+      "fullDecode": true,
+      "audio": "silent stereo track; no real match audio"
+    },
+    {
+      "path": "enhanced.mp4",
+      "sha256": "2a50bbe6679f89c2be8e49d935f8f0da4c3efe9332580bb3eb6a65ba257f810e",
+      "durationSeconds": 64,
+      "width": 960,
+      "height": 540,
+      "fps": 24,
+      "fullDecode": true,
+      "audio": "silent stereo track; no real match audio"
+    }
+  ],
+  "timeline": [
+    {
+      "kind": "live",
+      "outputStart": 0,
+      "outputEnd": 20,
+      "sourceStart": 0,
+      "sourceEnd": 20
+    },
+    {
+      "kind": "freeze",
+      "outputStart": 20,
+      "outputEnd": 24,
+      "sourceStart": 20,
+      "sourceEnd": 20
+    },
+    {
+      "kind": "live",
+      "outputStart": 24,
+      "outputEnd": 52,
+      "sourceStart": 20,
+      "sourceEnd": 48
+    },
+    {
+      "kind": "replay",
+      "outputStart": 52,
+      "outputEnd": 60,
+      "sourceStart": 38,
+      "sourceEnd": 46
+    },
+    {
+      "kind": "freeze",
+      "outputStart": 60,
+      "outputEnd": 64,
+      "sourceStart": 46,
+      "sourceEnd": 46
+    }
+  ],
+  "dataSha256": "d129e08cab788aa38dc1a5b9056a4461ae4687951c8905e856418a825253fd2b"
+}

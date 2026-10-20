@@ -33,7 +33,7 @@ For a public dynamic app, build the Dockerfile and pass a pullable public image:
 .venv/bin/python infra/azure/deploy.py --subscription YOUR_SUBSCRIPTION_ID --image YOUR_PUBLIC_IMAGE --apply
 ```
 
-The image includes only active/shared modules, generates the footage and runs as a non-root user. Local Docker daemon was unavailable, so no local image build is claimed. Optional Bicep resources use Container Apps Consumption, HTTPS, managed identity, 0–1 replicas, 0.25 vCPU/0.5 GiB, no Log Analytics workspace. Fixed media needs no Blob/queue/training service.
+The image includes only active/shared modules, generates the footage and runs as a non-root user. Docker was started locally, but its base-image pull stalled and was stopped; no successful image build is claimed. Optional Bicep resources use Container Apps Consumption, HTTPS, managed identity, 0–1 replicas, 0.25 vCPU/0.5 GiB, no Log Analytics workspace. Fixed media needs no Blob/queue/training service.
 
 ```bash
 az bicep build --file infra/azure/main.bicep --outfile /tmp/pitchprism-azure.json

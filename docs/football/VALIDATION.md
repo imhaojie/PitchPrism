@@ -15,8 +15,15 @@
 
 - Real Foundry inference: first Azure login found no subscriptions. User selected free-trial signup. No endpoint, model deployment or successful request trace exists yet.
 - Azure resource deployment, managed identity at runtime, model quota/availability and public dynamic app: pending trial activation and explicit target verification.
-- Local Docker build: daemon was not running. Dockerfile is provided; no built-image claim.
+- Local Docker build: Docker was started, but the base-image manifest/pull stalled for more than four minutes and was stopped. No built-image claim. Linux CI successfully ran the full gate, renderer and static export.
 - Hackathon new-work eligibility: disclosed reuse needs organizer confirmation.
 - Public video-platform submission URL: separate from a GitHub release MP4; user-account upload is still required if no connected video publisher is available.
 
 Model transport doubles in unit tests validate protocol behavior only. LOCAL templates, media rendering and static demo success are never counted as real model calls.
+
+## Public delivery verification
+
+- Public Pages deployment succeeded: https://imhaojie.github.io/PitchPrism/ . Public-browser checks passed for initial 35.5 m, goal/rewind score, Tactical/player focus and LOCAL explanation, with no browser errors.
+- GitHub Actions build and deployment both succeeded after configuring the new repository’s Pages environment to allow its `codex/football` branch.
+- English screen-recorded demo: **89.5 seconds**, **1920 × 1080**, burned English captions and silent stereo. Full FFmpeg decode passed. See demo-manifest.json for SHA-256.
+- No actual Foundry model call or Azure deployment has been claimed.

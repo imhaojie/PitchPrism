@@ -1,0 +1,12 @@
+{
+  "file": "PitchPrism-English-Demo.mp4",
+  "durationSeconds": 89.5,
+  "width": 1920,
+  "height": 1080,
+  "sha256": "d20e77d6c2a053d7e73d7472cc53a1f5e87d70eb015606e57165d4f37b8a48eb",
+  "fullDecode": true,
+  "language": "English captions",
+  "audio": "silent stereo; no narration/music",
+  "actualApplicationRecording": true,
+  "cloudStatusDisclosed": "LOCAL; live Azure verification pending"
+}

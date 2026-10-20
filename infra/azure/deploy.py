@@ -58,15 +58,16 @@ def main():
     user = az('ad', 'signed-in-user', 'show')
     az('role', 'assignment', 'create', '--assignee-object-id', user['id'], '--assignee-principal-type', 'User',
        '--role', 'Cognitive Services OpenAI User', '--scope', outputs['foundryResourceId'], '--subscription', args.subscription)
-    env = ROOT / '.env'
-    if env.exists():
-        raise RuntimeError('Deployment succeeded; existing .env preserved. Configure endpoint/deployment from the local deployment receipt.')
-    env.write_text(f'AZURE_OPENAI_ENDPOINT={outputs["endpoint"]}\nAZURE_OPENAI_DEPLOYMENT={outputs["modelDeployment"]}\nAZURE_USE_ENTRA=1\nPITCHPRISM_MAX_AI_CALLS_HOUR=12\n')
-    os.chmod(env, 0o600)
     receipt = ROOT / 'artifacts/azure-deployment.json'
     receipt.parent.mkdir(exist_ok=True)
     receipt.write_text(json.dumps(outputs, indent=2) + '\n')
-    print('Deployed; local .env written without keys. Allow a few minutes for RBAC propagation, then run verify_foundry.py.')
+    env = ROOT / '.env'
+    if env.exists():
+        print('Existing .env preserved. Configure it from artifacts/azure-deployment.json.')
+    else:
+        env.write_text(f'AZURE_OPENAI_ENDPOINT={outputs["endpoint"]}\nAZURE_OPENAI_DEPLOYMENT={outputs["modelDeployment"]}\nAZURE_USE_ENTRA=1\nPITCHPRISM_MAX_AI_CALLS_HOUR=12\n')
+        os.chmod(env, 0o600)
+    print('Deployed; keyless local configuration is ready or preserved. Allow a few minutes for RBAC propagation, then run verify_foundry.py.')
     if outputs.get('demoUrl'):
         print(outputs['demoUrl'])
 

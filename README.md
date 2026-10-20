@@ -16,6 +16,10 @@ PitchPrism helps a fan see the pass before the chance, and helps an analyst insp
 
 Northbridge AFC, Riverside United and their players are **fictional**. Events, coordinates, shot xG inputs and video are original synthetic material. No official Premier League data or footage is included.
 
+## English demo
+
+[Watch / download the 89.5-second English demo](https://github.com/imhaojie/PitchPrism/releases/download/football-demo-v1/PitchPrism-English-Demo.mp4). Actual app recording, English captions, 1080p; no voiceover/music. Cloud status is explicitly disclosed.
+
 ## What works
 
 - **Watch:** a 48-second software-rendered source sequence and a 64-second enhanced cut, with player labels, pass paths, pause and replay. All overlays are editorial.

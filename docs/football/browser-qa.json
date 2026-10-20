@@ -1,0 +1,27 @@
+{
+  "checks": [
+    "Audience changes explanation",
+    "Goal chapter score",
+    "Rewind removes future goal",
+    "Enhanced to source time mapping",
+    "Source to enhanced time mapping",
+    "Player focus",
+    "Conflicting team clears player",
+    "Play and pause",
+    "Half speed",
+    "Restore speed",
+    "Unmute",
+    "Mute",
+    "Fullscreen roundtrip",
+    "Evidence dialog",
+    "Explicit whole excerpt recap",
+    "About disclosure",
+    "Data scope disclosure",
+    "LOCAL explanation remains honest"
+  ],
+  "errors": [],
+  "viewport": {
+    "width": 1440,
+    "height": 1000
+  }
+}
