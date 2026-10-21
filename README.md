@@ -1,102 +1,84 @@
 <div align="center">
 
-<img src="product/football/watch/mark.svg" width="65" alt="PitchPrism prism mark">
+<img src="product/football/watch/mark.svg" width="65" alt="PitchPrism mark">
 
 # PitchPrism
 
 **An AI-powered football companion that turns match data into visual stories and personalized insights.**
 
-[Try the demo](https://imhaojie.github.io/PitchPrism/) · [Run locally](#run-locally) · [Microsoft integration](#microsoft-integration) · [Judge instructions](docs/football/JUDGING.md) · [Project pitch](docs/football/PITCH.md)
+[Open the demo](https://imhaojie.github.io/PitchPrism/) · [97-second match video](https://github.com/imhaojie/PitchPrism/releases/download/football-match-v2/enhanced.mp4) · [Judge instructions](docs/football/JUDGING.md) · [Project pitch](docs/football/PITCH.md)
 
 ![PitchPrism match room](docs/football/match-room.png)
 
 </div>
 
-PitchPrism helps a fan see the pass before the chance, and helps an analyst inspect the events behind the story. Watch an original synthetic football sequence, pause on the diagonal switch, follow a player, or replay the finish. The evidence follows the source clock through enhanced video, tactical pauses and replays.
+Watch a Manchester City × Newcastle excerpt through **GameBuddy's original glass player, three-state layout, drawer, controls and animated companion**. The original broadcast FX functions provide the branded opening, glowing foot markers, animated options, camera-to-board transitions and closing sequence. The adaptation changes the sport, source evidence and service adapter; it preserves the original interaction and animation system.
 
-Northbridge AFC, Riverside United and their players are **fictional**. Events, coordinates, shot xG inputs and video are original synthetic material. No official Premier League data or footage is included.
+The supplied **66.6-second source** becomes a **97.2-second, 1080p/25fps enhanced video** with three reviewed tactical freezes and a half-speed replay. All original video frames are retained before the additional replay. Broadcast audio is preserved on live sections; editorial freezes/branding are silent. Captions are English; generated narration is not included.
 
-## English demo
+## What you can test
 
-[Watch / download the 89.5-second English demo](https://github.com/imhaojie/PitchPrism/releases/download/football-demo-v1/PitchPrism-English-Demo.mp4). Actual app recording, English captions, 1080p; no voiceover/music. Cloud status is explicitly disclosed.
+- Play, seek, change speed, sound and fullscreen in the original player.
+- Open full-pitch or half-pitch views; inspect the diagram from the labelled source still.
+- Revisit six chapters and switch between source/enhanced video at the same source moment.
+- Read the observation behind an explanation; change fan/analyst familiarity or focus on a role.
+- Inspect genuine missing values: official xG and full-match pass accuracy remain **unavailable**.
 
-## What works
+The scoreboard reads **MCI 0–0 NEW** throughout the reviewed excerpt. No goal is shown. Only the close-up shirt text **BERNARDO / 20** is identified; other players are represented by roles. Foot anchors are manually reviewed on selected frames. Board coordinates and dashed arrows are editorial schematics, not optical tracking, measured positions or completed-pass records.
 
-- **Watch:** a 48-second software-rendered source sequence and a 64-second enhanced cut, with player labels, pass paths, pause and replay. All overlays are editorial.
-- **Understand:** excerpt-only completed passes, pass accuracy, shot counts, scenario xG and pass distance, computed from the events already played. Missing values remain missing.
-- **Personalize:** fan/analyst explanations, team selection and player focus change the event trail and narrative. Team totals retain their stated scope.
-- **Inspect:** source event IDs, normalized coordinates, formulas and the distinction between facts and interpretation remain visible.
-- **Use Foundry:** an actual Azure OpenAI v1 adapter implements a bounded read-state → inspect-evidence → validate-story tool loop, using Entra ID / managed identity or a server-side API key.
-
-**Current cloud status:** the adapter and deployment template are implemented; no successful live Foundry call or Azure deployment is claimed yet. The public Pages demo uses clearly labelled **LOCAL** evidence mode. It materializes the same Python calculations and templates and never simulates a successful cloud response.
+The separate fictional fixture in `data/match.json` still tests football analytics. It is never joined to the real video. See [source analysis](docs/football/SOURCE-ANALYSIS.md).
 
 ## Run locally
 
-Python 3.11+ is sufficient for the API/analytics. Generate the original media once with Pillow and FFmpeg:
+Python 3.11+; the app frontend needs no npm build:
 
 ```bash
 git clone https://github.com/imhaojie/PitchPrism.git
 cd PitchPrism
 python3 -m venv .venv
-.venv/bin/pip install -r product/football/requirements.txt
-# Install FFmpeg using your platform's package manager.
-.venv/bin/python product/football/scripts/render.py
+# Fetch the frozen, hash-verified demo media; uses Python standard library.
+.venv/bin/python product/football/scripts/fetch_media.py
 .venv/bin/python -m product.football.server --port 4180
 ```
 
-Open **http://127.0.0.1:4180/**. No Azure account is needed for local evidence mode; the frontend needs no npm installation. Generated media stays outside Git and is attached to the demo release when available.
+Open **http://127.0.0.1:4180/**. Space plays/pauses; F toggles fullscreen; Esc closes the current panel. The tactical panel explicitly labels the reviewed still's timestamp rather than pretending to follow players live.
 
-Space plays/pauses; arrow keys move along the source timeline. Source/enhanced switching preserves the original moment. Tactical view displays supplied synthetic coordinates, not optical tracking.
+To reproduce the FX from the exact original input, install FFmpeg and the renderer dependencies:
+
+```bash
+.venv/bin/pip install -r product/football/requirements.txt
+.venv/bin/python product/football/scripts/render.py --source /path/to/original/match.mp4
+.venv/bin/python product/football/scripts/export_demo.py
+```
+
+The input must match the SHA-256 in `product/football/data/clip.json`. A different video requires its own analysis and anchors. MP4s, build outputs and credentials stay outside Git; frozen media is in [Releases](https://github.com/imhaojie/PitchPrism/releases/tag/football-match-v2).
 
 ## Microsoft integration
 
-The active football runtime has **no AWS dependency**. Its Foundry adapter uses Microsoft's [OpenAI v1 API](https://learn.microsoft.com/en-us/azure/ai-foundry/openai/api-version-lifecycle). The deployment target is **Azure Container Apps Consumption**, with managed identity, HTTPS, scale-to-zero, one maximum replica and bounded model calls. Bicep also defines a Foundry resource, project and on-demand model deployment. No GPUs or training are needed.
+The active football app has no AWS runtime dependency. The **Azure Foundry / Azure OpenAI v1** adapter reuses the bounded **read state → inspect evidence → validate story** tool loop, with a separate prompt/context for the real clip and the synthetic test fixture. It supports Entra/managed identity or a server-side key. Context limits, evidence references, source-time bounds and numeric guards are enforced before a response is accepted.
+
+**Live Foundry and Azure deployment remain unverified.** No active Azure subscription has been confirmed. The public demo uses honest **LOCAL EDITORIAL** explanations; it never simulates a cloud response. The user selected the free trial; no paid upgrade or Azure resources have been created.
 
 ```bash
 cp .env.example .env
-# Set AZURE_OPENAI_ENDPOINT and AZURE_OPENAI_DEPLOYMENT in .env.
-# For keyless local access: az login; assign Cognitive Services OpenAI User.
+# Set AZURE_OPENAI_ENDPOINT and AZURE_OPENAI_DEPLOYMENT.
+# Entra: az login, AZURE_USE_ENTRA=1, Cognitive Services OpenAI User access.
 .venv/bin/python product/football/scripts/verify_foundry.py
 ```
 
-Only a real model response that passes the tool contract produces a live verification receipt. See [Azure setup](infra/azure/README.md) for subscription, quota, deployment and cost boundaries.
+[Azure setup and Bicep](infra/azure/README.md) target Container Apps Consumption with managed identity, scale-to-zero and bounded calls. Adapter tests and template compilation do not prove cloud inference.
 
-```text
-Synthetic events → deterministic football state → evidence IDs
-                                                  ↓
-                         local editorial mode / Azure Foundry tool loop
-                                                  ↓
-                         numeric + source-time + reference validation
-                                                  ↓
-                synchronized stories, facts, tactical map and enhanced video
-```
-
-## Verification
+## Verification and reuse
 
 ```bash
 npm ci --prefix product --ignore-scripts
-python3 product/scripts/check.py --full
+.venv/bin/python product/scripts/check.py --full
 ```
 
-The gate includes 32 new football tests plus 514 inherited product tests, privacy/syntax checks and legacy offline CDK assertions. Legacy CDK preserves the upstream snapshot; it does not certify Azure. Browser playback, MP4 full decode, Bicep compilation and live model verification are separate. See [validation](docs/football/VALIDATION.md).
+The gate passes **556 behavior tests**, privacy/syntax checks and 50 inherited offline CDK resource assertions. Both MP4s pass full decode. Browser checks cover actual playback, layout transitions, chapter/freezes, source switching, evidence, preferences and controls. [Validation](docs/football/VALIDATION.md) · [QA inventory](docs/football/QA-v2.md).
 
-`export_demo.py` materializes Python facts/local narratives into the same frontend. GitHub Actions renders the footage and publishes it to free Pages hosting. This static demo has no model credentials or live inference.
+PitchPrism adapts MIT-licensed [GameBuddy](https://github.com/imhaojie/BroadcastCode-2026), snapshot `17d74fd2a5df64a240198a7305312174de7684b0`, in an independent repository. The original checkout is unchanged. Directly imported modules include StageLayout, GlassManager, PlayerControls, Drawer, ContentPanel, Inspector, GameBuddyAmbient, CourtPanel and source/output mapping. The renderer calls the original `broadcast_fx.legacy` and `broadcast_fx.tactics` functions. These source assets use Python/OpenCV/Pillow/FFmpeg rather than Remotion. [Migration details](docs/football/MIGRATION.md).
 
-## Reuse and new work
+The NBA × AWS award belongs to **GameBuddy**, not PitchPrism. The organizers must confirm eligibility of an enhancement to previously winning open-source work. The supplied broadcast excerpt is a development/demo input, separate from the synthetic event fixture required for competition. Submission eligibility and media permission are not established by this implementation. [Official rules](https://github.com/microsoft/insidethegamehackathon/blob/main/OFFICIAL%20RULES.md).
 
-PitchPrism adapts MIT-licensed [GameBuddy](https://github.com/imhaojie/BroadcastCode-2026), snapshot `17d74fd2a5df64a240198a7305312174de7684b0`. The original repository remains unchanged. The source tree is retained for provenance and regression testing; the active entry point is `product/football/`.
-
-| Reused | Football adaptation |
-|---|---|
-| Native ESM player controls | Optional English accessibility; same playback, seeking, speed, volume and fullscreen |
-| Source/output timeline functions | New synthetic sequence, pause and replay map |
-| Viewing preference persistence | Separate PitchPrism namespace and fan/analyst settings |
-| Evidence-first Agent pattern and guardrails | New football tools, provenance and Azure OpenAI transport |
-| Video/verification approach | Original software-rendered football scene, enhanced MP4, hashes and full decode |
-| Offline regression gate | Football analytics, HTTP and Agent contract tests added |
-
-The **NBA × AWS silver award belongs to GameBuddy**, not PitchPrism. Rules require a new project, prohibit an already winning submission and permit open-source enhancements. Whether this adaptation qualifies must be confirmed with the organizers. [Official rules §4.3, §4.4, §4.11](https://github.com/microsoft/insidethegamehackathon/blob/main/OFFICIAL%20RULES.md).
-
-Active code: `product/football/`. Shared components: `product/watch/`. Deployment: `infra/azure/`. New submission materials: `docs/football/`. The original introduction is preserved in [README-GAMEBUDDY.md](README-GAMEBUDDY.md); the basketball/AWS implementation is not the active football runtime.
-
-Original code is MIT. DM Sans is SIL OFL. Preserved upstream materials follow [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) and are not used in the new football demo. PitchPrism is an independent project without Premier League endorsement.
+Original code is MIT; broadcast footage and third-party assets retain their owners' rights. The MIT licence does not grant broadcast redistribution rights. See [notices](THIRD_PARTY_NOTICES.md). Earlier `football-demo-v1` is a superseded synthetic prototype, not evidence for the current visuals, media or model integration.

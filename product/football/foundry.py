@@ -94,14 +94,14 @@ No claims about unseen space, defenders' intentions, causation, tracking or futu
 Team/player focus must affect the explanation when supplied. No markdown. Submit by tool, never ordinary assistant prose."""
 
 
-def validate_story(candidate, state, inspected, read_state):
+def validate_story(candidate, state, inspected, read_state, angle_reader=available_angles):
     if not read_state:
         raise ValueError("Read the match state first")
     ids = candidate.get("evidenceIds")
     known = {e["id"] for e in state["events"]}
     if not isinstance(ids, list) or not 1 <= len(ids) <= 8 or len(set(ids)) != len(ids) or not all(isinstance(i, str) and i in known and i in inspected for i in ids):
         raise ValueError("Cite only distinct, actually inspected events already present in the played excerpt")
-    angles = {a["id"]: a for a in available_angles(state)}
+    angles = {a["id"]: a for a in angle_reader(state)}
     if candidate.get("angle") not in angles or not set(angles[candidate["angle"]]["evidenceIds"]).issubset(ids):
         raise ValueError("Choose an available angle and cite all its supporting events")
     for key, limit in [("headline", 70), ("explanation", 340)]:
@@ -115,10 +115,15 @@ def validate_story(candidate, state, inspected, read_state):
     return {key: candidate[key] for key in ("headline", "explanation", "angle", "evidenceIds")}
 
 
-def run_agent(state, mode="casual", team="all", player="all", transport=request_model):
-    if not state["events"] or not available_angles(state):
-        return local_story(state, mode, team, player)
-    messages = [{"role": "system", "content": SYSTEM}, {"role": "user", "content": json.dumps({
+def run_agent(state, mode="casual", team="all", player="all", transport=request_model, context=None):
+    context = context or {}
+    angle_reader = context.get('angles', available_angles)
+    active_tools = TOOLS
+    if context:
+        active_tools = [{**tool, 'function': {**tool['function'], 'description': 'Read time-bounded reviewed video observations, missing data and allowed editorial angles.'}} if tool['function']['name'] == 'read_match_state' else tool for tool in TOOLS]
+    if not state["events"] or not angle_reader(state):
+        return context.get('local_story', local_story)(state, mode, team, player)
+    messages = [{"role": "system", "content": context.get('system', SYSTEM)}, {"role": "user", "content": json.dumps({
         "audience": mode, "favoriteTeam": team, "favoritePlayer": player, "sourceSecond": state["sourceSecond"],
         "task": "Read, inspect, explain and validate this moment."})}]
     inspected, trace, seen_calls, read_state = set(), [], set(), False
@@ -127,7 +132,7 @@ def run_agent(state, mode="casual", team="all", player="all", transport=request_
         remaining = 50 - (time.monotonic() - start)
         if remaining <= 0 or tokens >= 12000:
             break
-        response, request_id = transport(messages, TOOLS, remaining)
+        response, request_id = transport(messages, active_tools, remaining)
         tokens += response.get("usage", {}).get("total_tokens", 0)
         if tokens > 12000:
             break
@@ -153,8 +158,8 @@ def run_agent(state, mode="casual", team="all", player="all", transport=request_
                 if name == "read_match_state":
                     read_state = True
                     output = {k: state[k] for k in ("matchId", "synthetic", "sourceSecond", "stats", "facts", "scope")}
-                    output["eventIndex"] = [{k: e[k] for k in ("id", "second", "type", "playerId", "outcome")} for e in state["events"]]
-                    output["availableAngles"] = available_angles(state)
+                    output["eventIndex"] = [{k: e[k] for k in ("id", "second", "type", "playerId", "outcome") if k in e} for e in state["events"]]
+                    output["availableAngles"] = angle_reader(state)
                 elif name == "read_evidence":
                     ids = args.get("evidenceIds")
                     known = {e["id"]: e for e in state["events"]}
@@ -163,7 +168,7 @@ def run_agent(state, mode="casual", team="all", player="all", transport=request_
                     inspected.update(ids)
                     output = {"events": [known[i] for i in ids]}
                 elif name == "validate_story":
-                    accepted = validate_story(args, state, inspected, read_state)
+                    accepted = validate_story(args, state, inspected, read_state, angle_reader)
                     output = {"accepted": True}
                 else:
                     raise ValueError("Unknown tool")

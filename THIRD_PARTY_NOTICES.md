@@ -22,3 +22,9 @@ The architecture image is an AI-assisted explanatory figure of the project's imp
 ## PitchPrism additions
 
 The active football demo uses the DM Sans variable font from [Google Fonts](https://github.com/google/fonts/tree/main/ofl/dmsans), under the SIL Open Font License; its license is included at `product/football/watch/fonts/OFL.txt`. Original synthetic football data, player names, scene and overlays are created for PitchPrism. No real Premier League club marks or match footage are used. Playwright is development tooling by Microsoft, under Apache-2.0. Preserved GameBuddy code remains MIT; the notices above apply to its historical assets.
+
+## PitchPrism supplied match demonstration (2026-10-21)
+
+The current demo uses the user's `match.mp4` (SHA-256 `cf1ded5ca487eff98505fa64ac2f2f790c04a33ab441d5eccdd785da847ef523`), a Manchester City × Newcastle broadcast excerpt with existing broadcaster/competition marks and original audio. It was supplied for implementing this project's demonstration. Underlying broadcast, club, competition and audio rights remain with their respective owners; the code's MIT licence does not license this footage. Independent redistribution/competition permissions have not been verified. No endorsement is implied. See [source analysis](docs/football/SOURCE-ANALYSIS.md).
+
+The original GameBuddy mascot atlas, opening/closing designs, UI components and broadcast FX code are reused with their existing provenance; the football adaptation does not claim the upstream project's award. Earlier fictional events remain a separate synthetic test fixture and do not describe this real broadcast.

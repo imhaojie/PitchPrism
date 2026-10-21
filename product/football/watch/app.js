@@ -1,143 +1,107 @@
+import {getConfig,subscribe,updateConfig} from './shared/config/config.js';
+import {createStageLayout} from './shared/stage/layout.js';
+import {GlassManager} from './shared/glass/glass-manager.js';
+import {paintAmbienceSource,stopAmbienceSource} from './shared/glass/ambience-source.js';
 import {createPlayerControls} from './shared/media/player-controls.js';
-import {fitContain} from './shared/stage/layout.js';
+import {createDrawer} from './shared/navigation/drawer.js';
+import {createContentPanel} from './shared/content/content-panel.js';
+import {createInspector} from './shared/dev/inspector.js';
+import {mountGameBuddyAmbient} from './shared/companions/game-buddy/game-buddy-embed.js';
 import {sourceToOutputTime,outputToSourceTime,readPreferences,savePreferences} from './shared/adapters/catalog.js';
+import {createFootballPitch} from './football-pitch.js';
+import {api} from './transport.js';
 
 const $=selector=>document.querySelector(selector), $$=selector=>[...document.querySelectorAll(selector)];
-const video=$('#match-video'), canvas=$('#tactics'), context=canvas.getContext('2d');
-const esc=value=>String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
-const storage={getItem:()=>localStorage.getItem('pitchprism.preferences.v1'),setItem:(_key,value)=>localStorage.setItem('pitchprism.preferences.v1',value)};
-let preference;try{preference=readPreferences(storage);}catch{preference={familiarity:'beginner',purpose:'enjoy',player:'all'};}
-let mode=preference.familiarity==='familiar'?'analyst':'casual', team='all', player='all', variant='enhanced', tactical=false;
-let match, storyMap, state, story, health, snapshotSequence=0, storySequence=0, lastSource=-1, noticeTimer, explaining=false;
-const controls=createPlayerControls({video,stage:$('#stage'),locale:'en',onError:notice});
-$('#controls-host').append(controls.element);
-const clock=second=>`${Math.floor(second/60)}:${String(Math.floor(second%60)).padStart(2,'0')}`;
-const sourceTime=()=>variant==='enhanced'?outputToSourceTime(storyMap,video.currentTime):video.currentTime;
-const playerName=id=>match?.roster.find(p=>p.id===id)?.name||id;
-const shortName=id=>playerName(id).split(' ').at(-1);
-const STATIC_DEMO=false;
-let staticData;
-async function staticApi(path,options){
-  staticData??=await fetch(new URL('./demo-data.json',import.meta.url)).then(r=>r.json());
-  if(path==='/api/health')return {ok:true,service:'PitchPrism',synthetic:true,foundryConfigured:false,foundryVerified:false,provider:'local',mediaReady:true,staticDemo:true};
-  if(path==='/api/match')return staticData.match;
-  const body=options?.body?JSON.parse(options.body):{};
-  const t=path.startsWith('/api/snapshot')?Number(new URL(path,'https://example.local').searchParams.get('t')):Number(body.second||0);
-  const second=Math.max(0,Math.min(48,t));
-  const index=staticData.states.findLastIndex(s=>s.sourceSecond<=second);
-  if(path.startsWith('/api/snapshot'))return {...staticData.states[index],sourceSecond:second,clockSeconds:staticData.match.clockStartSeconds+Math.floor(second)};
-  if(path==='/api/explain'){if(body.provider==='azure-foundry')throw new Error('This public static demo uses local evidence mode. Azure requires the server deployment.');return {...staticData.stories[`${index}|${body.mode||'casual'}|${body.team||'all'}|${body.player||'all'}`],sourceSecond:second};}
-  if(path==='/api/recap')return staticData.recap;
-  throw new Error('Unknown static demo operation');
+const stage=$('#stage'),video=$('#match-video');
+const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const clock=value=>`${Math.floor(value/60)}:${String(Math.floor(value%60)).padStart(2,'0')}`;
+const storage={getItem:()=>localStorage.getItem('pitchprism.preferences.v2'),setItem:(_key,value)=>localStorage.setItem('pitchprism.preferences.v2',value)};
+let preferences=readPreferences(storage),match,storyMap,state,currentStory,health,variant='enhanced',activeMenu=null;
+let layout,glass,inspector,noticeTimer,idleTimer,refreshId=0,explainId=0,lastSecond=-1,openKind=null,explaining=false;
+const buddy=mountGameBuddyAmbient($('#game-buddy-slot'),{width:120,sequence:['idle','running-right','running-left','waving','jumping','failed','waiting','running','review']});
+function notice(message){$('#notice').textContent=String(message);$('#notice').hidden=false;clearTimeout(noticeTimer);noticeTimer=setTimeout(()=>$('#notice').hidden=true,4200);}
+function showControls(){stage.classList.remove('controls-hidden');clearTimeout(idleTimer);idleTimer=setTimeout(()=>{if(!activeMenu&&!content.isOpen&&!inspector.isOpen&&!video.paused&&!stage.querySelector(':focus-visible'))stage.classList.add('controls-hidden');},getConfig().motion.controlsIdle);}
+const content=createContentPanel({onSeek:(second,options)=>{if(options?.playbackRate)video.playbackRate=options.playbackRate;seek(second);content.close();},onStory:(_story,next)=>{switchVideo(next);content.close();},onClose:()=>{openKind=null;activeMenu=null;}});stage.append(content.element);
+const pitch=createFootballPitch({onMode:setMode,onSelect:id=>{preferences.player=id;$('#follow-player').value=id;save();syncPitch();},onTheme:preset=>{pitch.setTheme(preset);updateConfig({courtTheme:{preset}});}});$('#court-foreground').append(pitch.element);
+const controls=createPlayerControls({video,stage,onError:notice,onMenuChange:value=>{activeMenu=value;showControls();}});$('#controls-host').append(controls.element);
+const drawer=createDrawer({onAction:kind=>kind==='settings'?toggleSettings():openContent(kind)});$('#drawer-host').append(drawer.element);drawer.element.dataset.component='dock';
+layout=createStageLayout({stage,video,surface:$('#video-surface'),panel:$('#court-shell'),controls:$('#controls-host'),config:getConfig,onFrame:rect=>{
+  $('#top-tabs').style.right=(stage.clientWidth<700?12:rect.panel.x<stage.clientWidth ? stage.clientWidth-rect.panel.x+20 : 30)+'px';
+  if(stage.clientWidth<700){
+    const width=stage.clientWidth-24,height=stage.clientHeight;
+    Object.assign($('#controls-host').style,{left:'12px',width:width+'px',top:(height-104)+'px'});
+    if(rect.open>.001){
+      const videoHeight=Math.min(width*9/16,height*.25),panelTop=76+videoHeight;
+      Object.assign($('#video-surface').style,{left:'12px',top:'64px',width:width+'px',height:videoHeight+'px'});
+      Object.assign($('#court-shell').style,{left:'12px',top:panelTop+'px',width:width+'px',height:Math.max(200,height-panelTop-120)+'px'});
+    }
+  }
+  pitch.setView(rect.half);$('#court-shell').dataset.component=rect.half<.5?'fullCourt':'halfCourt';
+  const heading=$('#moment-heading');heading.style.left=rect.video.x+32+'px';heading.style.top=rect.video.y+35+'px';
+}});
+function setMode(mode){layout.to(mode);$$('[data-mode]').forEach(button=>{button.classList.toggle('selected',button.dataset.mode===mode);button.setAttribute('aria-pressed',String(button.dataset.mode===mode));});$('#right-edge').setAttribute('aria-expanded',String(mode!=='immersive'));glass?.apply();showControls();}
+function sourceTime(){return Math.min(match?.durationSeconds??Infinity,variant==='enhanced'?outputToSourceTime(storyMap,video.currentTime):video.currentTime);}
+function syncPitch(){if(!state)return;pitch.update(state,sourceTime(),preferences.player==='all'?null:preferences.player);}
+function save(){try{savePreferences(preferences,storage);}catch{notice('本机存储不可用，偏好仅用于当前页面。');}}
+function updatePreferences(){preferences={player:$('#follow-player').value,familiarity:$('#familiarity').value,purpose:$('#watch-purpose').value};save();syncPitch();explain(false);}
+for(const id of ['follow-player','familiarity','watch-purpose'])$('#'+id).addEventListener('change',updatePreferences);
+const audience=()=>preferences.familiarity==='familiar'||preferences.purpose==='analyze'?'analyst':'casual';
+function storyDescriptor(){return {id:match.id,sample:'football',title:match.title,durationSeconds:match.durationSeconds,chapters:match.chapters,evidence:[]};}
+function panelBody(html,title,eyebrow){content.element.querySelector('.content-sheet-title').textContent=title;content.element.querySelector('.content-eyebrow').textContent=eyebrow;content.element.querySelector('.content-sheet-body').innerHTML=html;}
+function paintInsights(){
+  if(!state||!currentStory)return;
+  const source=state.scene?`定格 ${state.scene.clock} / 原片 ${state.scene.second.toFixed(2)}s`:'播放片段 / 画面观察';
+  panelBody(`<div class="content-badge">${currentStory.provider==='azure-foundry'?'AZURE FOUNDRY':'LOCAL EDITORIAL'} · ${esc(source)}</div><h3 class="football-story-title">${esc(currentStory.headline)}</h3><p class="football-story-copy">${esc(currentStory.explanation)}</p><div class="football-metric-grid"><div class="football-metric"><small>画面记分牌</small><strong>0 – 0</strong><small>Manchester City / Newcastle</small></div><div class="football-metric"><small>原片时间</small><strong>${state.sourceSecond.toFixed(1)} <small>s</small></strong><small>原片与增强片同步</small></div><div class="football-metric"><small>官方 xG</small><strong>—</strong><small>未提供，保留缺失</small></div><div class="football-metric"><small>全场传球成功率</small><strong>—</strong><small>片段不足以计算</small></div></div><button class="football-explain" id="explain-moment" ${explaining?'disabled':''}>✦ ${explaining?'正在读取证据…':'解读这一刻'}</button><p class="football-source-note">${health.foundryConfigured?'Foundry 已配置；实际调用成功后才标记为云模型解读。':'本地编辑解读 · Azure Foundry 尚未配置。'}</p><details><summary>查看本条解读的画面证据</summary><pre class="football-source">${esc(JSON.stringify(state.events.filter(e=>currentStory.evidenceIds.includes(e.id)),null,2))}</pre></details><p class="football-source-note">人物光圈对应人工审核的定格帧。战术板与虚线是编辑示意，不是自动追踪或实际传球数据。</p>`,'这一刻的解读','PITCHPRISM / MATCH INTELLIGENCE');
+  $('#explain-moment').onclick=()=>explain(true);
 }
-async function api(path,options){if(STATIC_DEMO)return staticApi(path,options);const response=await fetch(path,options);const data=await response.json();if(!response.ok)throw new Error(data.error||`HTTP ${response.status}`);return data;}
-function notice(message){$('#notice').textContent=message;$('#notice').hidden=false;clearTimeout(noticeTimer);noticeTimer=setTimeout(()=>$('#notice').hidden=true,5500);}
-function persist(){try{savePreferences({familiarity:mode==='analyst'?'familiar':'beginner',purpose:mode==='analyst'?'analyze':'enjoy',player},storage);localStorage.setItem('pitchprism.focus.v1',JSON.stringify({team,player}));}catch{/* Browsing in private mode still works. */}}
-function eventMatches(event){return (team==='all'||event.team===team)&&(player==='all'||[event.playerId,event.recipientId].includes(player));}
-function paintStats(){
-  const a=state.stats.NBR,b=state.stats.RIV;
-  $('#score').innerHTML=`${a.goals} <span>–</span> ${b.goals}`;
-  $('#clock').textContent=clock(state.clockSeconds);
-  const rows=[['Completed passes',a.completedPasses,b.completedPasses,''],['Pass accuracy',a.passAccuracy,b.passAccuracy,'%'],['Shots',a.shots,b.shots,''],['Scenario xG',a.xg,b.xg,'']];
-  $('#stat-table').innerHTML=rows.map(([label,home,away,unit])=>{
-    const format=v=>v===null?'—':label==='Scenario xG'?v.toFixed(2):v+unit;
-    const share=(home||0)+(away||0)>0?Math.max(5,Math.min(95,(home||0)/((home||0)+(away||0))*100)):50;
-    return `<div class="stat-cell"><div class="stat-title">${label}</div><div class="stat-values"><span>${format(home)}</span><span>${format(away)}</span></div><div class="stat-bar"><span style="flex:${share}"></span><span style="flex:${100-share}"></span></div></div>`;
-  }).join('');
-  const fact=state.facts[0];
-  $('#fact-label').textContent=mode==='analyst'?'LATEST PASS · DERIVED DISTANCE':'THE BALL JUST TRAVELLED';
-  $('#fact-value').textContent=fact?fact.value.toFixed(1):'—';
-  $('#fact-note').textContent=mode==='analyst'?'105 × 68 m pitch · Euclidean distance':'Derived from synthetic event coordinates';
-  $('#event-count').textContent=`${state.events.length} EVENTS`;
-  const events=state.events.slice(-4).reverse();
-  $('#events').innerHTML=events.map(e=>`<li class="${eventMatches(e)?'':'dim'}"><time>${clock(match.clockStartSeconds+e.second)}</time><span class="trail-dot"></span><div><strong>${esc(shortName(e.playerId))}${e.recipientId?' → '+esc(shortName(e.recipientId)):''}</strong><small>${esc(e.type.toUpperCase())} · ${esc(e.outcome.toUpperCase())} · ${esc(e.id)}</small></div></li>`).join('');
-  const chapters=$$('.chapter');const active=chapters.filter(c=>+c.dataset.second<=state.sourceSecond).at(-1);
-  chapters.forEach(c=>{c.classList.toggle('active',c===active);c.setAttribute('aria-current',c===active?'true':'false');});
-  $('#focus-tag').hidden=player==='all'&&team==='all';
-  $('#focus-tag').textContent=player!=='all'?`FOLLOWING ${playerName(player).toUpperCase()}`:`FOLLOWING ${match.teams.find(t=>t.id===team)?.name.toUpperCase()}`;
+function openContent(kind){
+  if(!match)return;$('#settings').hidden=true;openKind=kind;activeMenu='content';drawer.setOpen(true);
+  content.open('moments',storyDescriptor(),[],{preferences,events:match.observations.map(o=>({time:o.second,text:o.text,sourceLabel:'已审核原片画面 · 非官方事件记录',evidenceIds:[o.id],playerIds:['carrier','right','runner']})),media:{variant,width:1920,height:1080}});
+  if(kind==='moments')return;
+  if(kind==='data'){paintInsights();return;}
+  if(kind==='library'){panelBody('<p class="content-lead">同一素材，同一原始时间。</p><div class="football-actions"><button id="choose-source">观看原片</button><button id="choose-enhanced">观看增强片</button><button id="restart-highlight">从头播放</button></div><p class="football-source-note">增强片直接调用 GameBuddy 的开场、光圈、箭头、战术形变、回放与片尾组件。</p>','片段与版本','MEDIA LIBRARY');$('#choose-source').onclick=()=>{switchVideo('source');content.close();};$('#choose-enhanced').onclick=()=>{switchVideo('enhanced');content.close();};$('#restart-highlight').onclick=()=>{video.currentTime=0;content.close();video.play().catch(notice);};return;}
+  panelBody(`<p class="content-lead">直接复用 GameBuddy 原版视觉组件。</p><p class="football-source-note">播放器的玻璃材质、沉浸式／全场／半场展开、左侧抽屉、回看、设置面板与小伙伴动画均来自原工程。增强片的开场、人物标记、箭头、战术暂停、回放与片尾也调用原函数。</p><p class="football-source-note">当前视频是用户提供的曼城对纽卡斯尔 66.6 秒片段。观察记录绑定原文件 SHA-256。没有事件数据源时不展示虚构 xG、球员统计或自动追踪。</p><p class="football-source-note">素材与执行记录见项目 README、media-manifest 与许可证。没有真实 Foundry 调用时保持 LOCAL。</p>`,'素材与复用来源','ASSET PROVENANCE');
 }
-function paintStory(result){
-  story=result;
-  $('#story-title').textContent=result.headline;$('#story-copy').textContent=result.explanation;
-  $('#citation-count').textContent=`${result.evidenceIds.length} source event${result.evidenceIds.length===1?'':'s'}`;
-  $('#story-clock').textContent=clock(match.clockStartSeconds+result.sourceSecond);
-  $('#story-kind').textContent=result.provider==='azure-foundry'?'FOUNDRY · VALIDATED':'LOCAL EVIDENCE MODE';
-  $('#provider-badge').textContent=result.provider==='azure-foundry'?'FOUNDRY':'LOCAL';
-}
-async function localExplain(){
-  if(!state||explaining)return;
-  const sequence=++storySequence;
-  try{const result=await api('/api/explain',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({second:state.sourceSecond,mode,team,player,provider:'local'})});if(sequence===storySequence)paintStory(result);}catch(error){notice(error.message);}
+async function explain(cloud){
+  if(!state||explaining)return;const sequence=++explainId,second=state.sourceSecond;
+  if(cloud){video.pause();explaining=true;if(openKind==='data')paintInsights();}
+  try{const result=await api('/api/clip/explain',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({second,mode:audience(),team:'all',player:preferences.player,provider:cloud&&health.foundryConfigured?'azure-foundry':'local'})});if(sequence===explainId&&Math.abs(sourceTime()-second)<.6){currentStory=result;if(openKind==='data')paintInsights();}}
+  catch(error){notice(error.message);}finally{explaining=false;if(openKind==='data')paintInsights();}
 }
 async function refresh(force=false){
-  if(!match)return;const second=sourceTime();if(second===null)return;
-  if(!force&&Math.abs(second-lastSource)<.45)return;lastSource=second;
-  const sequence=++snapshotSequence;
-  try{const value=await api('/api/snapshot?t='+encodeURIComponent(second));if(sequence!==snapshotSequence)return;state=value;paintStats();if(!explaining)await localExplain();drawTactics();}catch(error){notice(error.message);}
+  if(!match)return;const second=sourceTime();if(!force&&Math.abs(second-lastSecond)<.4)return;lastSecond=second;
+  const id=++refreshId;try{const result=await api('/api/clip/snapshot?t='+second);if(id!==refreshId)return;state=result;syncPitch();if(!explaining)explain(false);}catch(error){notice(error.message);}
 }
-function seekSource(second){if(!storyMap)return;video.currentTime=variant==='enhanced'?sourceToOutputTime(storyMap,second):second;video.pause();refresh(true);}
-function setAudience(value){mode=value;$$('[data-mode]').forEach(button=>{const active=button.dataset.mode===mode;button.classList.toggle('active',active);button.setAttribute('aria-pressed',String(active));});persist();if(state){paintStats();localExplain();}}
-function setView(value){tactical=value;canvas.hidden=!value;$('#match-view').classList.toggle('active',!value);$('#tactical-view').classList.toggle('active',value);$('#match-view').setAttribute('aria-pressed',String(!value));$('#tactical-view').setAttribute('aria-pressed',String(value));$('#scene-note').textContent=value?'EDITORIAL EVENT MAP · SYNTHETIC POSITIONS · NOT OPTICAL TRACKING':'ORIGINAL SYNTHETIC SIMULATION · EDITORIAL OVERLAYS';drawTactics();}
-async function switchVideo(next){
-  if(variant===next)return;const second=sourceTime(),wasPlaying=!video.paused;variant=next;
-  $$('.media-switch button').forEach(b=>{const active=b.id===`${next}-version`;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));});
-  video.src=new URL(`./media/${next}.mp4`,import.meta.url).href;video.addEventListener('loadedmetadata',()=>{video.currentTime=next==='enhanced'?sourceToOutputTime(storyMap,second):second;if(wasPlaying)video.play().catch(error=>notice(error.message));refresh(true);},{once:true});video.load();
-}
-
-function drawTactics(){
-  if(!tactical||!match||!state)return;
-  const ratio=Math.min(devicePixelRatio||1,2),width=canvas.clientWidth,height=canvas.clientHeight;
-  if(width<160||height<180)return;
-  if(canvas.width!==Math.round(width*ratio)||canvas.height!==Math.round(height*ratio)){canvas.width=Math.round(width*ratio);canvas.height=Math.round(height*ratio);}
-  context.setTransform(ratio,0,0,ratio,0,0);context.clearRect(0,0,width,height);
-  const fit=fitContain(width-76,height-162,105/68),left=(width-fit.width)/2,top=89;
-  const point=([x,y])=>[left+x/100*fit.width,top+y/100*fit.height];
-  const path=points=>{context.beginPath();points.forEach((p,i)=>{const [x,y]=point(p);i?context.lineTo(x,y):context.moveTo(x,y);});context.stroke();};
-  context.fillStyle='#1b392f';context.fillRect(left,top,fit.width,fit.height);
-  for(let i=0;i<10;i++){context.fillStyle=i%2?'#214236':'#1d3d32';context.fillRect(left+i*fit.width/10,top,fit.width/10,fit.height);}
-  context.strokeStyle='#6f897155';context.lineWidth=1;path([[0,0],[100,0],[100,100],[0,100],[0,0]]);path([[50,0],[50,100]]);
-  for(const [x,sign]of[[0,1],[100,-1]]){path([[x,20],[x+16*sign,20],[x+16*sign,80],[x,80]]);path([[x,36],[x+5*sign,36],[x+5*sign,64],[x,64]]);}
-  context.beginPath();context.ellipse(left+fit.width/2,top+fit.height/2,fit.width*9.15/105,fit.height*9.15/68,0,0,Math.PI*2);context.stroke();
-  const positions=Object.fromEntries(match.roster.map(p=>[p.id,[...p.position]]));
-  for(const event of state.events){positions[event.playerId]=event.start;if(event.recipientId&&event.outcome==='complete')positions[event.recipientId]=event.end;}
-  const passes=state.events.filter(e=>e.type==='pass'&&state.sourceSecond-e.second<11&&eventMatches(e));
-  for(const pass of passes){const [ax,ay]=point(pass.start),[bx,by]=point(pass.end);context.strokeStyle=pass.team==='NBR'?'#d8f790':'#b2adfc';context.lineWidth=2;context.setLineDash(pass.outcome==='complete'?[]:[5,5]);path([pass.start,pass.end]);context.setLineDash([]);const angle=Math.atan2(by-ay,bx-ax);context.beginPath();context.moveTo(bx,by);context.lineTo(bx-9*Math.cos(angle-.4),by-9*Math.sin(angle-.4));context.moveTo(bx,by);context.lineTo(bx-9*Math.cos(angle+.4),by-9*Math.sin(angle+.4));context.stroke();}
-  for(const p of match.roster){const [x,y]=point(positions[p.id]),focused=player===p.id,dim=(player!=='all'&&!focused)||(team!=='all'&&p.team!==team);context.globalAlpha=dim?.25:1;context.fillStyle=p.team==='NBR'?'#d8f790':'#b2adfc';context.shadowColor=context.fillStyle;context.shadowBlur=focused?16:0;context.beginPath();context.arc(x,y,focused?9:6,0,Math.PI*2);context.fill();context.shadowBlur=0;context.fillStyle='#132b23';context.font='600 7px DM';context.textAlign='center';context.fillText(String(p.number),x,y+2.5);if(focused||mode==='analyst'){context.fillStyle='#d9e5ca';context.font='8px DM';context.fillText(p.name.split(' ').at(-1).toUpperCase(),x,y-12);}context.globalAlpha=1;}
-  context.textAlign='left';context.fillStyle='#adbf9b';context.font='9px DM';context.fillText('NORTHBRIDGE ATTACK →',left,top+fit.height+22);context.textAlign='right';context.fillStyle='#b0a7cd';context.fillText('← RIVERSIDE ATTACK',left+fit.width,top+fit.height+22);
-}
-
-function openDialog(eyebrow,html){$('#dialog-eyebrow').textContent=eyebrow;$('#dialog-body').innerHTML=html;$('#details').showModal();}
-$('#details-close').onclick=()=>$('#details').close();$('#details').addEventListener('click',event=>{if(event.target===$('#details')){const r=$('#details').getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)$('#details').close();}});
-$('#evidence-open').onclick=()=>{const ids=story?.evidenceIds||[];const events=match.events.filter(e=>ids.includes(e.id));openDialog('EVIDENCE / '+clock(match.clockStartSeconds+(story?.sourceSecond||0)),`<h2>Every insight has a source.</h2><p>These exact synthetic events support the displayed story. Coordinates are normalized percentages on a scenario pitch. Shot xG is a supplied scenario input. Prose is editorial or model interpretation, never an official match fact.</p><pre>${esc(JSON.stringify(events,null,2))}</pre>${story?.trace?`<h3>Foundry tool trace</h3><pre>${esc(JSON.stringify(story.trace,null,2))}</pre>`:''}`);};
-$('#sources-open').onclick=()=>openDialog('DATA & TRANSPARENCY',`<h2>Real clarity. Fictional football.</h2><p>Northbridge AFC and Riverside United are fictional. All players, events, coordinates, shot xG inputs and the rendered video were created for this demo. No Premier League footage, official match feed, optical tracking, or trained xG model is used.</p><p>Pass accuracy = completed / attempted passes. Pass distance uses Euclidean geometry on a synthetic 105 × 68 metre pitch. Missing xG is shown as a dash. All live statistics cover only the played excerpt.</p><p>Enhanced video adds editorial paths, labels, pauses and replay. The original source clock is retained using GameBuddy's dual-timeline mapping. Frozen and replayed moments do not reveal future events.</p><p>Azure Foundry stories require a successful real API response and tool validation. Local evidence mode uses deterministic editorial templates and is labelled LOCAL. Validation checks references and numbers; it cannot prove every tactical interpretation.</p><p><a href="https://github.com/microsoft/insidethegamehackathon/blob/main/OFFICIAL%20RULES.md" target="_blank" rel="noopener">Hackathon rules ↗</a></p>`);
-$('#about-open').onclick=()=>openDialog('ABOUT PITCHPRISM',`<h2>Every angle tells a story.</h2><p>An AI-powered football companion that turns match data into visual stories and personalized insights.</p><p>PitchPrism adapts open-source GameBuddy components: the video player, source/output timeline, viewing preferences, evidence-first agent workflow and numeric guardrails. Its synthetic football scenario, analytics, event map, English fan/analyst experiences and Azure Foundry adapter are new.</p><p>GameBuddy's NBA × AWS award applies to the original basketball project. This new adaptation has no award or eligibility claim. New-work eligibility needs organizer confirmation.</p>`);
-$('#recap-open').onclick=async()=>{try{const recap=await api('/api/recap');openDialog('FULL SYNTHETIC EXCERPT RECAP',`<h2>${esc(recap.story.headline)}</h2><p>${esc(recap.story.explanation)}</p><p>This explicitly requested recap covers the entire fictional excerpt and can include events ahead of the player's current position.</p><pre>${esc(JSON.stringify(recap.stats,null,2))}</pre>`);}catch(error){notice(error.message);}};
-$$('[data-mode]').forEach(button=>button.onclick=()=>setAudience(button.dataset.mode));
-$('#team').onchange=event=>{team=event.target.value;if(player!=='all'&&team!=='all'&&match.roster.find(p=>p.id===player)?.team!==team){player='all';$('#player').value='all';}persist();paintStats();drawTactics();localExplain();};
-$('#player').onchange=event=>{player=event.target.value;if(player!=='all'&&team!=='all'){team=match.roster.find(p=>p.id===player).team;$('#team').value=team;}persist();paintStats();drawTactics();localExplain();};
-$('#match-view').onclick=()=>setView(false);$('#tactical-view').onclick=()=>setView(true);
-$('#source-version').onclick=()=>switchVideo('source');$('#enhanced-version').onclick=()=>switchVideo('enhanced');
-$$('.chapter').forEach(button=>button.onclick=()=>seekSource(+button.dataset.second));
-$('#explain').onclick=async()=>{
-  if(!state||explaining)return;video.pause();explaining=true;++storySequence;const anchor=state.sourceSecond,requestedMode=mode,requestedTeam=team,requestedPlayer=player;
-  const button=$('#explain');button.disabled=true;const previous=button.innerHTML;button.textContent=health.foundryConfigured?'Reading events → checking evidence…':'Reading the source events…';
-  try{const result=await api('/api/explain',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({second:anchor,mode,team,player,provider:health.foundryConfigured?'azure-foundry':'local'})});if(Math.abs(sourceTime()-anchor)>.5||mode!==requestedMode||team!==requestedTeam||player!==requestedPlayer){notice('The view changed during generation. Request an explanation for the new moment.');return;}paintStory(result);if(result.provider==='azure-foundry'){$('#provider-note').textContent=`Real Foundry response · ${result.tokens} tokens · source references validated`;notice('Foundry explanation validated. Open source events to inspect the tool trace.');}else notice('Evidence-based local explanation. Foundry needs an Azure deployment.');}
-  catch(error){notice(error.message);$('#provider-note').textContent='Cloud explanation failed. Local mode remains available; no cloud success was recorded.';}
-  finally{explaining=false;button.disabled=false;button.innerHTML=previous;}
-};
-video.addEventListener('timeupdate',()=>{const segment=storyMap?.production.timeline.find(s=>video.currentTime>=s.outputStart&&video.currentTime<s.outputEnd);$('#replay-indicator').hidden=variant!=='enhanced'||segment?.kind!=='replay';refresh();});
-video.addEventListener('seeked',()=>refresh(true));video.addEventListener('error',()=>{$('#media-error').hidden=false;notice('Media unavailable; switch to Tactical or install release media.');});video.addEventListener('loadeddata',()=>$('#media-error').hidden=true);
-new ResizeObserver(drawTactics).observe($('#stage'));
-document.addEventListener('keydown',event=>{if($('#details').open||['INPUT','SELECT','TEXTAREA','BUTTON'].includes(document.activeElement.tagName))return;if(event.code==='Space'){event.preventDefault();video.paused?video.play().catch(error=>notice(error.message)):video.pause();}if(event.key==='ArrowRight'){event.preventDefault();seekSource(Math.min(48,sourceTime()+5));}if(event.key==='ArrowLeft'){event.preventDefault();seekSource(Math.max(0,sourceTime()-5));}});
-
+function seek(second){video.pause();const freeze=match.production.timeline.find(s=>s.kind==='freeze'&&Math.abs(s.sourceStart-second)<.02);video.currentTime=variant==='enhanced'?(freeze?freeze.outputStart+.4:sourceToOutputTime(storyMap,second)):second;refresh(true);showControls();}
+function switchVideo(next){if(next===variant)return;const second=sourceTime();variant=next;$('#analysis-toggle').checked=next==='enhanced';video.pause();video.addEventListener('loadedmetadata',()=>{video.currentTime=next==='enhanced'?sourceToOutputTime(storyMap,second):second;refresh(true);},{once:true});video.src=new URL(`./media/${next}.mp4`,import.meta.url).href;video.load();$('#media-version').textContent=next==='enhanced'?'切换原片 ›':'切换增强片 ›';}
+function toggleSettings(){content.close();const open=$('#settings').hidden;$('#settings').hidden=!open;activeMenu=open?'settings':null;drawer.setOpen(true);showControls();}
+$('#media-version').onclick=e=>{e.preventDefault();switchVideo(variant==='enhanced'?'source':'enhanced');};
+$('#left-edge').onpointerenter=()=>drawer.setOpen(true);$('#left-edge').onclick=()=>drawer.setOpen(true);drawer.element.onpointerleave=()=>{if(!content.isOpen&&$('#settings').hidden)drawer.setOpen(false);};
+$('#right-edge').onclick=()=>setMode('halfCourt');$('#court-close').onclick=()=>setMode('immersive');
+$$('[data-mode]').forEach(button=>button.onclick=()=>setMode(button.dataset.mode));$('#open-insights').onclick=()=>openContent('data');
+$$('[data-content]').forEach(button=>button.onclick=()=>openContent(button.dataset.content));
+$('#analysis-toggle').onchange=e=>switchVideo(e.target.checked?'enhanced':'source');
+inspector=createInspector();stage.append(inspector.element);$('#style-inspector').hidden=false;$('#style-inspector').onclick=()=>{$('#settings').hidden=true;inspector.open();};
+glass=new GlassManager(stage,getConfig,{enabled:new URLSearchParams(location.search).get('glass')==='liquid'});glass.start();
+subscribe(()=>{layout.draw();glass.apply();pitch.setStyle(getConfig().halfCourt);});
+stage.onpointermove=showControls;stage.onfocusin=showControls;
+stage.addEventListener('keydown',event=>{if(event.key==='Escape'){if(inspector.isOpen){inspector.close();return;}if(content.isOpen){content.close();return;}$('#settings').hidden=true;activeMenu=null;drawer.setOpen(false);setMode('immersive');}if(event.target.matches('input,select,textarea,button'))return;if(event.code==='Space'){event.preventDefault();video.paused?video.play().catch(notice):video.pause();}if(event.key.toLowerCase()==='f'){document.fullscreenElement?document.exitFullscreen():stage.requestFullscreen();}});
+window.addEventListener('broadcast-layout-request',e=>setMode(e.detail.layout));
+window.addEventListener('broadcast-config-select',e=>{if(['fullCourt','halfCourt'].includes(e.detail.component))setMode(e.detail.component);});
+window.addEventListener('broadcast-inspector-state',e=>{activeMenu=e.detail.open?'inspector':null;showControls();});
+video.addEventListener('timeupdate',()=>refresh());for(const event of ['seeked','loadeddata','pause','ended'])video.addEventListener(event,()=>{refresh(true);showControls();});
+video.addEventListener('loadeddata',()=>$('#load-error').hidden=true);video.addEventListener('error',()=>{$('#load-error').hidden=false;showControls();});$('#retry-media').onclick=()=>video.load();
+video.addEventListener('loadedmetadata',()=>{$('#media-info').textContent=`${variant==='enhanced'?'增强片':'原片'} · ${video.videoWidth} × ${video.videoHeight} · ${video.duration.toFixed(2)}s`;layout.draw();});
+function paint(){if(glass.enabled)paintAmbienceSource($('#ambience'),video,stage);video.requestVideoFrameCallback?.(paint);}video.requestVideoFrameCallback?.(paint);
+window.broadcastUI={setMode,video,layout,openContent,getConfig,updateConfig,showControls,glass:()=>glass};
+window.broadcastDiagnostics=()=>({mode:layout.mode,layout:layout.rects,glass:glass.status(),media:{variant,time:video.currentTime,sourceTime:sourceTime(),duration:video.duration},reuse:['StageLayout','GlassManager','PlayerControls','Drawer','ContentPanel','Inspector','GameBuddyAmbient','CourtPanel','sourceOutputMapping']});
 async function init(){
-  [match,health]=await Promise.all([api('/api/match'),api('/api/health')]);
-  storyMap={...match,enhancedAvailable:true};
-  $('#player').innerHTML='<option value="all">The whole pitch</option>'+match.roster.map(p=>`<option value="${esc(p.id)}">${esc(p.name)}</option>`).join('');
-  try{const saved=JSON.parse(localStorage.getItem('pitchprism.focus.v1'));if(['all','NBR','RIV'].includes(saved?.team))team=saved.team;if(match.roster.some(p=>p.id===saved?.player))player=saved.player;}catch{}
-  $('#team').value=team;$('#player').value=player;setAudience(mode);
-  if(health.foundryConfigured){$('#provider-note').textContent='Azure Foundry configured. Explain a moment to verify the live model.';$('#provider-badge').textContent='READY';}
-  video.addEventListener('loadedmetadata',()=>{video.currentTime=sourceToOutputTime(storyMap,20);refresh(true);},{once:true});video.src=new URL('./media/enhanced.mp4',import.meta.url).href;video.load();
-  if(!health.mediaReady){setView(true);state=await api('/api/snapshot?t=20');paintStats();await localExplain();drawTactics();}
+  [match,health]=await Promise.all([api('/api/clip'),api('/api/health')]);storyMap={...match,enhancedAvailable:true};pitch.setStory(match);
+  $('#follow-player').replaceChildren(new Option('全队','all'));for(const p of match.roster)$('#follow-player').add(new Option(p.name,p.id));if(!match.roster.some(p=>p.id===preferences.player))preferences.player='all';
+  $('#follow-player').value=preferences.player;$('#familiarity').value=preferences.familiarity;$('#watch-purpose').value=preferences.purpose;$('#preference-status').textContent='关注定格中的角色；未核验的球员不补姓名。';
+  $('#moment-kicker').textContent='PitchPrism · GameBuddy 原版视觉';$('#moment-title').textContent='看懂每一次进攻';$('#moment-subtitle').textContent='沉浸观看 · 战术展开 · 证据解读';$('#moment-heading').hidden=true;
+  pitch.setStyle(getConfig().halfCourt);video.addEventListener('loadedmetadata',()=>{video.currentTime=1.4;refresh(true);},{once:true});video.src=new URL('./media/enhanced.mp4',import.meta.url).href;video.load();
+  const mode=new URLSearchParams(location.search).get('mode');if(['halfCourt','fullCourt'].includes(mode))setMode(mode);showControls();
 }
 init().catch(error=>notice(error.message));
+window.addEventListener('pagehide',event=>{if(event.persisted)return;buddy.destroy();layout.destroy();pitch.destroy();controls.destroy();glass.destroy();inspector.destroy();stopAmbienceSource($('#ambience'));});

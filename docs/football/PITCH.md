@@ -1,11 +1,17 @@
 # PitchPrism
 
-**An AI-powered football companion that turns match data into visual stories and personalized insights.**
+An AI-powered football companion that turns match data into visual stories and personalized insights.
 
-Football has more to say than the scoreline. PitchPrism connects synthetic match events with a synchronized visual story: see the diagonal switch, inspect the passing sequence, and replay the finish without losing the evidence.
+PitchPrism helps fans see the action before the outcome. An original glass viewing interface opens into a football diagram; reviewed freeze frames highlight the carrier, supporting runs and options, then move back into the broadcast. Chapters, half-speed replay and source-aligned explanations let a fan revisit the moment that matters.
 
-Fans get plain-language things to watch. Analysts get event-level context, derived statistics and provenance. Favorite team/player selections change the lens. Every figure retains its scope, and source links distinguish a fact, a scenario estimate and an interpretation.
+The current demonstration adapts a supplied Manchester City × Newcastle excerpt using GameBuddy's original visual library. It preserves every source frame, adds tactical pauses and replay, and exposes the observations behind the story. Missing xG and full-match statistics remain missing. The diagrams are editorial, not automatic tracking.
 
-The dynamic app integrates Microsoft Foundry through Azure OpenAI's v1 API. A bounded tool-using Agent reads match state, inspects event records and submits a story for numeric/reference checks. Azure Container Apps is the keyless deployment target. The public static demo uses separately labelled local evidence mode; live cloud success is not claimed until verified.
+The Microsoft integration implements a bounded Azure Foundry tool loop that reads state, inspects evidence and validates a story, with Entra/managed-identity support. Actual cloud deployment and inference are pending; today's public demo uses clearly labelled local editorial explanations.
 
-PitchPrism builds on MIT-licensed GameBuddy playback/evidence infrastructure. Its synthetic football scenario, analytics, event map, English personalized experiences and Azure adapter are new. No retraining or official footage is required.
+Repository: https://github.com/imhaojie/PitchPrism
+
+Demo: https://imhaojie.github.io/PitchPrism/
+
+97.2-second English-captioned match video: https://github.com/imhaojie/PitchPrism/releases/download/football-match-v2/enhanced.mp4
+
+Original GameBuddy reuse and the former project's award are disclosed. Submission eligibility, broadcast permissions and a supported video-platform URL still require resolution before a competition submission.

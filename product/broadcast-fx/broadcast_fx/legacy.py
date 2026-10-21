@@ -519,11 +519,11 @@ def render_intro(i, n, base_frame=None, copy=None):
         brand_x = x - 36 * (1 - brand_in)
         L.paste(gamebuddy_mascot_rgba(closing), brand_x, 62,
                 alpha=brand_alpha, scale=0.87 + 0.07 * brand_in)
-        L.paste(text_rgba('GAMEBUDDY', DINA, 86, CHALK, 2),
+        L.paste(text_rgba(copy.get('brandName', 'GAMEBUDDY'), DINA, 86, CHALK, 2),
                 brand_x + 188, 88, alpha=brand_alpha)
         rect(L, brand_x + 192, 178, brand_x + 710 * brand_in, 182,
              ORANGE, 0.9 * brand_alpha)
-        L.paste(text_rgba('YOUR AI BASKETBALL COMPANION', DIN, 29, MUTED, 3),
+        L.paste(text_rgba(copy.get('brandTagline', 'YOUR AI BASKETBALL COMPANION'), DIN, 29, MUTED, 3),
                 brand_x + 191, 188, alpha=brand_alpha)
     if t > 0.28:
         k = back_out(clamp((t - 0.28) / 0.2))
@@ -543,7 +543,7 @@ def render_intro(i, n, base_frame=None, copy=None):
         if x + 760 > 0:
             rect(L, 0, 770, (x + 760) * k, 846, BLUE, 0.92 * al)
         L.paste(text_rgba(copy.get("player", "#32  COOPER FLAGG"), DIN, 64, (255, 255, 255), 4), x + 10, 780, alpha=al * clamp((t - 1.4) / 0.2))
-        L.paste(text_rgba("DAL", PIX, 24, CHALK), x + 690, 796, alpha=al * clamp((t - 1.4) / 0.2))
+        L.paste(text_rgba(copy.get("team", "DAL"), PIX, 24, CHALK), x + 690, 796, alpha=al * clamp((t - 1.4) / 0.2))
     if closing:
         credit = ease_out((t - 1.6) / .4) * al
         if not copy.get('brand'):
@@ -769,7 +769,7 @@ def render_outro(i, n, base_frame=None, copy=None):
     a2 = back_out(clamp((t - 0.55) / 0.3))
     num = copy.get("points", 34)
     L.paste(text_rgba(str(num), DIN, 300, ORANGE, 0, 0, (0, 0, 0), 0.12), cx - 40, 560, alpha=clamp((t - 0.55) / 0.1), scale=1.3 - 0.3 * a2, anchor="rc")
-    L.paste(text_rgba("PTS", DIN, 110, CHALK, 6), cx - 10, 600, alpha=clamp((t - 0.6) / 0.15), anchor="lc")
+    L.paste(text_rgba(copy.get("pointsUnit", "PTS"), DIN, 110, CHALK, 6), cx - 10, 600, alpha=clamp((t - 0.6) / 0.15), anchor="lc")
     L.paste(text_rgba(copy.get("pointsLabel", "本场得分"), DIN if PRESENTATION_ENGLISH else CJK,
                      30 if PRESENTATION_ENGLISH else 34, MUTED), cx - 6, 672, alpha=clamp((t - 0.6) / 0.15), anchor="lc")
     chips = [("xFG 51%", ORANGE), ("5 FT · FINGER ROLL", CHALK), ("Q4 · 1:34", FLAME), ("DAL 105 — 107 HOU", GREEN)]
@@ -785,11 +785,12 @@ def render_outro(i, n, base_frame=None, copy=None):
         x += w + 60
     fk = ease_out((t - 1.6) / 0.5)
     source_note = "SOURCE: NBA PLAY-BY-PLAY & SHOT QUALITY (xFG)" if PRESENTATION_ENGLISH else "数据：NBA 官方逐回合与出手质量（xFG）"
+    source_note = copy.get("sourceNote", source_note)
     if SHOW_PRODUCTION_NOTES:
         source_note += "   |  特效依据人工关键帧与插值 · 非自动追踪  |  AI 解读字幕"
     L.paste(text_rgba(source_note,
                       DIN if PRESENTATION_ENGLISH else CJK, 26 if PRESENTATION_ENGLISH else 22, MUTED), cx, 950, alpha=fk, anchor="c")
-    L.paste(text_rgba("GameBuddy · NBA × AWS · TEAM 02", PIX, 24, CHALK), cx, 1000, alpha=fk, anchor="c")
+    L.paste(text_rgba(copy.get("brandCredit", "GameBuddy · NBA × AWS · TEAM 02"), PIX, 24, CHALK), cx, 1000, alpha=fk, anchor="c")
     out = L.compose()
     if i > n - 20:
         out = (out * ((n - i) / 20)).astype(np.uint8)

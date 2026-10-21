@@ -13,6 +13,7 @@ from urllib.parse import parse_qs, urlsplit
 
 from .analytics import local_story, snapshot, validate_match
 from .foundry import FoundryError, run_agent, settings
+from . import clip
 
 ROOT = Path(__file__).resolve().parents[2]
 HERE = Path(__file__).resolve().parent
@@ -67,12 +68,16 @@ class Handler(SimpleHTTPRequestHandler):
         try:
             if url.path == "/api/health":
                 config = settings()
-                return self.send_json({"ok": True, "service": "PitchPrism", "synthetic": True,
+                return self.send_json({"ok": True, "service": "PitchPrism", "synthetic": False,
                     "foundryConfigured": config["configured"], "foundryVerified": False,
                     "provider": "azure-foundry" if config["configured"] else "local",
                     "mediaReady": (HERE / "build/enhanced.mp4").is_file()})
             if url.path == "/api/match":
                 return self.send_json(MATCH)
+            if url.path == '/api/clip':
+                return self.send_json(clip.CLIP)
+            if url.path == '/api/clip/snapshot':
+                return self.send_json(clip.snapshot(float(parse_qs(url.query).get('t', [0])[0])))
             if url.path == "/api/snapshot":
                 second = float(parse_qs(url.query).get("t", [0])[0])
                 return self.send_json(snapshot(MATCH, second))
@@ -85,7 +90,14 @@ class Handler(SimpleHTTPRequestHandler):
         if url.path.startswith("/api/"):
             return self.send_json({"error": "Not found"}, 404)
         # Static allowlist excludes the cloned historical data, deployment files and local secrets.
-        routes = [("/shared/media/", ROOT / "product/watch/media"),
+        from urllib.parse import unquote
+        decoded = unquote(url.path)
+        shared = {'media','stage','adapters','court','config','glass','navigation','annotations','content','dev','companions','vendor'}
+        if '..' in decoded.split('/') or (decoded.startswith('/shared/') and decoded.split('/')[2] not in shared):
+            return self.send_error(404)
+        if decoded.startswith('/media/') and decoded not in {'/media/source.mp4','/media/enhanced.mp4','/media/manifest.json'}:
+            return self.send_error(404)
+        routes = [("/shared/", ROOT / "product/watch"), ("/shared/media/", ROOT / "product/watch/media"),
                   ("/shared/stage/", ROOT / "product/watch/stage"),
                   ("/shared/adapters/", ROOT / "product/watch/adapters"),
                   ("/media/", HERE / "build"), ("/", HERE / "watch")]
@@ -93,7 +105,7 @@ class Handler(SimpleHTTPRequestHandler):
             if url.path.startswith(prefix):
                 relative = url.path[len(prefix):] or "index.html"
                 path = (base / relative).resolve()
-                if not path.is_relative_to(base.resolve()) or not path.is_file() or path.suffix not in {".html", ".css", ".js", ".json", ".svg", ".woff2", ".ttf", ".mp4", ".jpg", ".png"}:
+                if not path.is_relative_to(base.resolve()) or not path.is_file() or path.suffix not in {".html", ".css", ".js", ".json", ".svg", ".woff2", ".ttf", ".webp", ".mp4", ".jpg", ".png"}:
                     return self.send_error(404)
                 return self.send_file(path)
 
@@ -131,7 +143,7 @@ class Handler(SimpleHTTPRequestHandler):
             pass
 
     def do_POST(self):
-        if self.path != "/api/explain":
+        if self.path not in {"/api/explain", '/api/clip/explain'}:
             return self.send_json({"error": "Not found"}, 404)
         # Browser requests must come from this host. CLI/API tests need no Origin.
         origin = self.headers.get("Origin")
@@ -144,9 +156,16 @@ class Handler(SimpleHTTPRequestHandler):
             body = json.loads(self.rfile.read(length))
             if not isinstance(body, dict):
                 raise ValueError("JSON body must be an object")
-            state, mode, team, player = validate_options(body)
+            is_clip = self.path == '/api/clip/explain'
+            if is_clip:
+                state = clip.snapshot(body.get('second', 0))
+                mode, team, player = body.get('mode', 'casual'), body.get('team', 'all'), body.get('player', 'all')
+                if mode not in {'casual', 'analyst'} or team not in {'all', 'MCI', 'NEW'} or player not in {'all', *[p['id'] for p in clip.CLIP['roster']]}:
+                    raise ValueError('Invalid clip audience or role')
+            else:
+                state, mode, team, player = validate_options(body)
             if body.get("provider", "local") == "local":
-                return self.send_json(local_story(state, mode, team, player))
+                return self.send_json((clip.local_story if is_clip else local_story)(state, mode, team, player))
             if body.get("provider") != "azure-foundry":
                 raise ValueError("Unsupported provider")
             if not settings()["configured"]:
@@ -156,7 +175,7 @@ class Handler(SimpleHTTPRequestHandler):
         if not LOCK.acquire(blocking=False):
             return self.send_json({"error": "A Foundry explanation is already running. Please retry shortly."}, 429)
         try:
-            cache_key = (round(state["sourceSecond"], 1), mode, team, player)
+            cache_key = (state['matchId'], round(state["sourceSecond"], 1), mode, team, player)
             if cache_key in CACHE:
                 return self.send_json({**CACHE[cache_key], "cached": True})
             now = time.monotonic()
@@ -165,7 +184,7 @@ class Handler(SimpleHTTPRequestHandler):
             if len(CALLS) >= int(os.environ.get("PITCHPRISM_MAX_AI_CALLS_HOUR", "12")):
                 return self.send_json({"error": "Demo's hourly model budget reached. Use local evidence mode."}, 429)
             CALLS.append(now)
-            result = run_agent(state, mode, team, player)
+            result = run_agent(state, mode, team, player, context=clip.AGENT_CONTEXT if is_clip else None)
             CACHE[cache_key] = result
             while len(CACHE) > 128:
                 CACHE.popitem(last=False)
@@ -184,7 +203,7 @@ def main():
     args = parser.parse_args()
     load_env(args.env_file)
     server = ThreadingHTTPServer((args.host, args.port), partial(Handler, directory=str(HERE / "watch")))
-    print(f"PitchPrism: http://{args.host}:{args.port} | synthetic scenario | Foundry configured: {settings()['configured']}", flush=True)
+    print(f"PitchPrism: http://{args.host}:{args.port} | reviewed match excerpt | Foundry configured: {settings()['configured']}", flush=True)
     server.serve_forever()
 
 

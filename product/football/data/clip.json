@@ -1,0 +1,629 @@
+{
+  "id": "user-match-cf1ded5c",
+  "title": "Manchester City × Newcastle",
+  "synthetic": false,
+  "durationSeconds": 66.6,
+  "clockStartSeconds": 551,
+  "teams": [
+    {
+      "id": "MCI",
+      "name": "Manchester City"
+    },
+    {
+      "id": "NEW",
+      "name": "Newcastle United"
+    }
+  ],
+  "source": {
+    "filename": "match.mp4",
+    "sha256": "cf1ded5ca487eff98505fa64ac2f2f790c04a33ab441d5eccdd785da847ef523",
+    "width": 1280,
+    "height": 720,
+    "fps": 25,
+    "frames": 1665,
+    "durationSeconds": 66.6,
+    "origin": "User-provided local broadcast excerpt, 2026-10-21",
+    "rights": "Provided for development and testing. Public redistribution licence not supplied."
+  },
+  "scope": "User-supplied 66.6-second broadcast excerpt; manually reviewed visual observations. No official event feed.",
+  "missing": [
+    "official events",
+    "xG",
+    "full-match statistics",
+    "calibrated positions",
+    "tracking",
+    "unverified player identities"
+  ],
+  "roster": [
+    {
+      "id": "carrier",
+      "name": "持球角色 / Current carrier"
+    },
+    {
+      "id": "right",
+      "name": "右侧选项 / Right-side option"
+    },
+    {
+      "id": "runner",
+      "name": "接应跑位 / Supporting run"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "build",
+      "second": 8,
+      "clock": "09:19",
+      "title": "DRAW THE PRESS",
+      "subtitle": "Watch the carrier, the nearest presser and the options ahead.",
+      "analysis": "City carry towards halfway while Newcastle hold positions ahead of the ball. The highlighted routes are possible outlets, not completed passes.",
+      "casual": "Watch the player with the ball. A teammate ahead and another near the far touchline give different ways to continue.",
+      "players": [
+        {
+          "id": "carrier",
+          "team": "MCI",
+          "foot": [
+            358,
+            400
+          ],
+          "board": [
+            44,
+            53
+          ],
+          "label": "BALL",
+          "active": true,
+          "anchorKind": "visible-foot"
+        },
+        {
+          "id": "press",
+          "team": "NEW",
+          "foot": [
+            434,
+            333
+          ],
+          "board": [
+            49,
+            48
+          ],
+          "label": "PRESS",
+          "active": true,
+          "anchorKind": "visible-foot"
+        },
+        {
+          "id": "support",
+          "team": "MCI",
+          "foot": [
+            513,
+            286
+          ],
+          "board": [
+            50,
+            34
+          ],
+          "label": "LINK",
+          "active": false,
+          "anchorKind": "visible-foot"
+        },
+        {
+          "id": "wide",
+          "team": "MCI",
+          "foot": [
+            611,
+            153
+          ],
+          "board": [
+            58,
+            8
+          ],
+          "label": "WIDE",
+          "active": false,
+          "anchorKind": "visible-foot"
+        },
+        {
+          "id": "inside",
+          "team": "MCI",
+          "foot": [
+            922,
+            398
+          ],
+          "board": [
+            65,
+            61
+          ],
+          "label": "INSIDE",
+          "active": false,
+          "anchorKind": "visible-foot"
+        },
+        {
+          "id": "cover",
+          "team": "NEW",
+          "foot": [
+            965,
+            440
+          ],
+          "board": [
+            66,
+            66
+          ],
+          "label": "",
+          "active": false,
+          "anchorKind": "visible-foot"
+        },
+        {
+          "id": "screen",
+          "team": "NEW",
+          "foot": [
+            690,
+            238
+          ],
+          "board": [
+            59,
+            28
+          ],
+          "label": "",
+          "active": false,
+          "anchorKind": "visible-foot"
+        }
+      ],
+      "routes": [
+        {
+          "a": "carrier",
+          "b": "support",
+          "kind": "option"
+        },
+        {
+          "a": "support",
+          "b": "wide",
+          "kind": "option"
+        }
+      ]
+    },
+    {
+      "id": "combine",
+      "second": 37.8,
+      "clock": "09:48",
+      "title": "FIND THE INSIDE",
+      "subtitle": "The ball is inside; a runner is available nearer the box.",
+      "analysis": "The ball has moved infield from the far side. A City runner is visible towards the penalty arc, with Newcastle defenders positioned between the ball and goal. The graphic simplifies the visible arrangement.",
+      "casual": "The ball has come away from the touchline. Look towards the teammate running nearer the box, then check the defenders in the way.",
+      "players": [
+        {
+          "id": "carrier",
+          "team": "MCI",
+          "foot": [
+            699,
+            299
+          ],
+          "board": [
+            76,
+            33
+          ],
+          "label": "BALL",
+          "active": true,
+          "anchorKind": "visible-foot"
+        },
+        {
+          "id": "runner",
+          "team": "MCI",
+          "foot": [
+            735,
+            379
+          ],
+          "board": [
+            83,
+            52
+          ],
+          "label": "RUN",
+          "active": true,
+          "anchorKind": "visible-foot"
+        },
+        {
+          "id": "support",
+          "team": "MCI",
+          "foot": [
+            423,
+            369
+          ],
+          "board": [
+            66,
+            46
+          ],
+          "label": "LINK",
+          "active": false,
+          "anchorKind": "visible-foot"
+        },
+        {
+          "id": "left",
+          "team": "MCI",
+          "foot": [
+            291,
+            267
+          ],
+          "board": [
+            66,
+            10
+          ],
+          "label": "WIDTH",
+          "active": false,
+          "anchorKind": "visible-foot"
+        },
+        {
+          "id": "press",
+          "team": "NEW",
+          "foot": [
+            657,
+            267
+          ],
+          "board": [
+            73,
+            28
+          ],
+          "label": "",
+          "active": false,
+          "anchorKind": "visible-foot"
+        },
+        {
+          "id": "cover",
+          "team": "NEW",
+          "foot": [
+            800,
+            282
+          ],
+          "board": [
+            83,
+            27
+          ],
+          "label": "",
+          "active": false,
+          "anchorKind": "visible-foot"
+        },
+        {
+          "id": "line",
+          "team": "NEW",
+          "foot": [
+            942,
+            371
+          ],
+          "board": [
+            87,
+            48
+          ],
+          "label": "",
+          "active": false,
+          "anchorKind": "visible-foot"
+        },
+        {
+          "id": "deep",
+          "team": "NEW",
+          "foot": [
+            1003,
+            471
+          ],
+          "board": [
+            90,
+            68
+          ],
+          "label": "",
+          "active": false,
+          "anchorKind": "visible-foot"
+        }
+      ],
+      "routes": [
+        {
+          "a": "carrier",
+          "b": "runner",
+          "kind": "option"
+        },
+        {
+          "a": "support",
+          "b": "carrier",
+          "kind": "observed-layout"
+        }
+      ]
+    },
+    {
+      "id": "release",
+      "second": 56.8,
+      "clock": "10:07",
+      "title": "LOOK TO THE RIGHT",
+      "subtitle": "A crowded centre. A teammate is available to the right.",
+      "analysis": "The central carrier has Newcastle players close by. A City teammate is visible to the right near the edge of the box. The dashed arrow highlights an option at this frame; it is not a prediction or a measured pass lane.",
+      "casual": "Pause on the crowd around the ball, then look right. There is a teammate to watch as play continues.",
+      "players": [
+        {
+          "id": "carrier",
+          "team": "MCI",
+          "foot": [
+            645,
+            344
+          ],
+          "board": [
+            76,
+            51
+          ],
+          "label": "BALL",
+          "active": true,
+          "anchorKind": "visible-foot"
+        },
+        {
+          "id": "support",
+          "team": "MCI",
+          "foot": [
+            538,
+            327
+          ],
+          "board": [
+            71,
+            45
+          ],
+          "label": "LINK",
+          "active": false,
+          "anchorKind": "visible-foot"
+        },
+        {
+          "id": "right",
+          "team": "MCI",
+          "foot": [
+            938,
+            360
+          ],
+          "board": [
+            87,
+            75
+          ],
+          "label": "RIGHT",
+          "active": true,
+          "anchorKind": "visible-foot"
+        },
+        {
+          "id": "wide",
+          "team": "MCI",
+          "foot": [
+            457,
+            552
+          ],
+          "board": [
+            65,
+            87
+          ],
+          "label": "WIDTH",
+          "active": false,
+          "anchorKind": "visible-foot"
+        },
+        {
+          "id": "press",
+          "team": "NEW",
+          "foot": [
+            628,
+            331
+          ],
+          "board": [
+            74,
+            48
+          ],
+          "label": "",
+          "active": false,
+          "anchorKind": "visible-foot"
+        },
+        {
+          "id": "cover",
+          "team": "NEW",
+          "foot": [
+            904,
+            319
+          ],
+          "board": [
+            85,
+            65
+          ],
+          "label": "",
+          "active": false,
+          "anchorKind": "visible-foot"
+        },
+        {
+          "id": "line",
+          "team": "NEW",
+          "foot": [
+            961,
+            375
+          ],
+          "board": [
+            89,
+            80
+          ],
+          "label": "",
+          "active": false,
+          "anchorKind": "visible-foot"
+        },
+        {
+          "id": "deep",
+          "team": "NEW",
+          "foot": [
+            817,
+            266
+          ],
+          "board": [
+            88,
+            39
+          ],
+          "label": "",
+          "active": false,
+          "anchorKind": "visible-foot"
+        }
+      ],
+      "routes": [
+        {
+          "a": "carrier",
+          "b": "right",
+          "kind": "option"
+        }
+      ]
+    }
+  ],
+  "chapters": [
+    {
+      "start": 0,
+      "end": 8,
+      "title": "01 / Patient build-up",
+      "caption": "City circulate before the carry towards halfway."
+    },
+    {
+      "start": 8,
+      "end": 20.4,
+      "title": "02 / Move to the far side",
+      "caption": "Follow the ball into the far-side channel."
+    },
+    {
+      "start": 20.4,
+      "end": 26.6,
+      "title": "03 / Bernardo close-up",
+      "caption": "BERNARDO and number 20 are visible on the shirt."
+    },
+    {
+      "start": 26.6,
+      "end": 37.8,
+      "title": "04 / Work inside",
+      "caption": "The wide camera returns; watch the far-side combination."
+    },
+    {
+      "start": 37.8,
+      "end": 56.8,
+      "title": "05 / Around the box",
+      "caption": "City continue in front of the defensive line."
+    },
+    {
+      "start": 56.8,
+      "end": 66.6,
+      "title": "06 / Right-side contest",
+      "caption": "Play moves right; the clip ends in a touchline contest."
+    }
+  ],
+  "observations": [
+    {
+      "id": "clip-score",
+      "second": 0,
+      "type": "scoreboard",
+      "text": "The broadcast scoreboard reads MCI 0–0 NEW.",
+      "source": "Visible broadcast scoreboard; excerpt only."
+    },
+    {
+      "id": "clip-build",
+      "second": 8,
+      "type": "visual-observation",
+      "text": "City carry towards halfway while Newcastle hold positions ahead of the ball. The highlighted routes are possible outlets, not completed passes.",
+      "scene": "build"
+    },
+    {
+      "id": "clip-bernardo",
+      "second": 24,
+      "type": "shirt-text",
+      "text": "The close-up shows BERNARDO and shirt number 20. No other player identity has been verified."
+    },
+    {
+      "id": "clip-combine",
+      "second": 37.8,
+      "type": "visual-observation",
+      "text": "The ball has moved infield from the far side. A City runner is visible towards the penalty arc, with Newcastle defenders positioned between the ball and goal. The graphic simplifies the visible arrangement.",
+      "scene": "combine"
+    },
+    {
+      "id": "clip-release",
+      "second": 56.8,
+      "type": "visual-observation",
+      "text": "The central carrier has Newcastle players close by. A City teammate is visible to the right near the edge of the box. The dashed arrow highlights an option at this frame; it is not a prediction or a measured pass lane.",
+      "scene": "release"
+    },
+    {
+      "id": "clip-end",
+      "second": 66.56,
+      "type": "visual-observation",
+      "text": "The clip ends with a touchline contest on the right. The scoreboard still reads MCI 0–0 NEW. No goal is shown; no full-match result is inferred."
+    }
+  ],
+  "production": {
+    "mode": "editorial",
+    "durationSeconds": 97.2,
+    "timeline": [
+      {
+        "kind": "intro",
+        "outputStart": 0,
+        "outputEnd": 2.8,
+        "sourceStart": 0,
+        "sourceEnd": 0
+      },
+      {
+        "kind": "live",
+        "outputStart": 2.8,
+        "outputEnd": 10.8,
+        "sourceStart": 0,
+        "sourceEnd": 8
+      },
+      {
+        "kind": "freeze",
+        "outputStart": 10.8,
+        "outputEnd": 15.8,
+        "sourceStart": 8,
+        "sourceEnd": 8,
+        "scene": "build"
+      },
+      {
+        "kind": "live",
+        "outputStart": 15.8,
+        "outputEnd": 45.6,
+        "sourceStart": 8,
+        "sourceEnd": 37.8
+      },
+      {
+        "kind": "freeze",
+        "outputStart": 45.6,
+        "outputEnd": 50.6,
+        "sourceStart": 37.8,
+        "sourceEnd": 37.8,
+        "scene": "combine"
+      },
+      {
+        "kind": "live",
+        "outputStart": 50.6,
+        "outputEnd": 69.6,
+        "sourceStart": 37.8,
+        "sourceEnd": 56.8
+      },
+      {
+        "kind": "freeze",
+        "outputStart": 69.6,
+        "outputEnd": 74.6,
+        "sourceStart": 56.8,
+        "sourceEnd": 56.8,
+        "scene": "release"
+      },
+      {
+        "kind": "live",
+        "outputStart": 74.6,
+        "outputEnd": 84.4,
+        "sourceStart": 56.8,
+        "sourceEnd": 66.6
+      },
+      {
+        "kind": "rewind",
+        "outputStart": 84.4,
+        "outputEnd": 85.2,
+        "sourceStart": 66.6,
+        "sourceEnd": 56.8
+      },
+      {
+        "kind": "replay",
+        "outputStart": 85.2,
+        "outputEnd": 92.8,
+        "sourceStart": 56.8,
+        "sourceEnd": 60.6
+      },
+      {
+        "kind": "outro",
+        "outputStart": 92.8,
+        "outputEnd": 97.2,
+        "sourceStart": 66.56,
+        "sourceEnd": 66.56
+      }
+    ]
+  },
+  "disclosure": "Foot anchors were reviewed on selected source frames. Board positions and dashed routes are editorial schematics, not measured tracking or official events."
+}
