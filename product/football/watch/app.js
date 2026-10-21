@@ -73,7 +73,7 @@ async function refresh(force=false){
   const id=++refreshId;try{const result=await api('/api/clip/snapshot?t='+second);if(id!==refreshId)return;state=result;syncPitch();if(!explaining)explain(false);}catch(error){notice(error.message);}
 }
 function seek(second){video.pause();const freeze=match.production.timeline.find(s=>s.kind==='freeze'&&Math.abs(s.sourceStart-second)<.02);video.currentTime=variant==='enhanced'?(freeze?freeze.outputStart+.4:sourceToOutputTime(storyMap,second)):second;refresh(true);showControls();}
-function switchVideo(next){if(next===variant)return;const second=sourceTime();variant=next;$('#analysis-toggle').checked=next==='enhanced';video.pause();video.addEventListener('loadedmetadata',()=>{video.currentTime=next==='enhanced'?sourceToOutputTime(storyMap,second):second;refresh(true);},{once:true});video.src=new URL(`./media/${next}.mp4`,import.meta.url).href;video.load();$('#media-version').textContent=next==='enhanced'?'切换原片 ›':'切换增强片 ›';}
+function switchVideo(next){if(next===variant)return;const second=sourceTime();variant=next;$('#analysis-toggle').checked=next==='enhanced';video.pause();video.addEventListener('loadedmetadata',()=>{video.currentTime=next==='enhanced'?sourceToOutputTime(storyMap,second):second;refresh(true);},{once:true});video.src=new URL(`./media/${next}.mp4?v=match-v2`,import.meta.url).href;video.load();$('#media-version').textContent=next==='enhanced'?'切换原片 ›':'切换增强片 ›';}
 function toggleSettings(){content.close();const open=$('#settings').hidden;$('#settings').hidden=!open;activeMenu=open?'settings':null;drawer.setOpen(true);showControls();}
 $('#media-version').onclick=e=>{e.preventDefault();switchVideo(variant==='enhanced'?'source':'enhanced');};
 $('#left-edge').onpointerenter=()=>drawer.setOpen(true);$('#left-edge').onclick=()=>drawer.setOpen(true);drawer.element.onpointerleave=()=>{if(!content.isOpen&&$('#settings').hidden)drawer.setOpen(false);};
@@ -100,7 +100,7 @@ async function init(){
   $('#follow-player').replaceChildren(new Option('全队','all'));for(const p of match.roster)$('#follow-player').add(new Option(p.name,p.id));if(!match.roster.some(p=>p.id===preferences.player))preferences.player='all';
   $('#follow-player').value=preferences.player;$('#familiarity').value=preferences.familiarity;$('#watch-purpose').value=preferences.purpose;$('#preference-status').textContent='关注定格中的角色；未核验的球员不补姓名。';
   $('#moment-kicker').textContent='PitchPrism · GameBuddy 原版视觉';$('#moment-title').textContent='看懂每一次进攻';$('#moment-subtitle').textContent='沉浸观看 · 战术展开 · 证据解读';$('#moment-heading').hidden=true;
-  pitch.setStyle(getConfig().halfCourt);video.addEventListener('loadedmetadata',()=>{video.currentTime=1.4;refresh(true);},{once:true});video.src=new URL('./media/enhanced.mp4',import.meta.url).href;video.load();
+  pitch.setStyle(getConfig().halfCourt);video.addEventListener('loadedmetadata',()=>{video.currentTime=1.4;refresh(true);},{once:true});video.src=new URL('./media/enhanced.mp4?v=match-v2',import.meta.url).href;video.load();
   const mode=new URLSearchParams(location.search).get('mode');if(['halfCourt','fullCourt'].includes(mode))setMode(mode);showControls();
 }
 init().catch(error=>notice(error.message));
