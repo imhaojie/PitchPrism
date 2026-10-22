@@ -1,8 +1,11 @@
 """Real excerpt provenance, timeline, time bounds and shared Agent context."""
 import json
 import unittest
+from unittest.mock import patch
 from product.football import clip
 from product.football.foundry import run_agent, validate_story
+from product.football.scripts import verify_foundry
+from infra.azure.deploy import require_free_subscription
 from product.football.tests import test_football as http_helpers
 call, response = http_helpers.call, http_helpers.response
 
@@ -84,3 +87,33 @@ class ClipHTTP(unittest.TestCase):
         self.assertEqual(result['provider'],'local')
         self.assertEqual(result['evidenceIds'],['clip-release'])
         self.assertNotIn('NORTHBRIDGE',json.dumps(result))
+
+
+class CloudReceiptContract(unittest.TestCase):
+    """Fake responses test receipt validation only; they never certify cloud access."""
+    def test_default_receipt_is_bound_to_the_active_real_clip(self):
+        fake = {'provider':'azure-foundry', 'trace':[{'tool':name, 'ok':True} for name in
+                ['read_match_state','read_evidence','validate_story']]}
+        with patch.object(verify_foundry, 'settings', return_value={'configured':True}), patch.object(verify_foundry, 'run_agent', return_value=fake) as agent:
+            receipt = verify_foundry.verify()
+        self.assertFalse(receipt['synthetic'])
+        self.assertEqual(receipt['scenario'],'clip')
+        self.assertEqual(receipt['sourceSha256'],clip.CLIP['source']['sha256'])
+        self.assertEqual(receipt['sourceSecond'],37.8)
+        self.assertIs(agent.call_args.kwargs['context'],clip.AGENT_CONTEXT)
+
+    def test_unconfigured_or_incomplete_calls_cannot_create_a_receipt(self):
+        with patch.object(verify_foundry, 'settings', return_value={'configured':False}), patch.object(verify_foundry, 'run_agent') as agent:
+            with self.assertRaises(RuntimeError):verify_foundry.verify()
+            agent.assert_not_called()
+        for result in [{'provider':'local','trace':[]},{'provider':'azure-foundry','trace':[{'tool':'validate_story','ok':True}]}]:
+            with patch.object(verify_foundry, 'settings', return_value={'configured':True}), patch.object(verify_foundry, 'run_agent', return_value=result):
+                with self.assertRaises(RuntimeError):verify_foundry.verify()
+
+    def test_deployment_rejects_paid_or_unprotected_billing(self):
+        for policy in [{'quotaId':'PayAsYouGo_2014-09-01','spendingLimit':'Off'},
+                       {'quotaId':'AzureForStudents_2018-01-01','spendingLimit':'Off'}, {}]:
+            with self.subTest(policy=policy),self.assertRaises(RuntimeError):
+                require_free_subscription({'state':'Enabled','subscriptionPolicies':policy})
+        require_free_subscription({'state':'Enabled','subscriptionPolicies':{
+            'quotaId':'AzureForStudents_2018-01-01','spendingLimit':'On'}})

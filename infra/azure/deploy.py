@@ -21,18 +21,35 @@ def az(*args):
     return json.loads(result.stdout) if result.stdout.strip() else None
 
 
+def require_free_subscription(subscription):
+    """A paid offer must never be used by this free-account deployment helper."""
+    policy = subscription.get('subscriptionPolicies', {})
+    quota = policy.get('quotaId', '').casefold()
+    if subscription.get('state') != 'Enabled' or not ('student' in quota or quota.startswith('freetrial_')):
+        raise RuntimeError('Deployment requires an enabled Azure for Students or Free Trial subscription; no paid upgrade is performed.')
+    if policy.get('spendingLimit', '').casefold() != 'on':
+        raise RuntimeError('The subscription spending limit must remain On. Deployment stopped without changing the billing plan.')
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--subscription', required=True, help='Explicit subscription ID; never implicit/default')
     parser.add_argument('--location', default='eastus2')
     parser.add_argument('--group', default='pitchprism-demo')
     parser.add_argument('--model', default='gpt-4.1-mini')
+    parser.add_argument('--capacity', type=int, default=10, help='On-demand rate quota in thousands of tokens/minute, not provisioned throughput')
     parser.add_argument('--image', default='', help='Optional public container image')
     parser.add_argument('--apply', action='store_true')
     args = parser.parse_args()
+    if not 1 <= args.capacity <= 10:
+        raise RuntimeError('This demo limits on-demand rate capacity to 1–10')
     account = az('account', 'show', '--subscription', args.subscription)
     if account.get('state') != 'Enabled':
         raise RuntimeError('The explicitly selected subscription is not Enabled')
+    subscription = az('rest', '--method', 'get', '--url',
+                      f'https://management.azure.com/subscriptions/{args.subscription}?api-version=2022-12-01')
+    if args.apply:
+        require_free_subscription(subscription)
     models = az('cognitiveservices', 'model', 'list', '--location', args.location, '--subscription', args.subscription)
     candidates = [m for m in models if m.get('model', {}).get('name') == args.model and
                   any(s.get('name') == 'GlobalStandard' for s in m.get('model', {}).get('skus', []))]
@@ -40,7 +57,8 @@ def main():
         raise RuntimeError('Requested model/GlobalStandard is unavailable in this subscription/region. Select an available model and region; no deployment was attempted.')
     chosen = sorted(candidates, key=lambda m: m['model']['version'])[-1]['model']
     plan = {'subscription': args.subscription, 'group': args.group, 'region': args.location,
-            'model': chosen['name'], 'version': chosen['version'], 'throughput': 'GlobalStandard capacity=1',
+            'billingPolicy': subscription.get('subscriptionPolicies', {}),
+            'model': chosen['name'], 'version': chosen['version'], 'throughput': f'GlobalStandard capacity={args.capacity}',
             'container': args.image or 'not requested', 'replicas': '0–1, 0.25 vCPU / 0.5 GiB',
             'notes': 'Usage consumes credits or incurs charges. Trial/region/model quota can prevent deployment. This is not a cost guarantee.'}
     print(json.dumps(plan, indent=2))
@@ -53,7 +71,7 @@ def main():
        '--tags', 'project=PitchPrism', 'purpose=hackathon-demo')
     deployment = az('deployment', 'group', 'create', '--name', 'pitchprism', '--resource-group', args.group,
         '--subscription', args.subscription, '--template-file', str(Path(__file__).with_name('main.bicep')),
-        '--parameters', f'modelName={chosen["name"]}', f'modelVersion={chosen["version"]}', f'containerImage={args.image}')
+        '--parameters', f'location={args.location}', f'modelName={chosen["name"]}', f'modelVersion={chosen["version"]}', f'capacity={args.capacity}', f'containerImage={args.image}')
     outputs = {key: value['value'] for key, value in deployment['properties']['outputs'].items()}
     user = az('ad', 'signed-in-user', 'show')
     az('role', 'assignment', 'create', '--assignee-object-id', user['id'], '--assignee-principal-type', 'User',

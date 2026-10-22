@@ -1,6 +1,8 @@
 # Azure / Foundry setup
 
-The user chose a **free trial**, not automatic pay-as-you-go. Identity/card checks require the account owner. Azure CLI is installed; first login found no subscriptions. No resource was created.
+The user selected **Azure for Students with a personal Microsoft account and university email for academic verification** on 2026-10-22; no pay-as-you-go upgrade is authorized. Student eligibility, identity checks and final account terms require the account owner. A subscription and actual model quota must be confirmed before deployment. No successful live inference is claimed yet.
+
+[Azure for Students](https://azure.microsoft.com/free/students/) offers eligible students $100 credit for 12 months without a credit card. School email verification is separate from Microsoft account sign-in; confirm both identities in the registration UI.
 
 Eligible new customers can receive $200 credit for 30 days. Trial availability, model access and regional quota vary; a trial does not guarantee the chosen model. Never upgrade or accept paid offers automatically. Check remaining credit before deployment. Budget alerts and the app's in-memory call limit are not spending caps.
 
@@ -25,7 +27,7 @@ After checking the explicit trial subscription/credit:
 .venv/bin/python -m product.football.server --port 4180
 ```
 
-This creates a Foundry resource/project/model, assigns the user Cognitive Services OpenAI User and writes an ignored keyless `.env` without overwriting existing config. RBAC propagation may take time. A real verification receipt is written only after successful inference and validation.
+The apply path rejects paid offers or subscriptions without the spending limit set to On. GlobalStandard capacity 10 is an on-demand rate quota, not provisioned throughput. This creates a Foundry resource/project/model, assigns the user Cognitive Services OpenAI User and writes an ignored keyless `.env` without overwriting existing config. RBAC propagation may take time. A real verification receipt is written only after successful inference and read/inspect/validate tool steps. The default verification now uses the active real clip at source 37.8s; `--scenario synthetic` explicitly tests the separate fictional fixture. Receipts include source/data SHA-256 and are saved with owner-only permissions.
 
 For a public dynamic app, build the Dockerfile and pass a pullable public image:
 
@@ -33,7 +35,7 @@ For a public dynamic app, build the Dockerfile and pass a pullable public image:
 .venv/bin/python infra/azure/deploy.py --subscription YOUR_SUBSCRIPTION_ID --image YOUR_PUBLIC_IMAGE --apply
 ```
 
-The image includes only active/shared modules, generates the footage and runs as a non-root user. Docker was started locally, but its base-image pull stalled and was stopped; no successful image build is claimed. Optional Bicep resources use Container Apps Consumption, HTTPS, managed identity, 0–1 replicas, 0.25 vCPU/0.5 GiB, no Log Analytics workspace. Fixed media needs no Blob/queue/training service.
+The image includes only active/shared modules, fetches the hash-verified frozen demo media and runs as a non-root user. Docker was started locally, but its base-image pull stalled and was stopped; no successful image build is claimed. Optional Bicep resources use Container Apps Consumption, HTTPS, managed identity, 0–1 replicas, 0.25 vCPU/0.5 GiB, no Log Analytics workspace. Fixed media needs no Blob/queue/training service.
 
 ```bash
 az bicep build --file infra/azure/main.bicep --outfile /tmp/pitchprism-azure.json
