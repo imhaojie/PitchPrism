@@ -35,7 +35,7 @@ For a public dynamic app, build the Dockerfile and pass a pullable public image:
 .venv/bin/python infra/azure/deploy.py --subscription YOUR_SUBSCRIPTION_ID --image YOUR_PUBLIC_IMAGE --apply
 ```
 
-The image includes only active/shared modules, fetches the hash-verified frozen demo media and runs as a non-root user. Docker was started locally, but its base-image pull stalled and was stopped; no successful image build is claimed. Optional Bicep resources use Container Apps Consumption, HTTPS, managed identity, 0–1 replicas, 0.25 vCPU/0.5 GiB, no Log Analytics workspace. Fixed media needs no Blob/queue/training service.
+The image includes only active/shared modules, fetches the hash-verified frozen demo media and runs as a non-root user. The public GitHub Actions build succeeded for commit `635fd0f`, and its GHCR manifest was anonymously reachable. The image reference is `ghcr.io/imhaojie/pitchprism:635fd0f12e85382b3192d2df7cc8f2c03ad91df8` (verify the current commit tag before use). Optional Bicep resources use Container Apps Consumption, HTTPS, managed identity, 0–1 replicas, 0.25 vCPU/0.5 GiB, no Log Analytics workspace. Fixed media needs no Blob/queue/training service.
 
 ```bash
 az bicep build --file infra/azure/main.bicep --outfile /tmp/pitchprism-azure.json
