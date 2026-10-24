@@ -1,7 +1,8 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en" translate="no">
   <head>
     <meta charset="UTF-8" />
+    <meta name="google" content="notranslate" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta name="color-scheme" content="dark" />
     <title>PitchPrism · AI Football Companion</title>
@@ -12,13 +13,13 @@
     <link rel="stylesheet" href="./shared/media/media.css" />
     <link rel="stylesheet" href="./shared/content/content.css" />
     <link rel="stylesheet" href="./shared/dev/inspector.css" />
-    <link rel="stylesheet" href="./style.css?v=1.0.0" />
+    <link rel="stylesheet" href="./style.css?v=english-v1" />
   </head>
   <body>
     <main
       id="stage"
       data-glass="css"
-      aria-label="PitchPrism 观赛播放器"
+      aria-label="PitchPrism match player"
       tabindex="-1"
     >
       <div id="scene">
@@ -26,7 +27,7 @@
         <div class="scene-shade"></div>
         <div id="video-surface" data-liquid-dynamic-container>
           <video
-            poster="./poster.jpg?v=1.0.0"
+            poster="./poster.jpg?v=english-v1"
             muted
             id="match-video"
             playsinline
@@ -53,7 +54,7 @@
         <div class="moment-pill glass-shell">
           <div class="glass-target"></div>
           <div class="glass-content">
-            <span id="moment-kicker">PitchPrism · 足球观赛伙伴</span>
+            <span id="moment-kicker">PitchPrism · Your football companion</span>
           </div>
         </div>
         <h1 id="moment-title"></h1>
@@ -62,21 +63,21 @@
       <aside
         id="court-shell"
         class="glass-shell"
-        aria-label="独立球队战术板"
+        aria-label="Editorial football pitch"
         inert
       >
         <div class="glass-target"></div>
         <div id="court-foreground" class="glass-content"></div>
-        <button id="court-close" aria-label="收起战术板">×</button>
+        <button id="court-close" aria-label="Close pitch view">×</button>
       </aside>
       <nav id="top-tabs" class="glass-shell" aria-label="Viewing layout">
         <div class="glass-target"></div>
         <div class="glass-content">
-          <button data-mode="immersive" class="selected">沉浸式</button
-          ><button data-mode="fullCourt">全场</button
-          ><button data-mode="halfCourt">半场</button
-          ><button id="open-tactics">⌁ 战术演播室</button
-          ><button id="open-insights">✦ AI 解读</button>
+          <button data-mode="immersive" class="selected">Immersive</button
+          ><button data-mode="fullCourt">Full pitch</button
+          ><button data-mode="halfCourt">Half pitch</button
+          ><button id="open-tactics">⌁ Tactical Studio</button
+          ><button id="open-insights">✦ Insights</button>
         </div>
       </nav>
       <div id="controls-host"></div>
@@ -84,12 +85,12 @@
       <button
         id="left-edge"
         class="edge-hotzone"
-        aria-label="打开操作抽屉"
+        aria-label="Open navigation"
       ></button
       ><button
         id="right-edge"
         class="edge-hotzone"
-        aria-label="展开半场战术板"
+        aria-label="Open half-pitch view"
       ></button>
       <div
         id="settings"
@@ -97,59 +98,68 @@
         class="glass-shell popover"
         hidden
         role="dialog"
-        aria-label="更多"
+        aria-label="More"
       >
         <div class="glass-target"></div>
         <div class="glass-content">
-          <h2>更多</h2>
+          <h2>More</h2>
           <details id="watch-preferences">
-            <summary>观赛偏好</summary>
+            <summary>Viewing preferences</summary>
             <label class="preference-row"
-              >关注角色<select id="follow-player" aria-label="关注角色">
-                <option value="all">全队</option>
+              >Focus role<select id="follow-player" aria-label="Focus role">
+                <option value="all">All roles</option>
               </select></label
             >
             <label class="preference-row"
-              >足球熟悉程度<select id="familiarity" aria-label="足球熟悉程度">
-                <option value="beginner">入门</option>
-                <option value="familiar">熟悉</option>
+              >Football familiarity<select
+                id="familiarity"
+                aria-label="Football familiarity"
+              >
+                <option value="beginner">New to football</option>
+                <option value="familiar">Familiar</option>
               </select></label
             >
             <label class="preference-row"
-              >观看目的<select id="watch-purpose" aria-label="观看目的">
-                <option value="enjoy">享受比赛</option>
-                <option value="analyze">深入分析</option>
+              >Viewing purpose<select
+                id="watch-purpose"
+                aria-label="Viewing purpose"
+              >
+                <option value="enjoy">Enjoy the match</option>
+                <option value="analyze">Analyze the play</option>
               </select></label
             >
             <p id="preference-status" class="keyboard-hint"></p>
           </details>
           <details>
-            <summary>观看设置</summary>
+            <summary>Playback settings</summary>
             <label class="setting-row"
-              >视频解释图层 <input type="checkbox" id="analysis-toggle" checked
+              >Enhanced video
+              <input type="checkbox" id="analysis-toggle" checked
             /></label>
             <p id="media-info" class="keyboard-hint">
-              PitchPrism · 复核版战术增强视频
+              PitchPrism · Reviewed tactical movie
             </p>
           </details>
           <button id="style-inspector" class="setting-row">
-            外观与组件 <span>›</span>
+            Appearance <span>›</span>
           </button>
           <details>
-            <summary>项目与制作</summary>
+            <summary>About this demo</summary>
             <button data-content="sources" class="setting-row">
-              完整来源 <span>›</span></button
+              Source and evidence <span>›</span></button
             ><button data-content="history" class="setting-row">
-              运行记录 <span>›</span></button
+              Production details <span>›</span></button
             ><a class="setting-row" href="#" id="media-version"
-              >增强视频 <span>›</span></a
+              >Enhanced video <span>›</span></a
             >
           </details>
           <details>
-            <summary>帮助</summary>
+            <summary>Help</summary>
             <p class="keyboard-hint">
-              左侧移入找操作；点击右侧看战术。空格播放 · F 全屏 · Esc
-              逐层返回。增强片的烧录内容不随偏好变化。
+              Open the left navigation for chapters and settings; open the right
+              pitch for tactics. Space: play/pause · F: fullscreen · Esc: close
+              panels. Viewing preferences do not change text burned into the
+              enhanced movie.
             </p>
           </details>
         </div>
@@ -158,18 +168,18 @@
         id="follow-reminder"
         class="glass-shell"
         hidden
-        aria-label="查看当前提醒依据"
+        aria-label="Inspect the current reminder evidence"
       >
         <span class="glass-target"></span><span class="glass-content"></span>
       </button>
       <div id="notice" role="status" hidden></div>
       <div id="load-error" hidden>
-        <h2>原片暂时无法播放</h2>
-        <p>请检查本地素材是否存在。不会用图片代替视频。</p>
-        <button id="retry-media">重新加载</button>
+        <h2>Video unavailable</h2>
+        <p>Check your connection and the demo media files, then try again.</p>
+        <button id="retry-media">Retry</button>
       </div>
     </main>
     <script src="./shared/vendor/court-viewer.js"></script>
-    <script type="module" src="./app.js?v=1.0.1"></script>
+    <script type="module" src="./app.js?v=english-v1"></script>
   </body>
 </html>

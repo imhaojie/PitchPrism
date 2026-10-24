@@ -53,7 +53,7 @@ test("layers can be removed independently without dropping the reviewed players"
   assert.ok(!graphics.includes('class="tactic-defense'));
   assert.ok(!graphics.includes('class="tactic-label'));
   assert.ok(graphics.includes('data-role="carrier"'));
-  assert.ok(pitchSVG(null).includes("非实时追踪"));
+  assert.ok(pitchSVG(null).includes("not live tracking"));
   assert.equal(analysisFor(null), null);
 });
 
@@ -161,4 +161,61 @@ test("every rendered role label stays in frame and avoids every other label in a
         }
         assert.ok(boxes.length > 0);
       }
+});
+
+test("all tactical readings use the reviewed English video text", async () => {
+  const { analysisFor, roleName } = await model;
+  for (const scene of clip.scenes) {
+    const plan = analysisFor(scene);
+    assert.ok(!/\p{Script=Han}/u.test(JSON.stringify(plan)));
+    plan.steps.forEach((step, i) =>
+      assert.equal(step.text, story.scenes[scene.id].steps[i].text),
+    );
+    for (const player of scene.players)
+      assert.ok(!/\p{Script=Han}/u.test(roleName(player)));
+  }
+});
+
+test("English appearance copy covers shared labels, preset feedback and validation errors", async () => {
+  const { englishInspector } = await import(
+    "../football/watch/english-inspector.js"
+  );
+  const source = fs.readFileSync(
+    path.join(__dirname, "../watch/dev/inspector.js"),
+    "utf8",
+  );
+  for (const match of source.matchAll(/'([^'\n]*\p{Script=Han}[^'\n]*)'/gu)) {
+    assert.ok(
+      !/\p{Script=Han}/u.test(englishInspector(match[1])),
+      `Untranslated inspector copy: ${match[1]}`,
+    );
+  }
+  const { importConfig } = await import("../watch/config/config.js");
+  for (const value of ["{}", '{"schemaVersion":7}', '{"extra":true}']) {
+    assert.throws(
+      () => importConfig(value),
+      (error) => !/\p{Script=Han}/u.test(englishInspector(error.message)),
+    );
+  }
+});
+
+test("the active viewing UI is English including accessibility and help copy", () => {
+  for (const name of [
+    "app.js",
+    "football-pitch.js",
+    "index.html",
+    "tactical-model.js",
+    "tactical-studio.js",
+  ]) {
+    const source = fs.readFileSync(
+      path.join(__dirname, "../football/watch", name),
+      "utf8",
+    );
+    assert.ok(!/\p{Script=Han}/u.test(source), `${name}: non-English UI copy`);
+  }
+  const html = fs.readFileSync(
+    path.join(__dirname, "../football/watch/index.html"),
+    "utf8",
+  );
+  assert.ok(html.includes('lang="en"'));
 });

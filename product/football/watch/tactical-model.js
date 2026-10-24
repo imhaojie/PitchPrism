@@ -9,105 +9,103 @@ export const escapeHTML = (value) =>
   );
 const plans = {
   build: {
-    title: "带球推进，读出接应层次",
-    tag: "BUILD-UP / 推进观察",
-    summary:
-      "先找持球人，再比较内侧接应与远侧宽度。画面呈现的是当下站位；线路表达可供观察的选择。",
+    title: "Read the next option",
+    tag: "BUILD-UP / COMPARE THE OPTIONS",
+    summary: "Carry. Connect. Compare the width.",
     steps: [
       {
-        title: "锁定持球人与近侧对手",
-        text: "持球角色向中线附近推进。先比较他与前方最近纽卡球员的位置，再观察球是否继续向前。",
+        title: "Start with the ball",
+        text: "City's carrier approaches halfway. A Newcastle player is positioned ahead of him.",
         focus: ["carrier", "press"],
         routes: [],
       },
       {
-        title: "寻找前方接应",
-        text: "前方的 LINK 角色提供一个可观察的连接点。青色虚线连接两人的示意位置，不代表传球已经发生或线路畅通。",
+        title: "Find the link",
+        text: "The teammate ahead is a possible link. The dashed arrow illustrates an option, not a completed pass.",
         focus: ["carrier", "support"],
         routes: [0],
       },
       {
-        title: "把远侧宽度纳入视野",
-        text: "远侧 WIDE 角色靠近边线。比较持球、接应、远侧三个位置和不同方向；虚线为独立选项，不是连续传球记录。后续是否采用这一选择要回到原片确认。",
+        title: "Compare the far side",
+        text: "Compare the central link with the far-side teammate. The arrows show separate options, not a recorded sequence.",
         focus: ["carrier", "support", "wide"],
         routes: [0, 1],
       },
     ],
-    limitation: "此帧不能证明对手已被吸引、传球一定成功或进攻即将形成机会。",
+    limitation:
+      "This still does not prove that a pass is open, will succeed, or will create a chance.",
   },
   combine: {
-    title: "由边入内，观察前方接应",
-    tag: "INFIELD / 内侧连接",
-    summary:
-      "球已来到内侧。将持球、前方跑位与球门前的防守角色一起阅读，比只盯住球更容易理解这一帧。",
+    title: "From wide to inside",
+    tag: "INFIELD / CONNECT THE PLAY",
+    summary: "Read the carrier, the runner and the defenders.",
     steps: [
       {
-        title: "先确认球所在的位置",
-        text: "持球角色出现在内侧。比较持球人与后方 LINK 接应的位置；这一步不画传球线。",
+        title: "Locate the carrier",
+        text: "The ball has come infield. Compare the carrier with the supporting teammate behind the ball.",
         focus: ["support", "carrier"],
         routes: [],
       },
       {
-        title: "看向禁区弧附近的队友",
-        text: "SUPPORT 角色位于更接近禁区弧的位置。青色虚线提示一个值得关注的接应方向；它不是预测路线，也没有测量传球难度。",
+        title: "Look towards the arc",
+        text: "A City runner is visible nearer the box. Watch the potential connection ahead.",
         focus: ["carrier", "runner"],
         routes: [0],
       },
       {
-        title: "同时阅读球门前的防守",
-        text: "纽卡球员位于球与球门之间。逐个高亮防守角色，比较其与接应者的位置；无法据此确认越位或防守意图。",
+        title: "Read the defenders",
+        text: "Newcastle defenders stand between ball and goal. Check their positions before judging the forward option.",
         focus: ["carrier", "runner", "cover", "line", "deep"],
         routes: [0],
       },
     ],
     limitation:
-      "没有官方事件、校准坐标或连续追踪，不能给出精确距离、越位结论或球员身份。",
+      "Without official events, calibrated coordinates or tracking, no exact distances, offside decisions or additional identities are inferred.",
   },
   release: {
-    title: "中央受限，把视线转向右侧",
-    tag: "RIGHT OPTION / 右侧观察",
-    summary:
-      "中央持球人与附近对手形成第一关注点；右侧队友是第二关注点。分步高亮让两处位置之间的关系更清楚。",
+    title: "Look to the right",
+    tag: "RIGHT OPTION / WIDEN YOUR VIEW",
+    summary: "Start in the centre. Then widen your view.",
     steps: [
       {
-        title: "从中央的持球点开始",
-        text: "纽卡球员靠近中央持球角色。金色光圈突出当前关注区域，仅用于阅读画面，不表示计算出的施压强度。",
+        title: "Start in the centre",
+        text: "A Newcastle player is close to the central carrier. The gold halo marks the area to inspect.",
         focus: ["carrier", "press"],
         routes: [],
       },
       {
-        title: "找到右侧可见队友",
-        text: "RIGHT 角色位于右侧、靠近禁区边缘。箭头提示从中央看向右侧的选择，不表示这条路线已开放或一定会被采用。",
+        title: "Find the right-side option",
+        text: "A City teammate is visible to the right near the box. The arrow highlights a possible outlet.",
         focus: ["carrier", "right"],
         routes: [0],
       },
       {
-        title: "把右侧接应与对手一起看",
-        text: "右侧附近仍有防守角色。将 RIGHT、邻近对手与中央持球人一起比较，然后回到视频查看接下来的动作。",
+        title: "Check the nearby defenders",
+        text: "The right-side teammate has defenders nearby. Compare their positions before following the next action.",
         focus: ["carrier", "right", "cover", "line"],
         routes: [0],
       },
     ],
     limitation:
-      "箭头是定格时刻的选项示意；不预测后续传球，也不推断进球、xG 或整场表现。",
+      "Arrows illustrate options at this still. They do not predict the next pass or imply a goal, xG or full-match performance.",
   },
 };
 export const analysisFor = (scene) => plans[scene?.id] || null;
 export const roleName = (p) =>
   ({
-    carrier: "持球",
-    press: "近侧对手",
-    support: "接应",
-    wide: "远侧宽度",
-    inside: "内侧",
-    cover: "防守",
-    screen: "防守",
-    runner: "前方接应",
-    left: "边路",
-    right: "右侧接应",
-    line: "防守",
-    deep: "防守",
-  })[p.id] || "可见角色";
+    carrier: "Carrier",
+    press: "Nearest opponent",
+    support: "Link",
+    wide: "Far-side width",
+    inside: "Inside support",
+    cover: "Defender",
+    screen: "Defender",
+    runner: "Supporting run",
+    left: "Wide support",
+    right: "Right-side option",
+    line: "Defender",
+    deep: "Defender",
+  })[p.id] || "Visible role";
 export function sceneGraphics(
   scene,
   {
@@ -278,7 +276,7 @@ export function sceneGraphics(
 }
 export function pitchSVG(scene, options = {}) {
   const prefix = options.prefix || "board";
-  return `<svg class="prism-pitch" viewBox="-3 -6 74 117" role="img" aria-label="已审核定格的足球站位示意，非实时追踪">
+  return `<svg class="prism-pitch" viewBox="-3 -6 74 117" role="img" aria-label="Editorial pitch for the reviewed still, not live tracking">
   <defs><pattern id="${prefix}-grass" width="68" height="10.5" patternUnits="userSpaceOnUse"><rect width="68" height="10.5" fill="#123b35"/><rect width="68" height="5.25" fill="#18433b"/></pattern><linearGradient id="${prefix}-light" x2="1" y2="1"><stop stop-color="#8cf7e9" stop-opacity=".13"/><stop offset="1" stop-color="#08272d" stop-opacity=".12"/></linearGradient></defs>
   <rect x="-3" y="-6" width="74" height="117" rx="3" fill="#082c2d"/><rect width="68" height="105" fill="url(#${prefix}-grass)"/><rect width="68" height="105" fill="url(#${prefix}-light)"/>
   <g class="prism-pitch-lines"><rect width="68" height="105"/><path d="M0 52.5H68M13.84 0V16.5H54.16V0M24.84 0V5.5H43.16V0M13.84 105V88.5H54.16V105M24.84 105V99.5H43.16V105M30.34 0V-2H37.66V0M30.34 105V107H37.66V105"/><circle cx="34" cy="52.5" r="9.15"/><circle cx="34" cy="11" r=".5"/><circle cx="34" cy="94" r=".5"/><path d="M26.687512 16.5A9.15 9.15 0 0 0 41.312488 16.5M26.687512 88.5A9.15 9.15 0 0 1 41.312488 88.5"/><circle cx="34" cy="52.5" r=".35"/><path d="M0 1A1 1 0 0 0 1 0M67 0A1 1 0 0 0 68 1M68 104A1 1 0 0 0 67 105M1 105A1 1 0 0 0 0 104"/></g>

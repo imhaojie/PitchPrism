@@ -1,7 +1,10 @@
 # Changelog
 
-## Unreleased
+## 1.0.1 — 2026-10-24
 
+- Make the complete viewing interface English, including tactical readings, chapters, preferences, accessibility labels and the appearance editor.
+- Reuse the reviewed English movie text for all nine interactive reading steps.
+- Fit the full English navigation on narrow phones.
 - Version static state and frontend module URLs so returning visitors refresh the released movie and matching timeline together.
 
 ## 1.0.0 — 2026-10-24

@@ -3,21 +3,21 @@ import {
   escapeHTML as esc,
   pitchSVG,
   sceneGraphics,
-} from "./tactical-model.js";
+} from "./tactical-model.js?v=english-v1";
 
 export function createTacticalStudio({ stage, onSeek, onClose }) {
   const dialog = document.createElement("dialog");
   dialog.className = "tactical-studio";
-  dialog.setAttribute("aria-label", "战术演播室");
+  dialog.setAttribute("aria-label", "Tactical Studio");
   dialog.innerHTML = `<div class="studio-shell">
-    <header class="studio-header"><div class="studio-brand"><span class="studio-mark">P</span><div><small>PITCHPRISM / TACTICAL STUDIO</small><h1>把这一刻，看得更深。</h1></div></div><div class="studio-header-actions"><span class="studio-editorial">● REVIEWED FRAME</span><button class="studio-close" aria-label="关闭战术演播室">×</button></div></header>
-    <nav class="studio-scenes" aria-label="选择审核定格"></nav>
+    <header class="studio-header"><div class="studio-brand"><span class="studio-mark">P</span><div><small>PITCHPRISM / TACTICAL STUDIO</small><h1>See the game. Read the moment.</h1></div></div><div class="studio-header-actions"><span class="studio-editorial">● REVIEWED FRAME</span><button class="studio-close" aria-label="Close Tactical Studio">×</button></div></header>
+    <nav class="studio-scenes" aria-label="Choose a reviewed moment"></nav>
     <div class="studio-grid"><section class="studio-main">
       <div class="studio-view-heading"><span><i></i> 01 / BROADCAST VIEW</span><span class="studio-source-time"></span></div>
-      <div class="studio-camera"><video muted playsinline preload="metadata" aria-label="审核时刻的原片定格"></video><svg class="studio-camera-art" viewBox="0 0 1280 720" aria-label="人工审核足部锚点与选项示意"></svg><div class="studio-frame-status" role="status">正在定位原片定格…</div><span class="studio-camera-caption">原片定格 · 人工审核锚点</span></div>
+      <div class="studio-camera"><video muted playsinline preload="metadata" aria-label="Reviewed source still"></video><svg class="studio-camera-art" viewBox="0 0 1280 720" aria-label="Reviewed foot anchors and editorial options"></svg><div class="studio-frame-status" role="status">Loading the reviewed source frame…</div><span class="studio-camera-caption">Source still · reviewed anchors</span></div>
       <div class="studio-analysis"><div class="studio-analysis-heading"><span class="studio-tag"></span><span class="studio-counter"></span></div><h2></h2><p class="studio-summary"></p><div class="studio-step-copy" aria-live="polite"><b></b><p></p></div></div>
-    </section><aside class="studio-board"><div class="studio-view-heading"><span><i></i> 02 / TACTICAL VIEW</span><span>站位示意</span></div><div class="studio-pitch"></div><div class="studio-key"><span><i class="key-city"></i>Manchester City</span><span><i class="key-new"></i>Newcastle</span><span><i class="key-option"></i>可选线路</span><span><i class="key-defense"></i>对手角色</span></div><p>俯视位置为编辑示意，未作坐标标定。</p></aside></div>
-    <footer class="studio-footer"><div class="studio-step-nav" role="group" aria-label="战术解析步骤"></div><div class="studio-tools"><button class="studio-sequence" aria-pressed="false">▷ 分步演示</button><label><input type="checkbox" data-layer="routes" checked>线路</label><label><input type="checkbox" data-layer="zones" checked>关注区</label><label><input type="checkbox" data-layer="labels" checked>角色</label></div><p class="studio-limitation"></p></footer>
+    </section><aside class="studio-board"><div class="studio-view-heading"><span><i></i> 02 / TACTICAL VIEW</span><span>Schematic</span></div><div class="studio-pitch"></div><div class="studio-key"><span><i class="key-city"></i>Manchester City</span><span><i class="key-new"></i>Newcastle</span><span><i class="key-option"></i>Passing options</span><span><i class="key-defense"></i>Opponents</span></div><p>Pitch positions are editorial schematics, not calibrated tracking.</p></aside></div>
+    <footer class="studio-footer"><div class="studio-step-nav" role="group" aria-label="Tactical reading steps"></div><div class="studio-tools"><button class="studio-sequence" aria-pressed="false">▷ Play readings</button><label><input type="checkbox" data-layer="routes" checked>Routes</label><label><input type="checkbox" data-layer="zones" checked>Focus area</label><label><input type="checkbox" data-layer="labels" checked>Labels</label></div><p class="studio-limitation"></p></footer>
   </div>`;
   stage.append(dialog);
   const $ = (s) => dialog.querySelector(s),
@@ -33,7 +33,7 @@ export function createTacticalStudio({ stage, onSeek, onClose }) {
     clearInterval(timer);
     timer = null;
     $(".studio-sequence").setAttribute("aria-pressed", "false");
-    $(".studio-sequence").textContent = "▷ 分步演示";
+    $(".studio-sequence").textContent = "▷ Play readings";
   }
   function paint() {
     if (!scene) return;
@@ -84,7 +84,7 @@ export function createTacticalStudio({ stage, onSeek, onClose }) {
   preview.addEventListener("error", () => {
     $(".studio-frame-status").hidden = false;
     $(".studio-frame-status").textContent =
-      "原片定格暂不可用，请检查媒体文件。";
+      "Source frame unavailable. Check the media files.";
     $(".studio-camera").classList.remove("is-ready");
   });
   function select(next, { seek = false, initialStep = 0 } = {}) {
@@ -95,7 +95,8 @@ export function createTacticalStudio({ stage, onSeek, onClose }) {
     const plan = analysisFor(scene);
     $(".studio-camera").classList.remove("is-ready");
     $(".studio-frame-status").hidden = false;
-    $(".studio-frame-status").textContent = "正在定位原片定格…";
+    $(".studio-frame-status").textContent =
+      "Loading the reviewed source frame…";
     $(".studio-source-time").textContent =
       `${scene.clock} · SOURCE ${scene.second.toFixed(2)}s`;
     $(".studio-tag").textContent = plan.tag;
@@ -151,7 +152,7 @@ export function createTacticalStudio({ stage, onSeek, onClose }) {
     onSeek(scene.second, step);
     paint();
     $(".studio-sequence").setAttribute("aria-pressed", "true");
-    $(".studio-sequence").textContent = "Ⅱ 暂停演示";
+    $(".studio-sequence").textContent = "Ⅱ Pause readings";
     timer = setInterval(() => {
       if (step >= 2) {
         stop();
@@ -176,7 +177,7 @@ export function createTacticalStudio({ stage, onSeek, onClose }) {
       $(".studio-scenes").innerHTML = match.scenes
         .map(
           (s, i) =>
-            `<button data-scene="${s.id}" aria-pressed="false"><span>0${i + 1}</span><b>${esc(analysisFor(s).title)}</b><time>${s.clock}</time><small>跳至定格 ↗</small></button>`,
+            `<button data-scene="${s.id}" aria-pressed="false"><span>0${i + 1}</span><b>${esc(analysisFor(s).title)}</b><time>${s.clock}</time><small>Jump to freeze ↗</small></button>`,
         )
         .join("");
       dialog.querySelectorAll("[data-scene]").forEach(

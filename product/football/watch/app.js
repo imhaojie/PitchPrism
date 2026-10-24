@@ -5,23 +5,25 @@ import {
   paintAmbienceSource,
   stopAmbienceSource,
 } from "./shared/glass/ambience-source.js";
-import { createPlayerControls } from "./shared/media/player-controls.js";
-import { createDrawer } from "./shared/navigation/drawer.js";
-import { createContentPanel } from "./shared/content/content-panel.js";
-import { createInspector } from "./shared/dev/inspector.js";
-import { mountFootballBuddy } from "./football-buddy.js?v=1.0.0";
-import { createTacticalStudio } from "./tactical-studio.js?v=1.0.0";
+import { createPlayerControls } from "./shared/media/player-controls.js?v=english-v1";
+import { createDrawer } from "./shared/navigation/drawer.js?v=english-v1";
+import { createContentPanel } from "./shared/content/content-panel.js?v=english-v1";
+import { createInspector } from "./shared/dev/inspector.js?v=english-v1";
+import { mountFootballBuddy } from "./football-buddy.js?v=english-v1";
+import { createTacticalStudio } from "./tactical-studio.js?v=english-v1";
 import {
   outputToSourceTime,
   readPreferences,
   savePreferences,
 } from "./shared/adapters/catalog.js";
-import { createFootballPitch } from "./football-pitch.js?v=1.0.0";
+import { createFootballPitch } from "./football-pitch.js?v=english-v1";
 import {
   presentationTimeForSource,
   reviewAt,
 } from "./shared/adapters/editorial-timeline.js";
-import { api } from "./transport.js?v=1.0.0";
+import { roleName } from "./tactical-model.js?v=english-v1";
+import { englishInspector } from "./english-inspector.js?v=english-v1";
+import { api } from "./transport.js?v=english-v1";
 
 const $ = (selector) => document.querySelector(selector),
   $$ = (selector) => [...document.querySelectorAll(selector)];
@@ -106,6 +108,7 @@ function showControls() {
   }, getConfig().motion.controlsIdle);
 }
 const content = createContentPanel({
+  locale: "en",
   onSeek: (second, options) => {
     if (options?.playbackRate) video.playbackRate = options.playbackRate;
     seek(second);
@@ -139,6 +142,7 @@ $("#court-foreground").append(pitch.element);
 const controls = createPlayerControls({
   video,
   stage,
+  locale: "en",
   onError: notice,
   onMenuChange: (value) => {
     activeMenu = value;
@@ -147,6 +151,7 @@ const controls = createPlayerControls({
 });
 $("#controls-host").append(controls.element);
 const drawer = createDrawer({
+  locale: "en",
   onAction: (kind) =>
     kind === "settings" ? toggleSettings() : openContent(kind),
 });
@@ -230,7 +235,9 @@ function save() {
   try {
     savePreferences(preferences, storage);
   } catch {
-    notice("本机存储不可用，偏好仅用于当前页面。");
+    notice(
+      "Local storage is unavailable. Preferences apply to this visit only.",
+    );
   }
 }
 function updatePreferences() {
@@ -270,17 +277,17 @@ function panelBody(html, title, eyebrow) {
 function paintInsights() {
   if (!state || !currentStory) return;
   const source = state.scene
-    ? `定格 ${state.scene.clock} / 原片 ${state.scene.second.toFixed(2)}s`
-    : "播放片段 / 画面观察";
+    ? `Freeze ${state.scene.clock} / source ${state.scene.second.toFixed(2)}s`
+    : "Match excerpt / visual observation";
   panelBody(
-    `<div class="content-badge">${currentStory.provider === "azure-foundry" ? "AZURE FOUNDRY" : "LOCAL EDITORIAL"} · ${esc(source)}</div><h3 class="football-story-title">${esc(currentStory.headline)}</h3><p class="football-story-copy">${esc(currentStory.explanation)}</p><div class="football-metric-grid"><div class="football-metric"><small>画面记分牌</small><strong>0 – 0</strong><small>Manchester City / Newcastle</small></div><div class="football-metric"><small>原片时间</small><strong>${state.sourceSecond.toFixed(1)} <small>s</small></strong><small>原片与增强片同步</small></div><div class="football-metric"><small>官方 xG</small><strong>—</strong><small>未提供，保留缺失</small></div><div class="football-metric"><small>全场传球成功率</small><strong>—</strong><small>片段不足以计算</small></div></div><button class="football-explain" id="explain-moment" ${explaining ? "disabled" : ""}>✦ ${explaining ? "正在读取证据…" : "解读这一刻"}</button><p class="football-source-note">${health.foundryConfigured ? "Foundry 已配置；实际调用成功后才标记为云模型解读。" : "本地编辑解读 · Azure Foundry 尚未配置。"}</p><details><summary>查看本条解读的画面证据</summary><pre class="football-source">${esc(
+    `<div class="content-badge">${currentStory.provider === "azure-foundry" ? "AZURE FOUNDRY" : "LOCAL EDITORIAL"} · ${esc(source)}</div><h3 class="football-story-title">${esc(currentStory.headline)}</h3><p class="football-story-copy">${esc(currentStory.explanation)}</p><div class="football-metric-grid"><div class="football-metric"><small>Visible scoreboard</small><strong>0 – 0</strong><small>Manchester City / Newcastle</small></div><div class="football-metric"><small>Source time</small><strong>${state.sourceSecond.toFixed(1)} <small>s</small></strong><small>Source and enhanced video aligned</small></div><div class="football-metric"><small>Official xG</small><strong>—</strong><small>Not supplied</small></div><div class="football-metric"><small>Full-match pass accuracy</small><strong>—</strong><small>Unavailable from this excerpt</small></div></div><button class="football-explain" id="explain-moment" ${explaining ? "disabled" : ""}>✦ ${explaining ? "Reading evidence…" : "Explain this moment"}</button><p class="football-source-note">${health.foundryConfigured ? "Foundry is configured. Only successful model responses are labelled as cloud insights." : "Local editorial insight · Azure Foundry is not configured."}</p><details><summary>Inspect the evidence behind this insight</summary><pre class="football-source">${esc(
       JSON.stringify(
         state.events.filter((e) => currentStory.evidenceIds.includes(e.id)),
         null,
         2,
       ),
-    )}</pre></details><p class="football-source-note">人物光圈对应人工审核的定格帧。战术板与虚线是编辑示意，不是自动追踪或实际传球数据。</p>`,
-    "这一刻的解读",
+    )}</pre></details><p class="football-source-note">Role highlights refer to manually reviewed stills. Pitch positions and dashed options are editorial schematics, not tracking or completed-pass data.</p>`,
+    "Match insights",
     "PITCHPRISM / MATCH INTELLIGENCE",
   );
   $("#explain-moment").onclick = () => explain(true);
@@ -296,7 +303,7 @@ function openContent(kind) {
     events: match.observations.map((o) => ({
       time: o.second,
       text: o.text,
-      sourceLabel: "已审核原片画面 · 非官方事件记录",
+      sourceLabel: "Reviewed source frame · not an official event record",
       evidenceIds: [o.id],
       playerIds: ["carrier", "right", "runner"],
     })),
@@ -309,7 +316,7 @@ function openContent(kind) {
     const note = document.createElement("p");
     note.className = "content-note";
     note.textContent =
-      "章节标注原片时间；跳转会定位增强片中的对应时刻。审核定格包含三步解析，虚线表示可选线路。";
+      "Chapters use source time and seek to the corresponding moment in the enhanced video. Each reviewed freeze has three readings; dashed arrows show options.";
     content.element.querySelector(".content-sheet-body").append(note);
     return;
   }
@@ -319,8 +326,8 @@ function openContent(kind) {
   }
   if (kind === "library") {
     panelBody(
-      '<p class="content-lead">同一素材，同一原始时间。</p><div class="football-actions"><button id="choose-source">观看原片</button><button id="choose-enhanced">观看增强片</button><button id="restart-highlight">从头播放</button></div><p class="football-source-note">增强片包含三组分步解析、选项箭头、角色高亮、战术板转场与半速回放。章节按原片时刻定位，播放器显示增强片时间。</p>',
-      "片段与版本",
+      '<p class="content-lead">One excerpt. One source clock.</p><div class="football-actions"><button id="choose-source">Watch source</button><button id="choose-enhanced">Watch enhanced</button><button id="restart-highlight">Play from start</button></div><p class="football-source-note">The enhanced movie includes three tactical sequences, option arrows, role highlights, pitch transitions and half-speed replay. Chapters use source time; the player shows enhanced time.</p>',
+      "Media library",
       "MEDIA LIBRARY",
     );
     $("#choose-source").onclick = () => {
@@ -339,8 +346,8 @@ function openContent(kind) {
     return;
   }
   panelBody(
-    `<p class="content-lead">PitchPrism · 让比赛成为可读的视觉故事。</p><p class="football-source-note">复核版增强视频：118.4 秒，1080p / 25fps。三个审核定格各含三步解析；人物高亮、虚线选项、战术板与半速回看都已烧录进视频。</p><p class="football-source-note">当前素材为曼城对纽卡斯尔 66.6 秒片段，观察记录绑定原文件 SHA-256。足部锚点为人工审核，俯视站位与箭头为编辑示意。官方事件、xG、整场统计与未核验身份保持缺失。</p><p class="football-source-note">公开演示使用本地编辑解读。Azure Foundry 需服务端配置并成功调用后才标记为云模型结果。代码许可、素材权利和第三方归属见项目的 LICENSE 与 THIRD_PARTY_NOTICES。</p>`,
-    "关于 PitchPrism",
+    `<p class="content-lead">PitchPrism · Turn the match into a visual story.</p><p class="football-source-note">Reviewed enhanced movie: 118.4 seconds, 1080p / 25fps. Three reviewed freezes each contain three readings. Role highlights, dashed options, pitch diagrams and half-speed replay are burned into the video.</p><p class="football-source-note">This 66.6-second Manchester City × Newcastle excerpt is bound to the source SHA-256. Foot anchors are manually reviewed; pitch positions and arrows are editorial. Official events, xG, full-match statistics and unverified identities remain unavailable.</p><p class="football-source-note">The public demo uses local editorial insights. Azure Foundry results require server configuration and a successful model call. See LICENSE and THIRD_PARTY_NOTICES for code licensing, media rights and attribution.</p>`,
+    "About PitchPrism",
     "PITCHPRISM / ABOUT",
   );
 }
@@ -418,10 +425,10 @@ function switchVideo(next) {
     },
     { once: true },
   );
-  video.src = new URL(`./media/${next}.mp4?v=1.0.0`, import.meta.url).href;
+  video.src = new URL(`./media/${next}.mp4?v=english-v1`, import.meta.url).href;
   video.load();
   $("#media-version").textContent =
-    next === "enhanced" ? "切换原片 ›" : "切换增强片 ›";
+    next === "enhanced" ? "Switch to source ›" : "Switch to enhanced ›";
 }
 function toggleSettings() {
   content.close();
@@ -452,7 +459,7 @@ $$("[data-content]").forEach(
 );
 $("#analysis-toggle").onchange = (e) =>
   switchVideo(e.target.checked ? "enhanced" : "source");
-inspector = createInspector();
+inspector = createInspector({ translate: englishInspector });
 stage.append(inspector.element);
 $("#style-inspector").hidden = false;
 $("#style-inspector").onclick = () => {
@@ -524,7 +531,7 @@ video.addEventListener("error", () => {
 $("#retry-media").onclick = () => video.load();
 video.addEventListener("loadedmetadata", () => {
   $("#media-info").textContent =
-    `${variant === "enhanced" ? "增强片" : "原片"} · ${video.videoWidth} × ${video.videoHeight} · ${video.duration.toFixed(2)}s`;
+    `${variant === "enhanced" ? "Enhanced" : "Source"} · ${video.videoWidth} × ${video.videoHeight} · ${video.duration.toFixed(2)}s`;
   layout.draw();
 });
 function paint() {
@@ -568,19 +575,20 @@ async function init() {
   [match, health] = await Promise.all([api("/api/clip"), api("/api/health")]);
   storyMap = { ...match, enhancedAvailable: true };
   pitch.setStory(match);
-  $("#follow-player").replaceChildren(new Option("全队", "all"));
+  $("#follow-player").replaceChildren(new Option("All roles", "all"));
   for (const p of match.roster)
-    $("#follow-player").add(new Option(p.name, p.id));
+    $("#follow-player").add(new Option(roleName(p), p.id));
   if (!match.roster.some((p) => p.id === preferences.player))
     preferences.player = "all";
   $("#follow-player").value = preferences.player;
   $("#familiarity").value = preferences.familiarity;
   $("#watch-purpose").value = preferences.purpose;
   $("#preference-status").textContent =
-    "关注定格中的角色；未核验的球员不补姓名。";
-  $("#moment-kicker").textContent = "PitchPrism · 足球观赛伙伴";
-  $("#moment-title").textContent = "看懂每一次进攻";
-  $("#moment-subtitle").textContent = "沉浸观看 · 战术展开 · 证据解读";
+    "Follow a visible role in the reviewed still. Unverified players are not assigned names.";
+  $("#moment-kicker").textContent = "PitchPrism · Your football companion";
+  $("#moment-title").textContent = "Read every attack";
+  $("#moment-subtitle").textContent =
+    "Immersive viewing · Tactical detail · Evidence-backed insights";
   $("#moment-heading").hidden = true;
   pitch.setStyle(getConfig().halfCourt);
   video.addEventListener(
@@ -591,7 +599,10 @@ async function init() {
     },
     { once: true },
   );
-  video.src = new URL("./media/enhanced.mp4?v=1.0.0", import.meta.url).href;
+  video.src = new URL(
+    "./media/enhanced.mp4?v=english-v1",
+    import.meta.url,
+  ).href;
   video.load();
   const mode = new URLSearchParams(location.search).get("mode");
   if (["halfCourt", "fullCourt"].includes(mode)) setMode(mode);

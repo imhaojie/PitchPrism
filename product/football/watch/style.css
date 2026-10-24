@@ -1298,3 +1298,24 @@
     transition: none;
   }
 }
+
+/* Keep all five English navigation actions visible on narrow phones. */
+@media (max-width: 360px) {
+  #top-tabs button {
+    font-size: 8px;
+    padding: 7px 5px;
+  }
+  #top-tabs .glass-content {
+    gap: 2px;
+  }
+}
+
+/* English component names wrap within the appearance editor's columns. */
+.config-inspector .inspector-component-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.config-inspector .inspector-component-grid button {
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}

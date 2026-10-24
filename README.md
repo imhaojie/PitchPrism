@@ -12,9 +12,11 @@
 [![Demo](https://github.com/imhaojie/PitchPrism/actions/workflows/football.yml/badge.svg?branch=main)](https://github.com/imhaojie/PitchPrism/actions/workflows/football.yml)
 [![License: MIT](https://img.shields.io/badge/code-MIT-a1f5d8)](LICENSE)
 
-![PitchPrism tactical studio](https://github.com/imhaojie/PitchPrism/releases/download/v1.0.0/tactical-studio.jpg)
+![PitchPrism tactical studio](https://github.com/imhaojie/PitchPrism/releases/download/v1.0.1/tactical-studio-english.jpg)
 
 </div>
+
+The interface and enhanced-video captions are in English.
 
 See the carrier, compare the options, and return to the action. PitchPrism brings a cinematic football player, a tactical studio and evidence-backed explanations into one viewing experience.
 
@@ -41,7 +43,7 @@ python -m product.football.server --port 4180
 
 Open **http://127.0.0.1:4180/**. On Windows, activate with `.venv\Scripts\activate`. No account or cloud credentials are needed. Media downloads are checked against committed SHA-256 values before use.
 
-**Controls:** Space plays/pauses; F toggles fullscreen; Esc closes panels. Open **战术演播室 / Tactical Studio** for the three-step readings. Chapter labels use source time; the player shows enhanced-video time.
+**Controls:** Space plays/pauses; F toggles fullscreen; Esc closes panels. Open **Tactical Studio** for the three-step readings. Chapter labels use source time; the player shows enhanced-video time.
 
 ## What the demo knows
 

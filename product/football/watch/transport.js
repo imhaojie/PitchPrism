@@ -1,7 +1,7 @@
 const STATIC_DEMO=false;
 let staticData;
 async function staticApi(path,options){
-  staticData??=await fetch(new URL('./demo-data.json?v=1.0.0',import.meta.url)).then(r=>r.json());
+  staticData??=await fetch(new URL('./demo-data.json?v=english-v1',import.meta.url)).then(r=>r.json());
   if(path==='/api/health')return {ok:true,service:'PitchPrism',synthetic:false,foundryConfigured:false,foundryVerified:false,provider:'local',mediaReady:true,staticDemo:true};
   if(path==='/api/clip')return staticData.match;
   const body=options?.body?JSON.parse(options.body):{};

@@ -20,11 +20,11 @@ const enumLabels = { default: '原图默认', system: '系统字体', pingfang: 
 const referenceStates = [ ['immersive','沉浸式'], ['fullCourt','全场'], ['halfCourt','半场'] ];
 const emit = (name, detail) => window.dispatchEvent(new CustomEvent(name, { detail }));
 
-export function createInspector() {
+export function createInspector({translate = value => value} = {}) {
   const element = document.createElement('dialog');
   element.className = 'config-inspector'; element.dataset.liquidIgnore = '';
-  element.setAttribute('aria-label', '中文可视化调参');
-  element.innerHTML = `<div class="inspector-heading"><div><h2>可视化调参</h2><p>点选组件 · 实时预览 · 仅本机保存</p></div><button type="button" class="inspector-close" aria-label="关闭调参">×</button></div>
+  element.setAttribute('aria-label', translate('中文可视化调参'));
+  element.innerHTML = translate(`<div class="inspector-heading"><div><h2>可视化调参</h2><p>点选组件 · 实时预览 · 仅本机保存</p></div><button type="button" class="inspector-close" aria-label="关闭调参">×</button></div>
     <p class="material-mode">经典毛玻璃 · 已锁定</p><p class="inspector-material-note"></p>
     <div class="inspector-tools"><button type="button" data-action="pick">在画面中点选</button><button type="button" data-action="undo">撤销</button><button type="button" data-action="redo">重做</button></div>
     <div class="inspector-component-grid" aria-label="选择组件">${['dock','fullCourt','halfCourt','controls','content','menus','heading','courtTheme'].map(group => `<button type="button" data-component-choice="${group}">${labels[group][0]}</button>`).join('')}</div>
@@ -36,25 +36,25 @@ export function createInspector() {
     <details class="inspector-presets"><summary>命名预设 · 仅本机浏览器</summary><div class="preset-save-row"><input class="preset-name" type="text" maxlength="48" placeholder="新预设名称" aria-label="预设名称"><button type="button" data-action="preset-create">新建</button></div><select class="preset-select" aria-label="已保存预设"><option value="">尚无命名预设</option></select><div class="preset-actions"><button type="button" data-action="preset-load">应用</button><button type="button" data-action="preset-update">更新</button><button type="button" data-action="preset-rename">重命名</button><button type="button" data-action="preset-delete">删除</button></div></details>
     <details class="inspector-diagnostics"><summary>实际材质与渲染状态</summary><pre aria-live="off"></pre></details>
     <p class="inspector-note">调参只影响界面与球场皮肤；球员身份、坐标、比分与来源保持只读。</p><p class="inspector-message" role="status" aria-live="polite"></p>
-    <div class="inspector-footer"><button type="button" data-action="save" class="inspector-primary">保存当前配置</button><button type="button" data-action="export">导出 JSON</button><button type="button" data-action="import">导入 JSON</button><input type="file" accept="application/json,.json" hidden aria-label="导入本机显示预设"></div>`;
+    <div class="inspector-footer"><button type="button" data-action="save" class="inspector-primary">保存当前配置</button><button type="button" data-action="export">导出 JSON</button><button type="button" data-action="import">导入 JSON</button><input type="file" accept="application/json,.json" hidden aria-label="导入本机显示预设"></div>`);
   const $ = selector => element.querySelector(selector);
   const fields = $('.inspector-fields'), picker = $('.group-select'), message = $('.inspector-message');
   const presetPicker = $('.preset-select'), presetName = $('.preset-name');
-  const pickBanner = document.createElement('div'); pickBanner.className = 'inspector-pick-banner'; pickBanner.hidden = true; pickBanner.textContent = '点击要调整的组件 · Esc 取消';
+  const pickBanner = document.createElement('div'); pickBanner.className = 'inspector-pick-banner'; pickBanner.hidden = true; pickBanner.textContent = translate('点击要调整的组件 · Esc 取消');
   let diagnosticTimer, picking = false, selectedNode = null, headerDrag = null;
-  const setMessage = (text, error = false) => { message.textContent = text; message.classList.toggle('is-error', error); };
+  const setMessage = (text, error = false) => { message.textContent = translate(text); message.classList.toggle('is-error', error); };
   function run(action, success) { endConfigEdit(); try { action(); if (success) setMessage(success); } catch (error) { setMessage(error.message, true); sync(); } }
   function renderGroup() {
     const group = picker.value; fields.replaceChildren();
-    $('.inspector-scope-note').textContent = group === 'glass' ? '批量操作：同时修改左抽屉、内容抽屉、全场、半场、控制条、菜单、顶部功能栏和标题胶囊八组玻璃。' : ['dock','fullCourt','halfCourt','controls','content','menus','heading'].includes(group) ? '当前组件的尺寸、字体与文字颜色独立调整。毛玻璃材质已锁定。' : group === 'courtTheme' ? '皮肤只改变场地外观，不改变当前比赛与球员资料。' : '调整会立即作用于画面；拖动面板标题可移动此调参窗口。';
+    $('.inspector-scope-note').textContent = translate(group === 'glass' ? '批量操作：同时修改左抽屉、内容抽屉、全场、半场、控制条、菜单、顶部功能栏和标题胶囊八组玻璃。' : ['dock','fullCourt','halfCourt','controls','content','menus','heading'].includes(group) ? '当前组件的尺寸、字体与文字颜色独立调整。毛玻璃材质已锁定。' : group === 'courtTheme' ? '皮肤只改变场地外观，不改变当前比赛与球员资料。' : '调整会立即作用于画面；拖动面板标题可移动此调参窗口。');
     element.querySelectorAll('[data-component-choice]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.componentChoice === group)));
     for (const [key, rule] of Object.entries(schema[group])) {
       if (['tint','tintAlpha','refraction','frost','bevelDepth','bevelWidth'].includes(key)) continue;
       const label = document.createElement('label'); label.className = 'inspector-field';
-      const text = document.createElement('span'); text.textContent = labels[group][1][key];
+      const text = document.createElement('span'); text.textContent = translate(labels[group][1][key]);
       const inputs = document.createElement('span'); inputs.className = 'inspector-field-inputs';
       const input = document.createElement(rule.enum ? 'select' : 'input'); input.dataset.key = key; input.setAttribute('aria-label', text.textContent);
-      if (rule.enum) { for (const value of rule.enum) { const option = document.createElement('option'); option.value = value; option.textContent = enumLabels[value] || value; input.append(option); } }
+      if (rule.enum) { for (const value of rule.enum) { const option = document.createElement('option'); option.value = value; option.textContent = translate(enumLabels[value] || value); input.append(option); } }
       else if (rule === 'boolean') input.type = 'checkbox';
       else if (rule === 'color') { input.type = 'color'; input.title = text.textContent; }
       else { input.type = 'number'; input.min = rule[0]; input.max = rule[1]; input.step = rule[2]; input.inputMode = 'decimal'; }
@@ -78,14 +78,14 @@ export function createInspector() {
     const config = getConfig(), status = getConfigStatus();
     const liquid = !!window.broadcastUI?.glass()?.enabled;
 
-    $('.inspector-material-note').textContent = '已锁定：3px · 底色 0.36 · 饱和度 118% · 边缘 0.10 · 高光 0.08 · 选中 0.15。大面板无模糊；旧光学参数仅兼容保留。';
+    $('.inspector-material-note').textContent = translate('已锁定：3px · 底色 0.36 · 饱和度 118% · 边缘 0.10 · 高光 0.08 · 选中 0.15。大面板无模糊；旧光学参数仅兼容保留。');
     fields.querySelectorAll('[data-key]').forEach(input => { const value = config[picker.value][input.dataset.key]; if (input.type === 'checkbox') input.checked = value; else if (input !== document.activeElement || input.type !== 'number') input.value = value; });
     fields.querySelectorAll('[data-color-for]').forEach(output => { output.textContent = config[picker.value][output.dataset.colorFor]; });
     $('[data-action="undo"]').disabled = !status.canUndo; $('[data-action="redo"]').disabled = !status.canRedo;
   }
   function syncPresets(selection) {
     const prior = selection ?? presetPicker.value; presetPicker.replaceChildren(); const presets = listPresets();
-    if (!presets.length) { const option = document.createElement('option'); option.value = ''; option.textContent = '尚无命名预设'; presetPicker.append(option); }
+    if (!presets.length) { const option = document.createElement('option'); option.value = ''; option.textContent = translate('尚无命名预设'); presetPicker.append(option); }
     for (const preset of presets) { const option = document.createElement('option'); option.value = preset.name; option.textContent = preset.name; presetPicker.append(option); }
     if (presets.some(item => item.name === prior)) presetPicker.value = prior;
     element.querySelectorAll('.preset-actions button').forEach(button => button.disabled = !presets.length);
@@ -94,7 +94,7 @@ export function createInspector() {
     let details;
     try { const value = typeof window.broadcastDiagnostics === 'function' ? window.broadcastDiagnostics() : window.broadcastDiagnostics; details = value ? JSON.stringify(value, null, 2) : '尚未收到渲染器状态。无法据此认定 liquidGL 已实际生效。'; }
     catch (error) { details = `状态读取失败：${error.message}`; }
-    $('.inspector-diagnostics pre').textContent = details;
+    $('.inspector-diagnostics pre').textContent = translate(details);
   }
   function close() { endConfigEdit(); clearInterval(diagnosticTimer); if (element.open) element.close(); emit('broadcast-inspector-state', { open: false }); }
   function open() { if (!element.isConnected) document.body.append(element); if (!element.open) element.show(); sync(); diagnostics(); try { syncPresets(); } catch (error) { setMessage(error.message, true); } clearInterval(diagnosticTimer); diagnosticTimer = setInterval(diagnostics, 800); emit('broadcast-inspector-state', { open: true }); }
@@ -129,7 +129,7 @@ export function createInspector() {
     if (action === 'preset-delete') run(() => { deletePreset(presetPicker.value); syncPresets(); }, '已删除所选本机预设，当前画面参数保留。');
     if (action === 'preset-rename') run(() => syncPresets(renamePreset(presetPicker.value, presetName.value)), '预设已重命名。');
     if (action === 'import') $('input[type="file"]').click();
-    if (action === 'export') run(() => { const url = URL.createObjectURL(new Blob([exportConfig()], { type: 'application/json' })); const link = document.createElement('a'); link.href = url; link.download = 'BroadcastCode-显示预设-v2.json'; link.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); }, '已导出显示预设；导出不会保存或发布。');
+    if (action === 'export') run(() => { const url = URL.createObjectURL(new Blob([exportConfig()], { type: 'application/json' })); const link = document.createElement('a'); link.href = url; link.download = translate('BroadcastCode-显示预设-v2.json'); link.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); }, '已导出显示预设；导出不会保存或发布。');
   });
   $('input[type="file"]').addEventListener('change', async event => { const file = event.target.files?.[0]; if (!file) return; try { if (file.size > 32768) throw new Error('显示预设上限为 32 KB。'); importConfig(await file.text()); setMessage('已导入并实时预览，可撤销。点击保存才会保留到下次。'); } catch (error) { setMessage(`未导入，当前配置已保留。${error.message}`, true); } finally { event.target.value = ''; } });
   const unsubscribe = subscribe(sync); renderGroup(); setMessage(getConfigStatus().storageMessage || '当前使用参考基线。所有参数修改均可撤销。');

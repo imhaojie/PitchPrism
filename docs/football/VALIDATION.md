@@ -1,10 +1,12 @@
-# Release validation — v1.0.0
+# Release validation — v1.0.1
 
 2026-10-24. The current demo uses the reviewed **118.4-second** movie. Earlier preview receipts are retained in the [preview archive](../archive/football-previews/README.md).
 
+The v1.0.1 interface is English throughout. The reviewed v1.0.0 movie and its media hashes/timing are unchanged.
+
 ## Engineering
 
-The complete offline gate passed **567 behavior tests, no skips**, source privacy checks, syntax checks and 50 preserved offline infrastructure assertions. New regressions cover all six chapter mappings, all nine reading-step jumps, freeze boundaries, replay/rewind, web/video focus and option agreement, altered media bytes, stale timelines, manifest/data identity, and label bounds/collisions across all nine readings. Offline infrastructure assertions do not certify Azure deployment or cloud inference.
+The complete offline gate passed **570 behavior tests, no skips**, source privacy checks, syntax checks and 50 preserved offline infrastructure assertions. New regressions cover all six chapter mappings, all nine reading-step jumps, freeze boundaries, replay/rewind, web/video focus and option agreement, altered media bytes, stale timelines, manifest/data identity, and label bounds/collisions across all nine readings. Offline infrastructure assertions do not certify Azure deployment or cloud inference.
 
 The optional companion PNG export and renderer preview command also ran successfully with the documented local tooling. Generated media and QA receipts remain outside Git.
 
@@ -21,6 +23,8 @@ The optional companion PNG export and renderer preview command also ran successf
 The actual static export was exercised in Chrome, including real video playback, all six chapter buttons and all nine reading-step buttons. Chapter output times were 2.8, 11.2, 36.4, 42.6, 54.2 and 86.4 seconds. Source preview stills remained at the corresponding 8.0, 37.8 or 56.8 seconds during step changes.
 
 Source/enhanced switching was exercised at source 37.8: enhanced step 58.3 → source 37.8 → enhanced first reading 54.2. Actual playback reached readyState 4 and the football companion entered its running state. Desktop and 390×844 studio layouts were visually inspected with no horizontal overflow or clipped reading/heading text in the checked states. All nine readings were rechecked in the browser after adding label avoidance: camera and board role labels had zero pairwise overlaps in these states. Modal entry/close, option semantics, chapter copy and responsive wrapping were inspected separately from automated tests.
+
+Additional English UI QA covers all 12 appearance-editor groups, the shared controls and chapter drawer, all nine English readings, accessibility attributes and 320/390px layouts.
 
 ## Limits
 

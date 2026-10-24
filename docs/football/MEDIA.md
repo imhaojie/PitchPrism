@@ -1,6 +1,6 @@
 # Media and releases
 
-The current release is **v1.0.0**. Its 118.4-second English-captioned movie contains the full 66.6-second source, three 13.2-second tactical freezes, a half-speed replay and football bookends. The MP4 is 1920×1080, 25fps, H.264/yuv420p with AAC audio. Live sections keep broadcast sound; editorial freezes are silent.
+The current media release is **v1.0.0**, reused unchanged by the English v1.0.1 interface. Its 118.4-second English-captioned movie contains the full 66.6-second source, three 13.2-second tactical freezes, a half-speed replay and football bookends. The MP4 is 1920×1080, 25fps, H.264/yuv420p with AAC audio. Live sections keep broadcast sound; editorial freezes are silent.
 
 ## Timing
 

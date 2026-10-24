@@ -1,6 +1,10 @@
 // Preserve GameBuddy's glass shell and continuous full/half view transition.
 import { createCourtPanel } from "./shared/court/court-panel.js";
-import { analysisFor, pitchSVG } from "./tactical-model.js";
+import {
+  analysisFor,
+  pitchSVG,
+  roleName,
+} from "./tactical-model.js?v=english-v1";
 
 export function createFootballPitch({ onMode, onSelect, onTheme, onInspect }) {
   const original = createCourtPanel({ onMode, onSelect, onTheme });
@@ -9,15 +13,20 @@ export function createFootballPitch({ onMode, onSelect, onTheme, onInspect }) {
   const $ = (s) => element.querySelector(s);
   $(".court-drawing").innerHTML = pitchSVG(null, { prefix: "sidebar" });
   $(".court-theme-choice").hidden = true;
+  $(".court-theme-choice").remove();
+  $(".court-segments").setAttribute("aria-label", "Pitch view");
+  $("[data-court-mode=fullCourt]").textContent = "Full pitch";
+  $("[data-court-mode=halfCourt]").textContent = "Half pitch";
+  $(".court-legend").setAttribute("aria-label", "Tactical legend");
   $(".court-header").insertAdjacentHTML(
     "afterend",
-    '<div class="pitch-editorial-tag"><i></i> TACTICAL SNAPSHOT <span>编辑示意</span></div>',
+    '<div class="pitch-editorial-tag"><i></i> TACTICAL SNAPSHOT <span>Editorial view</span></div>',
   );
   $(".court-legend").innerHTML =
-    '<span><i class="dark-team"></i>曼城</span><span><i class="white-team"></i>纽卡</span><span><i class="route-swatch"></i>选项示意</span><span><i class="held-swatch"></i>人工审核</span>';
+    '<span><i class="dark-team"></i>Man City</span><span><i class="white-team"></i>Newcastle</span><span><i class="route-swatch"></i>Options</span><span><i class="held-swatch"></i>Reviewed anchors</span>';
   $(".court-legend").insertAdjacentHTML(
     "beforebegin",
-    '<div class="football-snapshot-note"></div><button class="pitch-reading"><small>READ THE GAME / 阅读这一帧</small><strong>等待首个战术定格</strong><span>打开战术演播室 ↗</span></button>',
+    '<div class="football-snapshot-note"></div><button class="pitch-reading"><small>READ THE GAME</small><strong>Waiting for the first reviewed moment</strong><span>Open Tactical Studio ↗</span></button>',
   );
   $(".pitch-reading").onclick = () => onInspect?.();
   let half = 0,
@@ -33,6 +42,8 @@ export function createFootballPitch({ onMode, onSelect, onTheme, onInspect }) {
     $(".court-team-short").textContent = "PP";
     $(".court-team-badge").classList.remove("has-logo");
     element.dataset.footballTeam = team;
+    $(".court-team-badge").title = "PitchPrism";
+    $(".court-team-logo").alt = "";
   }
   function fit() {
     const zone = $(".court-view-zone"),
@@ -84,10 +95,10 @@ export function createFootballPitch({ onMode, onSelect, onTheme, onInspect }) {
       prefix: "sidebar",
     });
     $(".football-snapshot-note").textContent = scene
-      ? `定格 ${scene.clock} · 原片 ${scene.second.toFixed(2)}s · 非实时追踪`
-      : "原片 8 秒：首个审核定格 · 点击下方查看";
+      ? `Freeze ${scene.clock} · source ${scene.second.toFixed(2)}s · not live tracking`
+      : "First reviewed moment at source 8s · explore below";
     $(".pitch-reading strong").textContent =
-      analysisFor(scene)?.title || "从持球、接应到空间";
+      analysisFor(scene)?.title || "Read the carrier, support and space";
     const svg = $(".prism-pitch");
     svg.setAttribute("viewBox", `-3 -6 74 ${117 - half * 52.5}`);
     for (const marker of element.querySelectorAll(".tactic-person")) {
@@ -95,10 +106,7 @@ export function createFootballPitch({ onMode, onSelect, onTheme, onInspect }) {
       if (!match.roster.some((p) => p.id === id)) continue;
       marker.setAttribute("role", "button");
       marker.setAttribute("tabindex", "0");
-      marker.setAttribute(
-        "aria-label",
-        "关注" + match.roster.find((p) => p.id === id).name,
-      );
+      marker.setAttribute("aria-label", "Follow " + roleName({ id }));
       marker.setAttribute("aria-pressed", String(id === focus));
       const choose = () => onSelect(focus === id ? "all" : id);
       marker.onclick = choose;

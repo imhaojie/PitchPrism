@@ -33,7 +33,7 @@ export function createPlayerControls({ video, stage, onSettings, onError = () =>
   function translateUI() {
     if (locale !== 'en') return;
     const tr = value => Object.entries(translations).reduce((s, [from, to]) => s.replaceAll(from, to), value);
-    element.querySelectorAll('[aria-label],[aria-valuetext]').forEach(node => {
+    [element,...element.querySelectorAll('[aria-label],[aria-valuetext]')].forEach(node => {
       for (const key of ['aria-label','aria-valuetext']) if (node.hasAttribute(key)) node.setAttribute(key, tr(node.getAttribute(key)));
     });
     element.querySelectorAll('.sr-only').forEach(node => { node.textContent = tr(node.textContent); });
@@ -60,7 +60,7 @@ export function createPlayerControls({ video, stage, onSettings, onError = () =>
     if (!dragging) seek.value = String(video.currentTime || 0);
     $('.current-time').textContent = time(dragging ? +seek.value : video.currentTime || 0);
     $('.duration-time').textContent = duration ? time(duration) : '--:--';
-    seek.setAttribute('aria-valuetext', `${time(+seek.value)}，总时长 ${time(duration)}`); paintRange(seek);
+    seek.setAttribute('aria-valuetext', locale==='en'?`${time(+seek.value)}, duration ${time(duration)}`:`${time(+seek.value)}，总时长 ${time(duration)}`); paintRange(seek);
     const isMuted = video.muted || video.volume === 0;
     mute.innerHTML = svg(isMuted ? 'mute' : 'volume'); mute.setAttribute('aria-label', isMuted ? '取消静音' : '静音'); mute.setAttribute('aria-pressed', String(isMuted));
     volume.value = String(video.muted ? 0 : video.volume); paintRange(volume);
@@ -81,7 +81,7 @@ export function createPlayerControls({ video, stage, onSettings, onError = () =>
   }
   listen(play, 'click', togglePlay);
   listen(seek, 'pointerdown', event => { if (seek.disabled) return; dragging = true; dragPointer = event.pointerId; previousPlaying = !video.paused; video.pause(); seek.setPointerCapture?.(event.pointerId); emitInteraction(); });
-  listen(seek, 'input', () => { seekToInput(); $('.current-time').textContent = time(+seek.value); paintRange(seek); seek.setAttribute('aria-valuetext', `${time(+seek.value)}，总时长 ${time(video.duration)}`); });
+  listen(seek, 'input', () => { seekToInput(); $('.current-time').textContent = time(+seek.value); paintRange(seek); seek.setAttribute('aria-valuetext', locale==='en'?`${time(+seek.value)}, duration ${time(video.duration)}`:`${time(+seek.value)}，总时长 ${time(video.duration)}`); });
   listen(seek, 'pointerup', finishDrag); listen(seek, 'pointercancel', finishDrag); listen(seek, 'lostpointercapture', finishDrag);
   listen(seek, 'change', () => { if (!dragging) seekToInput(); });
   listen(mute, 'click', () => { if (video.muted || video.volume === 0) { video.muted = false; if (video.volume === 0) video.volume = .5; } else video.muted = true; refresh(); });
@@ -91,7 +91,7 @@ export function createPlayerControls({ video, stage, onSettings, onError = () =>
   listen(document, 'pointerdown', event => { if (activeMenu && !$('.rate-control').contains(event.target)) setMenu(false); });
   listen(element, 'keydown', event => { if (event.key === 'Escape' && activeMenu) { event.preventDefault(); event.stopPropagation(); setMenu(false); rate.focus(); } });
   listen(menu, 'keydown', event => { if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) return; event.preventDefault(); const choices = [...menu.querySelectorAll('button')]; let index = choices.indexOf(document.activeElement); index = event.key === 'Home' ? 0 : event.key === 'End' ? choices.length - 1 : (index + (event.key === 'ArrowDown' ? 1 : -1) + choices.length) % choices.length; choices[index].focus(); });
-  listen(fullscreen, 'click', async () => { try { if (document.fullscreenElement) await document.exitFullscreen(); else if (stage.requestFullscreen) await stage.requestFullscreen(); else throw new Error('此浏览器暂不支持舞台全屏。'); } catch (error) { report(error); } });
+  listen(fullscreen, 'click', async () => { try { if (document.fullscreenElement) await document.exitFullscreen(); else if (stage.requestFullscreen) await stage.requestFullscreen(); else throw new Error(locale==='en'?'Fullscreen is unavailable in this browser.':'此浏览器暂不支持舞台全屏。'); } catch (error) { report(error); } });
   if (onSettings) listen($('.settings-toggle'), 'click', onSettings);
   for (const event of ['timeupdate', 'loadedmetadata', 'durationchange', 'resize', 'play', 'pause', 'ended', 'volumechange', 'ratechange', 'seeked', 'emptied']) listen(video, event, refresh);
   listen(document, 'fullscreenchange', refresh);

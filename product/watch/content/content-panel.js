@@ -59,7 +59,7 @@ function detail(label, value) {
 }
 
 /** A floating non-modal drawer. Opening it never changes the media clock. */
-export function createContentPanel({ onSeek = () => {}, onStory = () => {}, onClose = () => {} } = {}) {
+export function createContentPanel({ onSeek = () => {}, onStory = () => {}, onClose = () => {}, locale = 'zh' } = {}) {
   const uid = `content-sheet-${++nextPanelId}`;
   const element = node('aside', 'content-sheet');
   element.id = uid;
@@ -74,7 +74,7 @@ export function createContentPanel({ onSeek = () => {}, onStory = () => {}, onCl
   const title = node('h2', 'content-sheet-title'); title.id = `${uid}-title`;
   heading.append(eyebrow, title);
   const closeButton = button('×', 'content-close', () => close());
-  closeButton.setAttribute('aria-label', '关闭内容抽屉');
+  closeButton.setAttribute('aria-label', locale==='en'?'Close content panel':'关闭内容抽屉');
   header.append(heading, closeButton);
   const body = node('div', 'content-sheet-body');
   const glass = node('div', 'glass-target');
@@ -94,19 +94,19 @@ export function createContentPanel({ onSeek = () => {}, onStory = () => {}, onCl
   function evidenceDetails(evidenceIds = [], story = activeStory) {
     const sources = story?.evidence || [];
     const names = evidenceIds.map(id => sources.find(item => item.id === id)?.title).filter(Boolean);
-    return names.length ? names.join(' · ') : '来源随历史记录保存';
+    return names.length ? names.join(' · ') : locale==='en'?'Reviewed source observation':'来源随历史记录保存';
   }
   function moments(story) {
     const pref=view.preferences||{player:'all',familiarity:'beginner',purpose:'enjoy'};
     const events=(view.events||[]).filter(e=>pref.player==='all'||e.playerIds.includes(pref.player));
-    body.append(paragraph(pref.purpose==='analyze'?'展开章节查看观察与依据。':'按章节回看这一回合。','content-lead'));
+    body.append(paragraph(locale==='en'?(pref.purpose==='analyze'?'Explore the observations and evidence in each chapter.':'Revisit the match by chapter.'):(pref.purpose==='analyze'?'展开章节查看观察与依据。':'按章节回看这一回合。'),'content-lead'));
     for(const [index,chapter] of (story.chapters||[]).entries()) {
       const card=section();card.classList.add('content-chapter');
       card.append(node('h3','content-section-title',`${String(index+1).padStart(2,'0')} · ${chapter.title}`));
       card.append(paragraph(chapter.caption));
-      card.append(button(`回放 ${formatVideoTime(chapter.start)} — ${formatVideoTime(chapter.end)}`,'content-text-button',()=>seek(chapter.start,{chapter,playbackRate:1})),button('慢放 0.5×','content-text-button',()=>seek(chapter.start,{chapter,playbackRate:.5})));
+      card.append(button(`${locale==='en'?'Play':'回放'} ${formatVideoTime(chapter.start)} — ${formatVideoTime(chapter.end)}`,'content-text-button',()=>seek(chapter.start,{chapter,playbackRate:1})),button(locale==='en'?'Slow motion 0.5×':'慢放 0.5×','content-text-button',()=>seek(chapter.start,{chapter,playbackRate:.5})));
       const points=events.filter(e=>e.time>=chapter.start&&e.time<chapter.end);
-      const details=node('details','content-profile-group');details.append(node('summary','',`关注点与依据 · ${points.length}`));
+      const details=node('details','content-profile-group');details.append(node('summary','',`${locale==='en'?'Observations and evidence':'关注点与依据'} · ${points.length}`));
       details.open=pref.purpose==='analyze';
       for(const event of points){
         const row=section();row.append(button(`${formatVideoTime(event.time)} · ${event.copy?.[pref.familiarity]||event.text}`,'content-text-button',()=>seek(event.time,{evidence:event})));
@@ -114,11 +114,11 @@ export function createContentPanel({ onSeek = () => {}, onStory = () => {}, onCl
         if(pref.purpose==='analyze')row.append(paragraph(evidenceDetails(event.evidenceIds),'content-note'));
         details.append(row);
       }
-      if(!points.length)details.append(paragraph('本章没有该关注对象的可核验提醒。','content-note'));
+      if(!points.length)details.append(paragraph(locale==='en'?'No verified observations for this role in this chapter.':'本章没有该关注对象的可核验提醒。','content-note'));
       card.append(details);body.append(card);
     }
-    if(pref.familiarity==='beginner')body.append(paragraph('进攻看如何创造出手机会；防守看如何限制对手；无球指未持球时的表现。现有提醒沿用来源原文。','content-note'));
-    body.append(paragraph('观察来自已查看的源帧；时间码是视频时间，不是官方时钟逐帧换算。无球事件及可靠位置映射待联调。','content-note'));
+    if(pref.familiarity==='beginner')body.append(paragraph(locale==='en'?'Attack creates options; defense limits them. Off-ball play means action without possession. Observations retain their source wording.':'进攻看如何创造出手机会；防守看如何限制对手；无球指未持球时的表现。现有提醒沿用来源原文。','content-note'));
+    body.append(paragraph(locale==='en'?'Observations refer to reviewed source frames. Source time is distinct from the broadcast match clock; diagrams are editorial, not tracking.':'观察来自已查看的源帧；时间码是视频时间，不是官方时钟逐帧换算。无球事件及可靠位置映射待联调。','content-note'));
   }
   function data(story) {
     const event = story.officialEvent || {};
@@ -366,7 +366,7 @@ export function createContentPanel({ onSeek = () => {}, onStory = () => {}, onCl
     if (!openState) lastFocus = document.activeElement;
     activeStory = story; view = options; historyRequest++;
     const [label, english] = TITLES[kind];
-    title.textContent = label; eyebrow.textContent = english;
+    title.textContent = locale==='en'?({moments:'Chapters',data:'Match insights',sources:'Sources',library:'Media library',history:'Production details'})[kind]:label; eyebrow.textContent = english;
     element.dataset.kind = kind;
     body.replaceChildren();
     ({ moments, data, sources, library, history })[kind](story, catalog);
