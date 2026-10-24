@@ -4,6 +4,7 @@
 # Dependencies and generated CDK / Python artifacts
 node_modules/
 .venv/
+.venv-*/
 __pycache__/
 *.py[cod]
 cdk.out/

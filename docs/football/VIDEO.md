@@ -1,18 +1,7 @@
-# English demonstration video
+# Demonstration video
 
-Delivered preview: **89.5 seconds**, **1920 × 1080**, strictly under two minutes. The table below is the original storyboard; actual caption timing is reflected in the rendered video. Show the actual application, with English captions. The initial recording must accurately disclose that the public demo is LOCAL and live Azure verification is pending. Replace that segment only after real cloud validation exists.
+The current reviewed video is distributed as [v1.0.0 / enhanced.mp4](https://github.com/imhaojie/PitchPrism/releases/download/v1.0.0/enhanced.mp4): **118.4 seconds**, **1920×1080**, **25fps**, English burned-in text. It includes three 13.2-second tactical freezes with nine readings, option arrows, role highlights, pitch transitions and half-speed replay. No generated narration is included.
 
-| Time | Screen | English caption |
-|---|---|---|
-| 0–10 | Match room, switch chapter | PitchPrism. An AI-powered football companion that turns match data into visual stories and personalized insights. |
-| 10–25 | Play enhanced sequence | Football is more than the scoreline. Follow an original synthetic match, with synchronized passes, player labels and event evidence. |
-| 25–39 | Tactical, analyst, player focus | Change your lens. Fans get a clear thing to watch; analysts inspect the event sequence. Follow a player through the same story. |
-| 39–51 | Source event dialog | Every insight has a source. Distances are calculated. Shot xG is a synthetic scenario input. No official match data or optical tracking is claimed. |
-| 51–66 | Goal, source/enhanced switch | Rewind the build-up, then see the finish. Source and enhanced video stay linked to the same original clock. |
-| 66–80 | Return to switch chapter | Go back in time: later goals and shots disappear from the live state. The explanation never borrows future evidence. |
-| 80–94 | Explain button and provenance | The server implements a bounded Foundry tool loop: read state, inspect events, validate the story. This public demo is LOCAL; live Azure verification is pending free-trial activation. |
-| 94–103 | Match room / final card | One match. Your perspective. PitchPrism — every angle tells a story. |
+This is an enhanced match excerpt. It does not itself demonstrate a successful Azure inference call. The public web demo adds interactive chapters, a Tactical Studio, viewing preferences and evidence inspection. [Detailed media timing and reproducibility](MEDIA.md).
 
-The generated local MP4 has an English-captioned screen recording and no voiceover or copyrighted music. Source/software scene and overlays are original. Screen tests are separate from screen-recording staging.
-
-Official rules require a public video link on YouTube, Vimeo, Facebook Video or Youku. A repository Release MP4 is useful for review/download but does not replace that platform URL. No contest entry is submitted automatically.
+The earlier synthetic screen recording and earlier match exports are historical previews. They are not the current video or its validation evidence. Competition video-platform and eligibility requirements are tracked separately in [submission notes](SUBMISSION.md).

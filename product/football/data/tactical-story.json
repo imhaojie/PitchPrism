@@ -1,0 +1,127 @@
+{
+  "scope": "Editorial interpretation of the three reviewed source stills; no automatic tracking or official event feed.",
+  "freezeDurationSeconds": 13.2,
+  "scenes": {
+    "build": {
+      "title": "READ THE NEXT OPTION",
+      "subtitle": "Carry. Connect. Compare the width.",
+      "evidenceId": "clip-build",
+      "steps": [
+        {
+          "title": "START WITH THE BALL",
+          "text": "City's carrier approaches halfway. A Newcastle player is positioned ahead of him.",
+          "focus": [
+            "carrier",
+            "press"
+          ],
+          "routes": []
+        },
+        {
+          "title": "FIND THE LINK",
+          "text": "The teammate ahead is a possible link. The dashed arrow illustrates an option, not a completed pass.",
+          "focus": [
+            "carrier",
+            "support"
+          ],
+          "routes": [
+            0
+          ]
+        },
+        {
+          "title": "COMPARE THE FAR SIDE",
+          "text": "Compare the central link with the far-side teammate. The arrows show separate options, not a recorded sequence.",
+          "focus": [
+            "carrier",
+            "support",
+            "wide"
+          ],
+          "routes": [
+            0,
+            1
+          ]
+        }
+      ]
+    },
+    "combine": {
+      "title": "FROM WIDE TO INSIDE",
+      "subtitle": "Read the carrier, the runner and the defenders.",
+      "evidenceId": "clip-combine",
+      "steps": [
+        {
+          "title": "LOCATE THE CARRIER",
+          "text": "The ball has come infield. Compare the carrier with the supporting teammate behind the ball.",
+          "focus": [
+            "support",
+            "carrier"
+          ],
+          "routes": []
+        },
+        {
+          "title": "LOOK TOWARDS THE ARC",
+          "text": "A City runner is visible nearer the box. Watch the potential connection ahead.",
+          "focus": [
+            "carrier",
+            "runner"
+          ],
+          "routes": [
+            0
+          ]
+        },
+        {
+          "title": "READ THE DEFENDERS",
+          "text": "Newcastle defenders stand between ball and goal. Check their positions before judging the forward option.",
+          "focus": [
+            "carrier",
+            "runner",
+            "cover",
+            "line",
+            "deep"
+          ],
+          "routes": [
+            0
+          ]
+        }
+      ]
+    },
+    "release": {
+      "title": "LOOK TO THE RIGHT",
+      "subtitle": "Start in the centre. Then widen your view.",
+      "evidenceId": "clip-release",
+      "steps": [
+        {
+          "title": "START IN THE CENTRE",
+          "text": "A Newcastle player is close to the central carrier. The gold halo marks the area to inspect.",
+          "focus": [
+            "carrier",
+            "press"
+          ],
+          "routes": []
+        },
+        {
+          "title": "FIND THE RIGHT-SIDE OPTION",
+          "text": "A City teammate is visible to the right near the box. The arrow highlights a possible outlet.",
+          "focus": [
+            "carrier",
+            "right"
+          ],
+          "routes": [
+            0
+          ]
+        },
+        {
+          "title": "CHECK THE NEARBY DEFENDERS",
+          "text": "The right-side teammate has defenders nearby. Compare their positions before following the next action.",
+          "focus": [
+            "carrier",
+            "right",
+            "cover",
+            "line"
+          ],
+          "routes": [
+            0
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,84 +1,96 @@
 <div align="center">
 
-<img src="product/football/watch/mark.svg" width="65" alt="PitchPrism mark">
+<img src="product/football/watch/mark.svg" width="64" alt="PitchPrism">
 
 # PitchPrism
 
 **An AI-powered football companion that turns match data into visual stories and personalized insights.**
 
-[Open the demo](https://imhaojie.github.io/PitchPrism/) · [97-second match video](https://github.com/imhaojie/PitchPrism/releases/download/football-match-v2/enhanced.mp4) · [Judge instructions](docs/football/JUDGING.md) · [Project pitch](docs/football/PITCH.md)
+[Live demo](https://imhaojie.github.io/PitchPrism/) · [Watch / download MP4](https://github.com/imhaojie/PitchPrism/releases/download/v1.0.0/enhanced.mp4) · [Documentation](docs/README.md) · [Releases](https://github.com/imhaojie/PitchPrism/releases)
 
-![PitchPrism match room](docs/football/match-room.png)
+[![Quality](https://github.com/imhaojie/PitchPrism/actions/workflows/quality.yml/badge.svg?branch=main)](https://github.com/imhaojie/PitchPrism/actions/workflows/quality.yml)
+[![Demo](https://github.com/imhaojie/PitchPrism/actions/workflows/football.yml/badge.svg?branch=main)](https://github.com/imhaojie/PitchPrism/actions/workflows/football.yml)
+[![License: MIT](https://img.shields.io/badge/code-MIT-a1f5d8)](LICENSE)
+
+![PitchPrism tactical studio](https://github.com/imhaojie/PitchPrism/releases/download/v1.0.0/tactical-studio.jpg)
 
 </div>
 
-Watch a Manchester City × Newcastle excerpt through **GameBuddy's original glass player, three-state layout, drawer, controls and animated companion**. The original broadcast FX functions provide the branded opening, glowing foot markers, animated options, camera-to-board transitions and closing sequence. The adaptation changes the sport, source evidence and service adapter; it preserves the original interaction and animation system.
+See the carrier, compare the options, and return to the action. PitchPrism brings a cinematic football player, a tactical studio and evidence-backed explanations into one viewing experience.
 
-The supplied **66.6-second source** becomes a **97.2-second, 1080p/25fps enhanced video** with three reviewed tactical freezes and a half-speed replay. All original video frames are retained before the additional replay. Broadcast audio is preserved on live sections; editorial freezes/branding are silent. Captions are English; generated narration is not included.
+## Features
 
-## What you can test
+- **Tactics inside the video.** A reviewed 118.4-second, 1080p/25fps movie includes animated option arrows, role highlights, nine reading steps, pitch transitions and half-speed replay. English text is burned into the MP4.
+- **An interactive tactical studio.** Explore three reviewed moments with source-frame highlights, a pitch diagram and independent routes, focus-area and label controls.
+- **One source clock.** Six chapters, tactical steps and source/enhanced switching resolve to the same original moment, including freezes and replay.
+- **A personal viewing experience.** Choose immersive, full-pitch or half-pitch layouts; adjust football familiarity and focus on a visible role. A football companion reacts to playback.
+- **Inspectable explanations.** Read the evidence behind each local editorial story. The optional Azure Foundry adapter adds a bounded read → inspect → validate tool loop.
 
-- Play, seek, change speed, sound and fullscreen in the original player.
-- Open full-pitch or half-pitch views; inspect the diagram from the labelled source still.
-- Revisit six chapters and switch between source/enhanced video at the same source moment.
-- Read the observation behind an explanation; change fan/analyst familiarity or focus on a role.
-- Inspect genuine missing values: official xG and full-match pass accuracy remain **unavailable**.
+## Quick start
 
-The scoreboard reads **MCI 0–0 NEW** throughout the reviewed excerpt. No goal is shown. Only the close-up shirt text **BERNARDO / 20** is identified; other players are represented by roles. Foot anchors are manually reviewed on selected frames. Board coordinates and dashed arrows are editorial schematics, not optical tracking, measured positions or completed-pass records.
-
-The separate fictional fixture in `data/match.json` still tests football analytics. It is never joined to the real video. See [source analysis](docs/football/SOURCE-ANALYSIS.md).
-
-## Run locally
-
-Python 3.11+; the app frontend needs no npm build:
+Requires **Python 3.11+**. Playback and local explanations use the Python standard library; the frontend is native JavaScript and needs no build step.
 
 ```bash
 git clone https://github.com/imhaojie/PitchPrism.git
 cd PitchPrism
 python3 -m venv .venv
-# Fetch the frozen, hash-verified demo media; uses Python standard library.
-.venv/bin/python product/football/scripts/fetch_media.py
-.venv/bin/python -m product.football.server --port 4180
+source .venv/bin/activate
+python product/football/scripts/fetch_media.py
+python -m product.football.server --port 4180
 ```
 
-Open **http://127.0.0.1:4180/**. Space plays/pauses; F toggles fullscreen; Esc closes the current panel. The tactical panel explicitly labels the reviewed still's timestamp rather than pretending to follow players live.
+Open **http://127.0.0.1:4180/**. On Windows, activate with `.venv\Scripts\activate`. No account or cloud credentials are needed. Media downloads are checked against committed SHA-256 values before use.
 
-To reproduce the FX from the exact original input, install FFmpeg and the renderer dependencies:
+**Controls:** Space plays/pauses; F toggles fullscreen; Esc closes panels. Open **战术演播室 / Tactical Studio** for the three-step readings. Chapter labels use source time; the player shows enhanced-video time.
 
-```bash
-.venv/bin/pip install -r product/football/requirements.txt
-.venv/bin/python product/football/scripts/render.py --source /path/to/original/match.mp4
-.venv/bin/python product/football/scripts/export_demo.py
-```
+## What the demo knows
 
-The input must match the SHA-256 in `product/football/data/clip.json`. A different video requires its own analysis and anchors. MP4s, build outputs and credentials stay outside Git; frozen media is in [Releases](https://github.com/imhaojie/PitchPrism/releases/tag/football-match-v2).
+The demonstration uses a supplied **66.6-second Manchester City × Newcastle excerpt**, with a visible **0–0** scoreboard. All 1,665 source frames appear once in order before the additional replay; live sections retain broadcast audio. Explanatory freezes and bookends are silent.
 
-## Microsoft integration
+Selected foot anchors and observations were manually reviewed. Pitch positions and dashed arrows are editorial schematics: an arrow shows an option, not a completed pass or measured open lane. Official events, xG, full-match statistics, continuous tracking and unverified player identities remain unavailable. A separate synthetic analytics fixture is used for tests and is never joined to this footage.
 
-The active football app has no AWS runtime dependency. The **Azure Foundry / Azure OpenAI v1** adapter reuses the bounded **read state → inspect evidence → validate story** tool loop, with a separate prompt/context for the real clip and the synthetic test fixture. It supports Entra/managed identity or a server-side key. Context limits, evidence references, source-time bounds and numeric guards are enforced before a response is accepted.
+The public demo uses **LOCAL EDITORIAL** explanations. **Live Azure inference and deployment have not been verified.** Adapter tests and infrastructure compilation are separate from cloud execution.
 
-**Live Foundry and Azure deployment remain unverified.** No active Azure subscription has been confirmed. The public demo uses honest **LOCAL EDITORIAL** explanations; it never simulates a cloud response. The user selected the free trial; no paid upgrade or Azure resources have been created.
+## Develop and verify
 
-```bash
-cp .env.example .env
-# Set AZURE_OPENAI_ENDPOINT and AZURE_OPENAI_DEPLOYMENT.
-# Entra: az login, AZURE_USE_ENTRA=1, Cognitive Services OpenAI User access.
-.venv/bin/python product/football/scripts/verify_foundry.py
-```
-
-[Azure setup and Bicep](infra/azure/README.md) target Container Apps Consumption with managed identity, scale-to-zero and bounded calls. Adapter tests and template compilation do not prove cloud inference.
-
-## Verification and reuse
+Use **Node.js 22+** for the complete engineering gate:
 
 ```bash
 npm ci --prefix product --ignore-scripts
-.venv/bin/python product/scripts/check.py --full
+python product/scripts/check.py --full
+python product/football/scripts/export_demo.py
+python product/football/scripts/serve_demo.py --port 4181
 ```
 
-The gate passes **556 behavior tests**, privacy/syntax checks and 50 inherited offline CDK resource assertions. Both MP4s pass full decode. Browser checks cover actual playback, layout transitions, chapter/freezes, source switching, evidence, preferences and controls. [Validation](docs/football/VALIDATION.md) · [QA inventory](docs/football/QA-v2.md).
+The static export opens at **http://127.0.0.1:4181/site/**. It uses the same media, observations and source/output mapping as the local server. The exporter rejects mismatched media hashes or timing. Browser playback and full media decode are checked separately from offline tests.
 
-PitchPrism adapts MIT-licensed [GameBuddy](https://github.com/imhaojie/BroadcastCode-2026), snapshot `17d74fd2a5df64a240198a7305312174de7684b0`, in an independent repository. The original checkout is unchanged. Directly imported modules include StageLayout, GlassManager, PlayerControls, Drawer, ContentPanel, Inspector, GameBuddyAmbient, CourtPanel and source/output mapping. The renderer calls the original `broadcast_fx.legacy` and `broadcast_fx.tactics` functions. These source assets use Python/OpenCV/Pillow/FFmpeg rather than Remotion. [Migration details](docs/football/MIGRATION.md).
+[Development guide](CONTRIBUTING.md) · [Architecture](docs/football/ARCHITECTURE.md) · [Media pipeline](docs/football/MEDIA.md) · [Validation](docs/football/VALIDATION.md)
 
-The NBA × AWS award belongs to **GameBuddy**, not PitchPrism. The organizers must confirm eligibility of an enhancement to previously winning open-source work. The supplied broadcast excerpt is a development/demo input, separate from the synthetic event fixture required for competition. Submission eligibility and media permission are not established by this implementation. [Official rules](https://github.com/microsoft/insidethegamehackathon/blob/main/OFFICIAL%20RULES.md).
+## Optional Azure Foundry
 
-Original code is MIT; broadcast footage and third-party assets retain their owners' rights. The MIT licence does not grant broadcast redistribution rights. See [notices](THIRD_PARTY_NOTICES.md). Earlier `football-demo-v1` is a superseded synthetic prototype, not evidence for the current visuals, media or model integration.
+Install `product/football/requirements.txt`, copy `.env.example` to `.env`, and configure the server-side endpoint and deployment. Entra/managed identity is supported; credentials never belong in browser code.
+
+```bash
+python -m pip install -r product/football/requirements.txt
+python product/football/scripts/verify_foundry.py
+```
+
+A successful API response with a validated tool trace is required before a real Foundry receipt exists. See [Azure configuration](infra/azure/README.md). Cloud deployment is optional and is not performed by the quick start or GitHub Pages workflow.
+
+## Repository map
+
+| Path | Purpose |
+| --- | --- |
+| `product/football/` | Application, evidence, editorial stories, media tools and tests |
+| `product/watch/` | Shared viewing, layout, controls and time-mapping modules |
+| `product/broadcast-fx/` | Rendering primitives |
+| `product/tests/` | Shared behavior and regression tests |
+| `infra/azure/` | Optional Azure configuration and guarded deployment tooling |
+| `docs/football/` | Product, media and validation documentation |
+| `docs/archive/` | Historical engineering records and source provenance |
+
+Media, credentials, build outputs and account receipts stay outside Git. Versioned video assets are distributed through Releases.
+
+## License and credits
+
+Code is available under the [MIT License](LICENSE). Third-party software, fonts and source attribution are documented in [Third-party notices](THIRD_PARTY_NOTICES.md). Broadcast video, audio and third-party marks retain their owners' rights and are not licensed by the code's MIT license.

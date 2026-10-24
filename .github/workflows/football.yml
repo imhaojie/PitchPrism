@@ -1,42 +1,41 @@
-name: PitchPrism checks and public demo
+name: Publish demo
 on:
   push:
-    branches: [main, codex/football]
+    branches: [main]
   workflow_dispatch:
 permissions:
   contents: read
-  pages: write
-  id-token: write
 concurrency:
   group: pitchprism-pages
   cancel-in-progress: true
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-      - run: npm ci --prefix product --ignore-scripts --no-audit --no-fund
-      - run: python product/scripts/check.py --full
-      - run: sudo apt-get update && sudo apt-get install -y ffmpeg fonts-dejavu-core
-      - run: pip install -r product/football/requirements.txt
-      - run: python product/football/scripts/fetch_media.py
-      - run: python product/football/scripts/export_demo.py
+      - name: Fetch and verify the published media
+        run: python product/football/scripts/fetch_media.py
+      - name: Export the local editorial demo
+        run: python product/football/scripts/export_demo.py
       - uses: actions/upload-pages-artifact@v3
         with:
           path: product/football/build/site
   deploy:
     needs: build
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy the explicitly labelled local-evidence demo
+      - name: Deploy demo
         id: deployment
         uses: actions/deploy-pages@v4

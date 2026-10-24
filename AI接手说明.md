@@ -1,15 +1,21 @@
-# PitchPrism · 当前交接
+# PitchPrism 当前维护说明
 
-2026-10-21。独立项目，原 GameBuddy 仓库未修改。用户要求恢复完整原版视觉，并指定 `/Users/jack/work/BroadcastCode/match.mp4` 为实际测试素材。默认入口 `python3 -m product.football.server --port 4180`。
+2026-10-24。先读 [README](README.md)、[架构](docs/football/ARCHITECTURE.md)、[媒体流程](docs/football/MEDIA.md) 和 [来源归属](docs/football/MIGRATION.md)。默认入口为 `python -m product.football.server --port 4180`；活动目录为 `product/football/`。
 
-当前前端真正导入 GameBuddy 的三态布局、玻璃材质、播放器、抽屉、内容面板、Inspector、CourtPanel、小伙伴动画和时间映射。足球适配只替换几何/数据/必要文案与样式。实际特效库为 Python/OpenCV/Pillow/FFmpeg，不是 Remotion。
+## 当前媒体与时钟
 
-源片66.6秒，曼城对纽卡斯尔，画面0–0，无进球。人工逐段审核，三个定格8.0、37.8、56.8秒，SHA绑定在 `product/football/data/clip.json`。全源片保留，新增原版开场、光圈/箭头、战术板形变、半速回放、片尾，输出97.2秒1080p/25fps。原片/增强片全解码通过；556项行为测试及完整门禁通过。浏览器完成真实播放、切换、回看、偏好、全屏、三态等验收。
+当前正式版本为 v1.0.0。网页使用复核版 118.4 秒、1920×1080、25fps 增强视频，SHA-256 为 `986f282682283a789c40150832840db910dd1ce16e0017318558fda021f5e0ed`。这是已交付的 `build/tactical-v4/PitchPrism-Enhanced-Reviewed.mp4` 的原字节副本，没有重新编码。媒体通过 GitHub Release 分发，不入 Git。
 
-`data/match.json` 为独立合成数据测试，不与真实视频混用。没有官方xG、全场统计或可靠球员身份时保留缺失。战术板是编辑示意，非自动追踪。LOCAL解读是审核观察的本地模板，不冒充模型输出。
+原片 66.6 秒，MCI 0–0 NEW，无进球。原始输入与无损重封装文件是不同哈希；见 `data/source-lock.json`。人工审核的观察、足部锚点和示意站位保持不变。`data/clip.json` 的 production 已更新为复核版时间轴；release manifest 分开记录原渲染输入的数据哈希和当前网页数据哈希。
 
-Azure CLI 已安装，首次登录当时无订阅。用户选择免费试用；尚无已确认可用订阅，无实际Foundry调用或Azure部署。不得升级付费。原REST工具循环增加真实片段context，继续使用相同读证据/验证/预算逻辑。
+三个定格在增强时间 10.8–24.0、53.8–67.0、86.0–99.2 秒，分别对应原片 8、37.8、56.8 秒。每个定格的三步解析在本地偏移 0、4.1、8.2 秒切换。章节和步骤跳转通过 `product/watch/adapters/editorial-timeline.js`；跳转含 0.4 秒稳定显示偏移。切换原片与增强片保留原片时刻。
 
-冻结媒体从 `football-match-v2` release 获取，以 `data/media-lock.json` 核验；源码Git不含MP4。复现渲染须提供与源SHA一致的原始match.mp4，重新封装的source.mp4哈希不同，不能当原输入。
+## 产品与发布
 
-入口和交付见 [README](README.md)、[源片分析](docs/football/SOURCE-ANALYSIS.md)、[复用说明](docs/football/MIGRATION.md)、[验收](docs/football/VALIDATION.md)。旧football-demo-v1为被用户否定的历史合成版本，不再作为当前成果。赛制新作品/旧获奖项目复用资格、广播素材许可、视频平台URL和实际微软云验收仍未完成。
+足球伙伴为 `football-buddy.js` 的 SVG/CSS 动画。战术演播室支持三个定格、三步解析和图层开关；角色及线路与烧录英文稿 `data/tactical-story.json` 一致，测试校验这一约束。不画防守连接线或历史传球关系线；虚线仅为选项。名义球场按 105×68m 与 IFAB Law 1 几何推导，非校准追踪。
+
+媒体下载和静态导出同时检查三个资产的哈希、数据绑定和时间轴。正式发布流程见媒体文档。完整门禁、浏览器和媒体解码是不同验收层；记录见 [当前验收](docs/football/VALIDATION.md)。历史文档归档，README 面向当前产品。
+
+`data/match.json` 是独立合成测试，禁止与真实视频混用。缺少官方事件、xG、全场统计及可靠身份时保持缺失；不得从未来观察支持当前解读。
+
+Azure Foundry 适配器和 Bicep 已实现，但真实部署和模型调用仍未核验。免费试用要求、禁止付费升级及禁止 AWS 资源变更的约束继续有效。GitHub Pages 为 LOCAL EDITORIAL，不冒充云输出。比赛资格、素材授权与受支持视频平台 URL 仍是独立提交事项；不因发布版本而自动完成。

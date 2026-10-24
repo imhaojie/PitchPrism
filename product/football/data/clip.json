@@ -53,8 +53,8 @@
       "id": "build",
       "second": 8,
       "clock": "09:19",
-      "title": "DRAW THE PRESS",
-      "subtitle": "Watch the carrier, the nearest presser and the options ahead.",
+      "title": "READ THE NEXT OPTION",
+      "subtitle": "Carry. Connect. Compare the width.",
       "analysis": "City carry towards halfway while Newcastle hold positions ahead of the ball. The highlighted routes are possible outlets, not completed passes.",
       "casual": "Watch the player with the ball. A teammate ahead and another near the far touchline give different ways to continue.",
       "players": [
@@ -69,7 +69,7 @@
             44,
             53
           ],
-          "label": "BALL",
+          "label": "CARRIER",
           "active": true,
           "anchorKind": "visible-foot"
         },
@@ -84,7 +84,7 @@
             49,
             48
           ],
-          "label": "PRESS",
+          "label": "OPPONENT",
           "active": true,
           "anchorKind": "visible-foot"
         },
@@ -181,8 +181,8 @@
       "id": "combine",
       "second": 37.8,
       "clock": "09:48",
-      "title": "FIND THE INSIDE",
-      "subtitle": "The ball is inside; a runner is available nearer the box.",
+      "title": "FROM WIDE TO INSIDE",
+      "subtitle": "Read the carrier, the runner and the defenders.",
       "analysis": "The ball has moved infield from the far side. A City runner is visible towards the penalty arc, with Newcastle defenders positioned between the ball and goal. The graphic simplifies the visible arrangement.",
       "casual": "The ball has come away from the touchline. Look towards the teammate running nearer the box, then check the defenders in the way.",
       "players": [
@@ -197,7 +197,7 @@
             76,
             33
           ],
-          "label": "BALL",
+          "label": "CARRIER",
           "active": true,
           "anchorKind": "visible-foot"
         },
@@ -212,7 +212,7 @@
             83,
             52
           ],
-          "label": "RUN",
+          "label": "SUPPORT",
           "active": true,
           "anchorKind": "visible-foot"
         },
@@ -257,7 +257,7 @@
             73,
             28
           ],
-          "label": "",
+          "label": "OPPONENT",
           "active": false,
           "anchorKind": "visible-foot"
         },
@@ -325,7 +325,7 @@
       "second": 56.8,
       "clock": "10:07",
       "title": "LOOK TO THE RIGHT",
-      "subtitle": "A crowded centre. A teammate is available to the right.",
+      "subtitle": "Start in the centre. Then widen your view.",
       "analysis": "The central carrier has Newcastle players close by. A City teammate is visible to the right near the edge of the box. The dashed arrow highlights an option at this frame; it is not a prediction or a measured pass lane.",
       "casual": "Pause on the crowd around the ball, then look right. There is a teammate to watch as play continues.",
       "players": [
@@ -340,7 +340,7 @@
             76,
             51
           ],
-          "label": "BALL",
+          "label": "CARRIER",
           "active": true,
           "anchorKind": "visible-foot"
         },
@@ -400,7 +400,7 @@
             74,
             48
           ],
-          "label": "",
+          "label": "OPPONENT",
           "active": false,
           "anchorKind": "visible-foot"
         },
@@ -541,11 +541,13 @@
   ],
   "production": {
     "mode": "editorial",
-    "durationSeconds": 97.2,
+    "version": "1.0.0",
+    "durationSeconds": 118.4,
+    "readingStepSeconds": 4.1,
     "timeline": [
       {
         "kind": "intro",
-        "outputStart": 0,
+        "outputStart": 0.0,
         "outputEnd": 2.8,
         "sourceStart": 0,
         "sourceEnd": 0
@@ -560,66 +562,66 @@
       {
         "kind": "freeze",
         "outputStart": 10.8,
-        "outputEnd": 15.8,
+        "outputEnd": 24.0,
         "sourceStart": 8,
         "sourceEnd": 8,
         "scene": "build"
       },
       {
         "kind": "live",
-        "outputStart": 15.8,
-        "outputEnd": 45.6,
+        "outputStart": 24.0,
+        "outputEnd": 53.8,
         "sourceStart": 8,
         "sourceEnd": 37.8
       },
       {
         "kind": "freeze",
-        "outputStart": 45.6,
-        "outputEnd": 50.6,
+        "outputStart": 53.8,
+        "outputEnd": 67.0,
         "sourceStart": 37.8,
         "sourceEnd": 37.8,
         "scene": "combine"
       },
       {
         "kind": "live",
-        "outputStart": 50.6,
-        "outputEnd": 69.6,
+        "outputStart": 67.0,
+        "outputEnd": 86.0,
         "sourceStart": 37.8,
         "sourceEnd": 56.8
       },
       {
         "kind": "freeze",
-        "outputStart": 69.6,
-        "outputEnd": 74.6,
+        "outputStart": 86.0,
+        "outputEnd": 99.2,
         "sourceStart": 56.8,
         "sourceEnd": 56.8,
         "scene": "release"
       },
       {
         "kind": "live",
-        "outputStart": 74.6,
-        "outputEnd": 84.4,
+        "outputStart": 99.2,
+        "outputEnd": 109.0,
         "sourceStart": 56.8,
         "sourceEnd": 66.6
       },
       {
         "kind": "rewind",
-        "outputStart": 84.4,
-        "outputEnd": 85.2,
+        "outputStart": 109.0,
+        "outputEnd": 109.6,
         "sourceStart": 66.6,
         "sourceEnd": 56.8
       },
       {
         "kind": "replay",
-        "outputStart": 85.2,
-        "outputEnd": 92.8,
+        "outputStart": 109.6,
+        "outputEnd": 115.2,
         "sourceStart": 56.8,
-        "sourceEnd": 60.6
+        "sourceEnd": 59.6
       },
       {
         "kind": "outro",
-        "outputStart": 92.8,
-        "outputEnd": 97.2,
+        "outputStart": 115.2,
+        "outputEnd": 118.4,
         "sourceStart": 66.56,
         "sourceEnd": 66.56
       }

@@ -1,10 +1,10 @@
 # GameBuddy · 当前维护交接
 
-2026-10-14。比赛已经结束，用户确认 **Team02 获得银奖**。当前工作转为仓库整理与开源文档，主入口是 [README.md](README.md)。原逐轮交接完整保留在[比赛期间接手说明](docs/archive/competition-2026/AI接手说明-比赛期间.md)，协同日志在[归档目录](docs/archive/competition-2026/README.md)。
+2026-10-14。比赛已经结束，用户确认 **Team02 获得银奖**。当前工作转为仓库整理与开源文档，主入口是 [README.md](../../../README.md)。原逐轮交接完整保留在[比赛期间接手说明](../competition-2026/AI接手说明-比赛期间.md)，协同日志在[归档目录](../competition-2026/README.md)。
 
 ## 当前结构
 
-- `product/` 为产品源码与部署工程；启动见[产品工程指南](product/README.md)。
+- `product/` 为产品源码与部署工程；启动见[产品工程指南](../../../product/README.md)。
 - `product/watch/` 为玻璃观赛前端；Python 本地入口无需云凭据。
 - `docs/README.md` 导航架构、模型、视频、AWS 和验收材料。
 - `SHOWCASE.md` 保留原比赛作品说明。发布脚本读取它，GitHub README 与比赛 CloudFront `/readme` 分开维护。

@@ -231,7 +231,7 @@ SFT 改善了工具协议与证据选择，本轮 **RL 相对 SFT 未观察到�
 
 训练实现采用分组归一化优势，基于当前策略采样后进行单次策略梯度更新，没有实现带参考 KL 的完整 GRPO 或 clipped PPO。
 
-[训练结果](docs/RL三层联合训练结果-20261010.md) · [服务交付](docs/RL服务交付-20261010.md) · [端到端接入](docs/RL产品端到端联调验收-20261010.md)
+[训练结果](../../RL三层联合训练结果-20261010.md) · [服务交付](../../RL服务交付-20261010.md) · [端到端接入](../../RL产品端到端联调验收-20261010.md)
 
 </details>
 
@@ -289,7 +289,7 @@ python3 product/watch/preview.py --port 4178
 python3 product/watch/preview.py --port 4178 --media-dir /path/to/local-media
 ```
 
-这些文件名对应仓库中的既定样片及事件映射；替换为其他视频时，需要同时完成事件和标注适配。更多说明见[前端文档](product/watch/README.md)。
+这些文件名对应仓库中的既定样片及事件映射；替换为其他视频时，需要同时完成事件和标注适配。更多说明见[前端文档](../../../product/watch/README.md)。
 
 ### 2. 查看本地产品、历史运行与证据
 
@@ -318,13 +318,13 @@ python3 product/scripts/check.py --full
 python3 product/rl/train_evidence.py --dry-run --out product/build/rl-plan
 ```
 
-真实训练需要对应 GPU 环境及模型依赖；渲染需要 FFmpeg、固定媒体工具、字体和授权源视频。完整路径见[工程指南](product/README.md)、[三层数据训练记录](docs/RL三层联合训练结果-20261010.md)和[正式视频渲染](product/broadcast-fx/formal/README.md)。
+真实训练需要对应 GPU 环境及模型依赖；渲染需要 FFmpeg、固定媒体工具、字体和授权源视频。完整路径见[工程指南](../../../product/README.md)、[三层数据训练记录](../../RL三层联合训练结果-20261010.md)和[正式视频渲染](../../../product/broadcast-fx/formal/README.md)。
 
 ### 5. AWS 复现
 
 在自己的 AWS 账号复现时，需要调整账号、执行角色、权限边界、模型访问和 SageMaker 端点配置。
 
-赛事环境已 bootstrap，禁止重复执行。赛后参赛账号的模型和管理权限已受限，本地复现与云部署步骤见[产品工程指南](product/README.md)。
+赛事环境已 bootstrap，禁止重复执行。赛后参赛账号的模型和管理权限已受限，本地复现与云部署步骤见[产品工程指南](../../../product/README.md)。
 
 <a id="stack"></a>
 
@@ -371,14 +371,14 @@ BroadcastCode-2026/
 
 | 阅读目的 | 文档 |
 |---|---|
-| 本地启动、依赖与工程入口 | [产品工程指南](product/README.md) |
-| 三态布局、媒体目录、观赛设置 | [观赛前端](product/watch/README.md) |
-| 数据球探的真实成片接入 | [RL 产品端到端联调](docs/RL产品端到端联调验收-20261010.md) |
-| 模型效果、失败与实验边界 | [联合训练结果](docs/RL三层联合训练结果-20261010.md) |
-| 比赛提交视频与 AI 双人解说 | [正式 55 秒作品](docs/正式55秒豆包双人解说与主页发布-20261010.md) |
-| 最终英文答辩片 | [PPT 最终演示视频](docs/PPT最终演示视频-20261011.md) |
-| 服务协同、交付验证与监控 | [AWS 托管交付闭环](docs/AWS托管交付闭环-20261010.md) |
-| 历史成果及整理后的完整导航 | [文档首页](docs/README.md) |
+| 本地启动、依赖与工程入口 | [产品工程指南](../../../product/README.md) |
+| 三态布局、媒体目录、观赛设置 | [观赛前端](../../../product/watch/README.md) |
+| 数据球探的真实成片接入 | [RL 产品端到端联调](../../RL产品端到端联调验收-20261010.md) |
+| 模型效果、失败与实验边界 | [联合训练结果](../../RL三层联合训练结果-20261010.md) |
+| 比赛提交视频与 AI 双人解说 | [正式 55 秒作品](../../正式55秒豆包双人解说与主页发布-20261010.md) |
+| 最终英文答辩片 | [PPT 最终演示视频](../../PPT最终演示视频-20261011.md) |
+| 服务协同、交付验证与监控 | [AWS 托管交付闭环](../../AWS托管交付闭环-20261010.md) |
+| 历史成果及整理后的完整导航 | [文档首页](../../README.md) |
 
 当前支持已登记的样片与比赛素材，新视频需要适配事件映射和标注。战术板位置、箭头和人物轮廓采用编辑示意。
 
@@ -388,8 +388,8 @@ BroadcastCode-2026/
 
 欢迎通过 Issue 描述可复现的问题，或通过 Pull Request 改进数据工具、前端体验、视频渲染与工程文档。提交前运行上述离线检查，并为数据或媒体附上来源、单位与统计范围。
 
-感谢 NBA × AWS 主办方、现场评委与技术支持，以及所有参与开发和答辩的 Team02 队友。项目使用 Qwen、FFmpeg、liquidGL、Fusion Pixel 等模型、工具或素材；第三方许可与来源见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
+感谢 NBA × AWS 主办方、现场评委与技术支持，以及所有参与开发和答辩的 Team02 队友。项目使用 Qwen、FFmpeg、liquidGL、Fusion Pixel 等模型、工具或素材；第三方许可与来源见 [THIRD_PARTY_NOTICES.md](../../../THIRD_PARTY_NOTICES.md)。
 
 ## 许可证
 
-原创代码采用 [MIT License](LICENSE)。数据、视频、照片、模型及其他第三方素材的许可见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
+原创代码采用 [MIT License](../../../LICENSE)。数据、视频、照片、模型及其他第三方素材的许可见 [THIRD_PARTY_NOTICES.md](../../../THIRD_PARTY_NOTICES.md)。

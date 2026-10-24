@@ -19,12 +19,14 @@ The root MIT license applies to GameBuddy's original source code and original te
 The architecture image is an AI-assisted explanatory figure of the project's implemented capabilities. Tactical overlays are editorial illustrations, not official tracking products. Image sources and media identities are recorded in [the project gallery manifest](docs/assets/project/sources.json), the competition capture manifest, and the architecture figure manifests.
 
 
-## PitchPrism additions
+## PitchPrism
 
-The active football demo uses the DM Sans variable font from [Google Fonts](https://github.com/google/fonts/tree/main/ofl/dmsans), under the SIL Open Font License; its license is included at `product/football/watch/fonts/OFL.txt`. Original synthetic football data, player names, scene and overlays are created for PitchPrism. No real Premier League club marks or match footage are used. Playwright is development tooling by Microsoft, under Apache-2.0. Preserved GameBuddy code remains MIT; the notices above apply to its historical assets.
+The active application uses DM Sans from [Google Fonts](https://github.com/google/fonts/tree/main/ofl/dmsans), under the SIL Open Font License. Its license is included at `product/football/watch/fonts/OFL.txt`. The football companion is an original SVG/CSS component; the active app does not mount the historical basketball sprite. System DIN fonts used for the reviewed video are not redistributed; the renderer falls back to bundled DM Sans where unavailable.
 
-## PitchPrism supplied match demonstration (2026-10-21)
+Shared interface modules and rendering primitives retain the MIT-licensed [GameBuddy](https://github.com/imhaojie/BroadcastCode-2026) source attribution, snapshot `17d74fd2a5df64a240198a7305312174de7684b0`. Its separate award history is not a PitchPrism award. The original repository is unchanged. [Source provenance](docs/football/MIGRATION.md).
 
-The current demo uses the user's `match.mp4` (SHA-256 `cf1ded5ca487eff98505fa64ac2f2f790c04a33ab441d5eccdd785da847ef523`), a Manchester City × Newcastle broadcast excerpt with existing broadcaster/competition marks and original audio. It was supplied for implementing this project's demonstration. Underlying broadcast, club, competition and audio rights remain with their respective owners; the code's MIT licence does not license this footage. Independent redistribution/competition permissions have not been verified. No endorsement is implied. See [source analysis](docs/football/SOURCE-ANALYSIS.md).
+### Supplied match footage
 
-The original GameBuddy mascot atlas, opening/closing designs, UI components and broadcast FX code are reused with their existing provenance; the football adaptation does not claim the upstream project's award. Earlier fictional events remain a separate synthetic test fixture and do not describe this real broadcast.
+The demonstration uses the user's `match.mp4` (SHA-256 `cf1ded5ca487eff98505fa64ac2f2f790c04a33ab441d5eccdd785da847ef523`), a Manchester City × Newcastle broadcast excerpt containing broadcaster/competition marks and original audio. Broadcast, club, competition and audio rights remain with their owners. The code's MIT license does not license this footage; no endorsement is implied. Independent redistribution/competition permissions have not been verified. [Source analysis](docs/football/SOURCE-ANALYSIS.md).
+
+The independent synthetic test fixture is original scenario data and does not describe this real broadcast. Playwright is development tooling by Microsoft under Apache-2.0. Sharp is optional development tooling under Apache-2.0, with its own dependency notices. Dependency and source licenses remain applicable.

@@ -1,0 +1,28 @@
+name: Bug report
+description: Report a reproducible problem in PitchPrism.
+labels: [bug]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+      description: Include the expected behavior and the affected release or demo URL.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: For timing issues, include source/enhanced mode, chapter and displayed time.
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Browser, operating system, viewport and local/server/static mode.
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Relevant evidence
+      description: Screenshots or safe logs. Do not include keys, account receipts or private footage.

@@ -1,3 +1,5 @@
+> Historical preview. Use [current validation](../../football/VALIDATION.md) for the released product.
+
 # Browser QA inventory
 
 Claims: actual playable synthetic footage; source/output time mapping; no future evidence in live insights; canonical numeric facts; audience/team/player personalization; readable desktop/mobile layout; separate local/cloud status.

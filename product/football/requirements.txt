@@ -7,3 +7,6 @@ azure-identity>=1.25.0,<2
 numpy==2.4.2
 opencv-python-headless==4.13.0.92
 fonttools[woff]==4.62.1
+
+# Optional portable FFmpeg executable for the standalone tactical video renderer.
+imageio-ffmpeg==0.6.0

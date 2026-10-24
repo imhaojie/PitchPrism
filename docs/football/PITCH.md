@@ -2,16 +2,10 @@
 
 An AI-powered football companion that turns match data into visual stories and personalized insights.
 
-PitchPrism helps fans see the action before the outcome. An original glass viewing interface opens into a football diagram; reviewed freeze frames highlight the carrier, supporting runs and options, then move back into the broadcast. Chapters, half-speed replay and source-aligned explanations let a fan revisit the moment that matters.
+PitchPrism helps fans read the action. A cinematic player opens into a tactical studio: reviewed freeze frames highlight the carrier, supporting options and nearby opponents, then return to the broadcast. Chapters, half-speed replay and source-aligned explanations make each moment easy to revisit.
 
-The current demonstration adapts a supplied Manchester City × Newcastle excerpt using GameBuddy's original visual library. It preserves every source frame, adds tactical pauses and replay, and exposes the observations behind the story. Missing xG and full-match statistics remain missing. The diagrams are editorial, not automatic tracking.
+The 118.4-second demonstration retains every source frame and includes nine English reading steps, animated options, role highlights and football pitch transitions inside the MP4. The interactive studio uses the same reviewed moments and reading sequence. Missing official statistics stay missing; editorial diagrams remain clearly distinct from tracking.
 
-The Microsoft integration implements a bounded Azure Foundry tool loop that reads state, inspects evidence and validates a story, with Entra/managed-identity support. Actual cloud deployment and inference are pending; today's public demo uses clearly labelled local editorial explanations.
+An optional Azure Foundry integration implements a bounded read → inspect → validate tool loop. The public demo currently uses local editorial explanations; live Azure inference and deployment remain unverified.
 
-Repository: https://github.com/imhaojie/PitchPrism
-
-Demo: https://imhaojie.github.io/PitchPrism/
-
-97.2-second English-captioned match video: https://github.com/imhaojie/PitchPrism/releases/download/football-match-v2/enhanced.mp4
-
-Original GameBuddy reuse and the former project's award are disclosed. Submission eligibility, broadcast permissions and a supported video-platform URL still require resolution before a competition submission.
+[Repository](https://github.com/imhaojie/PitchPrism) · [Live demo](https://imhaojie.github.io/PitchPrism/) · [English-captioned MP4](https://github.com/imhaojie/PitchPrism/releases/download/v1.0.0/enhanced.mp4).

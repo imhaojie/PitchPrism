@@ -1,25 +1,175 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="dark"><title>PitchPrism · AI Football Companion</title><link rel="icon" href="data:,">
-<link rel="stylesheet" href="./shared/stage/stage.css"><link rel="stylesheet" href="./shared/court/court.css"><link rel="stylesheet" href="./shared/annotations/annotations.css"><link rel="stylesheet" href="./shared/media/media.css"><link rel="stylesheet" href="./shared/content/content.css"><link rel="stylesheet" href="./shared/dev/inspector.css"><link rel="stylesheet" href="./style.css?v=match-v2"></head>
-<body><main id="stage" data-glass="css" aria-label="PitchPrism 观赛播放器" tabindex="-1">
-<div id="scene"><canvas id="ambience" aria-hidden="true"></canvas><div class="scene-shade"></div><div id="video-surface" data-liquid-dynamic-container><video poster="./poster.jpg?v=match-v2" muted id="match-video" playsinline preload="auto" crossorigin="anonymous" aria-label="Football match video"></video></div></div>
-<div id="annotation-host" data-liquid-ignore></div>
-<div id="game-buddy-slot" data-liquid-ignore aria-hidden="true" style="position:absolute;left:16px;bottom:calc(var(--controls-height,66px) + 32px);z-index:20;pointer-events:none"></div>
-<div id="moment-heading" data-liquid-ignore><div class="moment-pill glass-shell"><div class="glass-target"></div><div class="glass-content"><span id="moment-kicker">PitchPrism · 足球观赛伙伴</span></div></div><h1 id="moment-title"></h1><p id="moment-subtitle"></p></div>
-<aside id="court-shell" class="glass-shell" aria-label="独立球队战术板" inert><div class="glass-target"></div><div id="court-foreground" class="glass-content"></div><button id="court-close" aria-label="收起战术板">×</button></aside>
-<nav id="top-tabs" class="glass-shell" aria-label="Viewing layout"><div class="glass-target"></div><div class="glass-content"><button data-mode="immersive" class="selected">沉浸式</button><button data-mode="fullCourt">全场</button><button data-mode="halfCourt">半场</button><button id="open-insights">✦ AI 解读</button></div></nav><div id="controls-host"></div><div id="drawer-host"></div>
-<button id="left-edge" class="edge-hotzone" aria-label="打开操作抽屉"></button><button id="right-edge" class="edge-hotzone" aria-label="展开半场战术板"></button>
-<div id="settings" data-component="menus" class="glass-shell popover" hidden role="dialog" aria-label="更多"><div class="glass-target"></div><div class="glass-content"><h2>更多</h2>
-<details id="watch-preferences"><summary>观赛偏好</summary>
-<label class="preference-row">关注球员<select id="follow-player" aria-label="关注球员"><option value="all">全队</option></select></label>
-<label class="preference-row">足球熟悉程度<select id="familiarity" aria-label="足球熟悉程度"><option value="beginner">入门</option><option value="familiar">熟悉</option></select></label>
-<label class="preference-row">观看目的<select id="watch-purpose" aria-label="观看目的"><option value="enjoy">享受比赛</option><option value="analyze">深入分析</option></select></label>
-<p id="preference-status" class="keyboard-hint"></p></details>
-<details><summary>观看设置</summary><label class="setting-row">视频解释图层 <input type="checkbox" id="analysis-toggle" checked></label><p id="media-info" class="keyboard-hint">PitchPrism · GameBuddy 原版视觉组件</p></details>
-<button id="style-inspector" class="setting-row">外观与组件 <span>›</span></button>
-<details><summary>项目与制作</summary><button data-content="sources" class="setting-row">完整来源 <span>›</span></button><button data-content="history" class="setting-row">运行记录 <span>›</span></button><a class="setting-row" href="#" id="media-version">增强视频 <span>›</span></a></details>
-<details><summary>帮助</summary><p class="keyboard-hint">左侧移入找操作；点击右侧看战术。空格播放 · F 全屏 · Esc 逐层返回。增强片的烧录内容不随偏好变化。</p></details>
-</div></div>
-<button id="follow-reminder" class="glass-shell" hidden aria-label="查看当前提醒依据"><span class="glass-target"></span><span class="glass-content"></span></button>
-<div id="notice" role="status" hidden></div><div id="load-error" hidden><h2>原片暂时无法播放</h2><p>请检查本地素材是否存在。不会用图片代替视频。</p><button id="retry-media">重新加载</button></div>
-</main><script src="./shared/vendor/court-viewer.js"></script><script type="module" src="./app.js?v=match-v2"></script></body></html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <title>PitchPrism · AI Football Companion</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="./shared/stage/stage.css" />
+    <link rel="stylesheet" href="./shared/court/court.css" />
+    <link rel="stylesheet" href="./shared/annotations/annotations.css" />
+    <link rel="stylesheet" href="./shared/media/media.css" />
+    <link rel="stylesheet" href="./shared/content/content.css" />
+    <link rel="stylesheet" href="./shared/dev/inspector.css" />
+    <link rel="stylesheet" href="./style.css?v=1.0.0" />
+  </head>
+  <body>
+    <main
+      id="stage"
+      data-glass="css"
+      aria-label="PitchPrism 观赛播放器"
+      tabindex="-1"
+    >
+      <div id="scene">
+        <canvas id="ambience" aria-hidden="true"></canvas>
+        <div class="scene-shade"></div>
+        <div id="video-surface" data-liquid-dynamic-container>
+          <video
+            poster="./poster.jpg?v=1.0.0"
+            muted
+            id="match-video"
+            playsinline
+            preload="auto"
+            crossorigin="anonymous"
+            aria-label="Football match video"
+          ></video>
+        </div>
+      </div>
+      <div id="annotation-host" data-liquid-ignore></div>
+      <div
+        id="game-buddy-slot"
+        data-liquid-ignore
+        aria-hidden="true"
+        style="
+          position: absolute;
+          left: 16px;
+          bottom: calc(var(--controls-height, 66px) + 32px);
+          z-index: 20;
+          pointer-events: none;
+        "
+      ></div>
+      <div id="moment-heading" data-liquid-ignore>
+        <div class="moment-pill glass-shell">
+          <div class="glass-target"></div>
+          <div class="glass-content">
+            <span id="moment-kicker">PitchPrism · 足球观赛伙伴</span>
+          </div>
+        </div>
+        <h1 id="moment-title"></h1>
+        <p id="moment-subtitle"></p>
+      </div>
+      <aside
+        id="court-shell"
+        class="glass-shell"
+        aria-label="独立球队战术板"
+        inert
+      >
+        <div class="glass-target"></div>
+        <div id="court-foreground" class="glass-content"></div>
+        <button id="court-close" aria-label="收起战术板">×</button>
+      </aside>
+      <nav id="top-tabs" class="glass-shell" aria-label="Viewing layout">
+        <div class="glass-target"></div>
+        <div class="glass-content">
+          <button data-mode="immersive" class="selected">沉浸式</button
+          ><button data-mode="fullCourt">全场</button
+          ><button data-mode="halfCourt">半场</button
+          ><button id="open-tactics">⌁ 战术演播室</button
+          ><button id="open-insights">✦ AI 解读</button>
+        </div>
+      </nav>
+      <div id="controls-host"></div>
+      <div id="drawer-host"></div>
+      <button
+        id="left-edge"
+        class="edge-hotzone"
+        aria-label="打开操作抽屉"
+      ></button
+      ><button
+        id="right-edge"
+        class="edge-hotzone"
+        aria-label="展开半场战术板"
+      ></button>
+      <div
+        id="settings"
+        data-component="menus"
+        class="glass-shell popover"
+        hidden
+        role="dialog"
+        aria-label="更多"
+      >
+        <div class="glass-target"></div>
+        <div class="glass-content">
+          <h2>更多</h2>
+          <details id="watch-preferences">
+            <summary>观赛偏好</summary>
+            <label class="preference-row"
+              >关注角色<select id="follow-player" aria-label="关注角色">
+                <option value="all">全队</option>
+              </select></label
+            >
+            <label class="preference-row"
+              >足球熟悉程度<select id="familiarity" aria-label="足球熟悉程度">
+                <option value="beginner">入门</option>
+                <option value="familiar">熟悉</option>
+              </select></label
+            >
+            <label class="preference-row"
+              >观看目的<select id="watch-purpose" aria-label="观看目的">
+                <option value="enjoy">享受比赛</option>
+                <option value="analyze">深入分析</option>
+              </select></label
+            >
+            <p id="preference-status" class="keyboard-hint"></p>
+          </details>
+          <details>
+            <summary>观看设置</summary>
+            <label class="setting-row"
+              >视频解释图层 <input type="checkbox" id="analysis-toggle" checked
+            /></label>
+            <p id="media-info" class="keyboard-hint">
+              PitchPrism · 复核版战术增强视频
+            </p>
+          </details>
+          <button id="style-inspector" class="setting-row">
+            外观与组件 <span>›</span>
+          </button>
+          <details>
+            <summary>项目与制作</summary>
+            <button data-content="sources" class="setting-row">
+              完整来源 <span>›</span></button
+            ><button data-content="history" class="setting-row">
+              运行记录 <span>›</span></button
+            ><a class="setting-row" href="#" id="media-version"
+              >增强视频 <span>›</span></a
+            >
+          </details>
+          <details>
+            <summary>帮助</summary>
+            <p class="keyboard-hint">
+              左侧移入找操作；点击右侧看战术。空格播放 · F 全屏 · Esc
+              逐层返回。增强片的烧录内容不随偏好变化。
+            </p>
+          </details>
+        </div>
+      </div>
+      <button
+        id="follow-reminder"
+        class="glass-shell"
+        hidden
+        aria-label="查看当前提醒依据"
+      >
+        <span class="glass-target"></span><span class="glass-content"></span>
+      </button>
+      <div id="notice" role="status" hidden></div>
+      <div id="load-error" hidden>
+        <h2>原片暂时无法播放</h2>
+        <p>请检查本地素材是否存在。不会用图片代替视频。</p>
+        <button id="retry-media">重新加载</button>
+      </div>
+    </main>
+    <script src="./shared/vendor/court-viewer.js"></script>
+    <script type="module" src="./app.js?v=1.0.0"></script>
+  </body>
+</html>

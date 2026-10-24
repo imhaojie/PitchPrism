@@ -1,15 +1,14 @@
-# Try PitchPrism
+# Demo walkthrough
 
-Open [the demo](https://imhaojie.github.io/PitchPrism/), or follow the [local setup](../../README.md#run-locally). No sign-in is needed for LOCAL EDITORIAL mode.
+Open [PitchPrism](https://imhaojie.github.io/PitchPrism/) or follow the [local quick start](../../README.md#quick-start). No sign-in is needed.
 
-1. Play the enhanced match video. It is 97.2 seconds with English captions.
-2. Open the left drawer → chapters. Revisit the 37.8-second source moment to see a reviewed freeze and the original camera-to-board transition.
-3. Switch full-pitch / half-pitch / immersive layouts. The diagram is a labelled editorial still, not live player tracking.
-4. Open the explanation and inspect its evidence. Change familiarity or focus role under More → preferences.
-5. Use the media library to switch source/enhanced while preserving the source moment.
+1. Play the **118.4-second** enhanced movie. The three tactical freezes contain arrows, role highlights, English readings and camera-to-pitch transitions.
+2. Open **战术演播室 / Tactical Studio**. Select a reviewed frame, change its reading step and toggle routes, focus areas or labels. The main player seeks to the corresponding burned-in step.
+3. Open the left drawer's chapters. The six source-time chapters resolve to the enhanced movie's clock; the tactical chapters enter their freeze.
+4. Compare immersive, full-pitch and half-pitch layouts. The sidebar advances through the same three reading steps during an enhanced freeze.
+5. Open the explanation, inspect its evidence, and change familiarity or focus role under More → preferences.
+6. Switch source/enhanced in the media library. The same source moment is retained; re-entering an enhanced tactical moment opens its first reading.
 
-The current real-video demonstration uses a supplied Manchester City × Newcastle excerpt. Its visible scoreboard is 0–0; no xG, official event feed or full-match statistics were supplied. A separate synthetic event fixture is retained for deterministic analytics and the competition's synthetic-data requirement, never shown as measurements of this real match.
+The source excerpt shows MCI 0–0 NEW. Missing official events, xG, identities and full-match statistics stay missing. The pitch and dashed options are editorial schematics, not optical tracking or a completed-pass feed.
 
-Microsoft status: the Azure Foundry API adapter and Container Apps/Bicep configuration exist; a live deployment/inference remains pending an active free-trial subscription. The public static demo does not run a model. It never displays a fake successful Azure result.
-
-The original GameBuddy code/assets and prior award are disclosed. Organizer eligibility confirmation and underlying broadcast permissions remain submission dependencies. A release-hosted English-captioned match video is available; the supported public video-platform submission URL has not yet been provided.
+The public static demo is **LOCAL EDITORIAL**. Live Azure inference and deployment remain unverified. [Media timing](MEDIA.md) · [Validation](VALIDATION.md) · [Submission notes](SUBMISSION.md).

@@ -1,3 +1,5 @@
+> Historical preview. Use [current validation](../../football/VALIDATION.md) for the released product.
+
 # Supplied-match QA inventory
 
 2026-10-21. Only the cf1ded5c source and current GameBuddy-shell adaptation count for this round.

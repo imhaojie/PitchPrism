@@ -37,7 +37,7 @@ class ReviewedClip(unittest.TestCase):
         for a,b in zip(timeline,timeline[1:]):self.assertEqual(a['outputEnd'],b['outputStart'])
         for s in timeline:
             for k in ['outputStart','outputEnd','sourceStart','sourceEnd']:self.assertAlmostEqual(s[k]*25,round(s[k]*25))
-        self.assertEqual(timeline[-1]['outputEnd'],97.2)
+        self.assertEqual(timeline[-1]['outputEnd'],118.4)
         self.assertLess(timeline[-1]['outputEnd'],120)
 
     def test_freezes_are_exact_reviewed_frames(self):

@@ -1,0 +1,7 @@
+{
+  "originalSha256": "cf1ded5ca487eff98505fa64ac2f2f790c04a33ab441d5eccdd785da847ef523",
+  "remuxSha256": "b7e62c603d84e228a1638494eb8786a8b7e72c09922b762405ca79ade39125ca",
+  "reviewedInputDataSha256": "a24e1d1a38428fa63cd40c6e25dcc388093ab9f76a044d8b7c04504b28a5217e",
+  "provenanceRelease": "football-match-v2",
+  "note": "Lossless stream remux of the reviewed original. This is a distinct file identity."
+}

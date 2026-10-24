@@ -12,4 +12,4 @@ Read README.md, docs/football/MIGRATION.md and AI接手说明.md first.
 - Run `python3 product/scripts/check.py --full`. Browser QA, media decode, Bicep and cloud verification are separate.
 - User chose free Azure trial. Never upgrade to pay-as-you-go or accept paid offers. Before deploying, verify the user's explicit subscription, trial credit and model quota. No AWS resource changes are authorized.
 - New-work eligibility requires organizer confirmation. Submission video must be English and under two minutes, with a public supported video-platform URL separate from a GitHub release.
-- Use relative documentation links. Historical guidance: GAMEBUDDY-AGENTS.md.
+- Use relative documentation links. Historical guidance: docs/archive/provenance/AGENTS.md.

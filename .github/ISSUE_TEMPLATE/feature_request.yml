@@ -1,0 +1,18 @@
+name: Feature request
+description: Propose an improvement to the viewing experience.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: What should become easier?
+      description: Describe the viewer's need and a concrete example.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+      description: Describe the interaction or output, including any evidence/media needs.
+    validations:
+      required: true
