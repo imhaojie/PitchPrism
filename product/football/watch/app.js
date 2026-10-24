@@ -9,19 +9,19 @@ import { createPlayerControls } from "./shared/media/player-controls.js";
 import { createDrawer } from "./shared/navigation/drawer.js";
 import { createContentPanel } from "./shared/content/content-panel.js";
 import { createInspector } from "./shared/dev/inspector.js";
-import { mountFootballBuddy } from "./football-buddy.js";
-import { createTacticalStudio } from "./tactical-studio.js";
+import { mountFootballBuddy } from "./football-buddy.js?v=1.0.0";
+import { createTacticalStudio } from "./tactical-studio.js?v=1.0.0";
 import {
   outputToSourceTime,
   readPreferences,
   savePreferences,
 } from "./shared/adapters/catalog.js";
-import { createFootballPitch } from "./football-pitch.js";
+import { createFootballPitch } from "./football-pitch.js?v=1.0.0";
 import {
   presentationTimeForSource,
   reviewAt,
 } from "./shared/adapters/editorial-timeline.js";
-import { api } from "./transport.js";
+import { api } from "./transport.js?v=1.0.0";
 
 const $ = (selector) => document.querySelector(selector),
   $$ = (selector) => [...document.querySelectorAll(selector)];

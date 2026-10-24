@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Version static state and frontend module URLs so returning visitors refresh the released movie and matching timeline together.
+
 ## 1.0.0 — 2026-10-24
 
 - Publish the reviewed 118.4-second, 1080p/25fps tactical movie with English text, option arrows, role highlights, nine reading steps and half-speed replay.
