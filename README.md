@@ -28,7 +28,68 @@ A scoreline tells you what happened. PitchPrism helps you read the passing optio
 
 The featured experience pairs a **118.4-second English tactical film** with a browser-based player and Tactical Studio. It runs without an account or cloud credentials. A Python API also provides an independent synthetic football scenario, personalized explanations and optional Microsoft cloud adapters.
 
-[Features](#features) · [Quick start](#quick-start) · [Microsoft integrations](#microsoft-integrations) · [Architecture](#architecture) · [Development](#development) · [Contributing](#contributing)
+[What makes PitchPrism different](#what-makes-pitchprism-different) · [Visual showcase](#visual-showcase) · [Competition requirements](#competition-requirements-and-evidence) · [Features](#features) · [Quick start](#quick-start) · [Microsoft integrations](#microsoft-integrations) · [Architecture](#architecture) · [Development](#development) · [Contributing](#contributing)
+
+## What makes PitchPrism different
+
+**The explanation becomes part of the viewing experience.** PitchPrism connects a cinematic football film, an interactive tactical reading and inspectable evidence through the same source clock.
+
+- **From broadcast to 3D, without losing the moment.** Three tactical freezes rise into a perspective pitch view, reveal the options and return to the action. Nine reading steps, role highlights, arrows and replay are burned into the downloadable film.
+- **One tactical script, two ways to explore it.** The film and browser studio use the same reviewed readings, role focus and option indices. Viewers can pause, toggle explanatory layers and jump to the matching step.
+- **Time-aware explanations.** Source time and enhanced-video time remain aligned through freezes and replay. Current-context readings exclude future evidence, including after rewinding.
+- **Graphics checked against their evidence.** Reviewed foot anchors and approximate pitch geometry constrain option arrows, covered lanes and editorial zones. Automated checks reject inconsistent configurations and audit text bounds and collisions.
+- **Personalization backed by an event trail.** The independent synthetic scenario provides casual/analyst explanations and club/player preferences, with deterministic statistics and cited event IDs. The real-footage experience adds viewing layouts, familiarity settings and visible-role focus.
+- **A bounded Microsoft AI workflow.** The implemented Foundry agent reads state, inspects evidence and validates its story. Optional moderation, private receipts, secret resolution and metrics extend the same server pipeline.
+
+Together, these choices connect visual storytelling, interaction and evidence in a reproducible viewing experience. [Explore the architecture](docs/football/ARCHITECTURE.md) · [Inspect the validation](docs/football/VALIDATION.md).
+
+## Visual showcase
+
+### 01 · A broadcast identity made for the pitch
+
+![PitchPrism opening identity and film artwork](https://github.com/imhaojie/PitchPrism/releases/download/v1.1.0/thumbnail.jpg)
+
+A consistent visual language joins the opening, tactical sequences and replay: spectrum accents, bold display typography and restrained English captions.
+
+### 02 · Read the action inside the broadcast
+
+![PitchPrism broadcast overlay with English tactical labels and highlights](https://github.com/imhaojie/PitchPrism/releases/download/v1.1.0/still-broadcast-overlay.jpg)
+
+Role highlights and option arrows direct attention to the reviewed moment. Explanatory graphics remain labelled interpretations of the supplied footage.
+
+### 03 · Step into the tactical view
+
+![PitchPrism perspective 3D tactical view with role markers and explanatory routes](https://github.com/imhaojie/PitchPrism/releases/download/v1.1.0/still-3d-tactics.jpg)
+
+Perspective camera movement, anonymous team figures, light columns and route graphics give each freeze a clear spatial reading. All nine steps share the film's source/output timing.
+
+### 04 · Make the reading your own
+
+![PitchPrism interactive Tactical Studio with source evidence and pitch diagram](https://github.com/imhaojie/PitchPrism/releases/download/v1.1.0/tactical-studio-web.png)
+
+Compare the source frame with the pitch diagram, switch layers and seek directly to a reading. The film and studio preserve the same tactical story.
+
+[**Watch the complete 118.4-second film**](https://vimeo.com/1239357832) · [**Open the interactive demo**](https://imhaojie.github.io/PitchPrism/)
+
+## Competition requirements and evidence
+
+Prepared for **Inside the Game: Developer Hackathon**. The implementation and submitted materials address the challenge through the following concrete deliverables. This table maps requirements to evidence; it does not replace organizer eligibility or acceptance decisions.
+
+| Requirement | PitchPrism implementation or submitted evidence |
+| --- | --- |
+| **Ingest synthetic football events** | Original Northbridge / Riverside passes, shots, tackles, recoveries and pressure events in [the synthetic fixture](product/football/data/match.json). |
+| **Interpret match state and statistics** | Time-bounded snapshots, pass distance, pass accuracy, goals and scenario shot xG in [the analytics engine](product/football/analytics.py). |
+| **Explain why a moment matters** | Evidence-linked local explanations and the implemented Foundry read → inspect → validate tool loop; [Microsoft verification scope](docs/football/AZURE-VERIFICATION.md). |
+| **Render insights alongside the match** | Released tactical film, synchronized player overlays and interactive Tactical Studio. The featured film uses separately reviewed real footage; synthetic statistics never describe that footage. |
+| **Personalize the experience** | Casual/analyst and club/player parameters in the synthetic API; viewing layout, familiarity and visible-role focus in the film player. |
+| **English project pitch and Microsoft technology description** | Saved on [the competition project](https://innovationstudio.microsoft.com/hackathons/insidethegamedeveloperhackathon/project/127054), with seven implemented Microsoft connections. |
+| **Public demonstration video under two minutes** | [Vimeo demo](https://vimeo.com/1239357832), 118.4 seconds, English explanatory captions, 1080p. |
+| **Public GitHub source and reproducible application** | This repository, [quick start](#quick-start), synthetic API examples and [589 passing offline tests](docs/football/VALIDATION.md). |
+| **Source permissions and new-work eligibility** | The owner reports confirmation of footage permissions and organizer eligibility confirmation; attribution and code licenses are preserved in [the notices](THIRD_PARTY_NOTICES.md). |
+
+The public demo runs local editorial explanations. Live Microsoft verification covers **Entra authentication and Content Safety F0 analysis**; generative Foundry inference and the other cloud services have the documented separate status. Optional examples in the rules, such as optical tracking, measured speed and auto-eventing, are not represented as implemented features.
+
+[Official rules](https://github.com/microsoft/insidethegamehackathon/blob/main/OFFICIAL%20RULES.md) · [Submission materials](docs/football/SUBMISSION.md) · [Per-service verification](docs/football/AZURE-VERIFICATION.md)
 
 ## Features
 
@@ -41,20 +102,7 @@ The featured experience pairs a **118.4-second English tactical film** with a br
 | **Explainable intelligence** | Evidence-linked editorial readings, time-bounded synthetic analytics and a Foundry read → inspect → validate agent. |
 | **Microsoft platform integration** | Seven implemented service/authentication connections, with opt-in execution and server-side configuration. |
 
-<details>
-<summary><strong>Explore the visual experience</strong></summary>
 
-**Interactive studio**
-
-![Interactive Tactical Studio](https://github.com/imhaojie/PitchPrism/releases/download/v1.1.0/tactical-studio-web.png)
-
-**Broadcast overlays**
-
-![Broadcast graphics with tactical highlights](https://github.com/imhaojie/PitchPrism/releases/download/v1.1.0/still-broadcast-overlay.jpg)
-
-[Watch on Vimeo](https://vimeo.com/1239357832) · [Download the MP4](https://github.com/imhaojie/PitchPrism/releases/download/v1.1.0/enhanced.mp4)
-
-</details>
 
 ## Quick start
 
