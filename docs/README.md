@@ -9,6 +9,8 @@
 - [Reviewed source analysis](football/SOURCE-ANALYSIS.md)
 - [Current validation](football/VALIDATION.md)
 - [Azure Foundry and Container Apps](../infra/azure/README.md)
+- [Microsoft platform verification](football/AZURE-VERIFICATION.md)
+- [Competition materials and submission status](football/SUBMISSION.md)
 
 ## Contribute
 

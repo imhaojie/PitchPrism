@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+- Implement optional Content Safety, private Blob receipts, Key Vault and Application Insights adapters alongside Foundry, Container Apps and Entra identity.
+- Verify an actual Entra-authenticated Content Safety F0 call on an existing English tactical caption; document the exact verification scope.
+- Publish the Microsoft integration overview and add 14 adapter contract tests, bringing the offline gate to 589 tests.
+- Add the public Vimeo demo link, expand the open-source README with a visual gallery and reproducible synthetic API examples, and consolidate submission documentation.
+- Preserve the selected v1.1.0 movie, its released assets and the source/output timeline.
+
 ## 1.1.0 — 2026-10-26
 
 The demo movie is replaced by the broadcast-package render; timing is unchanged, so every chapter and reading jump still applies.
