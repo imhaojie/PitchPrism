@@ -9,7 +9,7 @@ except ImportError:
     from media_release import ASSETS, digest, verify_release
 
 HERE = Path(__file__).resolve().parents[1]
-BASE = 'https://github.com/imhaojie/PitchPrism/releases/download/v1.0.0/'
+BASE = 'https://github.com/imhaojie/PitchPrism/releases/download/v1.1.0/'
 
 
 def fetch():

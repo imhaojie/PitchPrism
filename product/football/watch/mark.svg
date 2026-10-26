@@ -1,1 +1,24 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 44"><path fill="#233e32" d="M20 1 39 34 20 44 1 34Z"/><path fill="#d8f492" d="m20 4 2 27 14 2Z"/><path fill="#f0f2d9" d="m20 4-15 29 15-5Z"/><path fill="#9cbaa4" d="m5 34 15-5v12Z"/><path fill="#648d71" d="m22 32 14 3-14 6Z"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-label="PitchPrism">
+  <title>PitchPrism</title>
+  <!-- The centre circle of a pitch; a prism on the centre spot splits the halfway line into three rays. -->
+  <defs>
+    <linearGradient id="pp-prism" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff"/><stop offset=".45" stop-color="#e9ddff"/><stop offset="1" stop-color="#b79cff"/>
+    </linearGradient>
+    <linearGradient id="pp-shade" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#5b2bd1"/><stop offset="1" stop-color="#2a0b6b"/>
+    </linearGradient>
+    <clipPath id="pp-inside"><circle cx="120" cy="120" r="99"/></clipPath>
+  </defs>
+  <rect width="240" height="240" rx="56" fill="#24063f"/>
+  <g clip-path="url(#pp-inside)">
+    <path d="M10 124H92" stroke="#ffffff" stroke-width="11" stroke-linecap="round"/>
+    <path d="M140 114 232 66" stroke="#2ee6ff" stroke-width="11"/>
+    <path d="M142 124 232 124" stroke="#00f58c" stroke-width="11"/>
+    <path d="M140 134 232 182" stroke="#ff2d87" stroke-width="11"/>
+  </g>
+  <circle cx="120" cy="120" r="92" fill="none" stroke="#ffffff" stroke-width="10"/>
+  <path d="M120 70 165 148H75Z" fill="url(#pp-prism)" stroke="#ffffff" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M120 70 165 148H120Z" fill="url(#pp-shade)" opacity=".85"/>
+  <path d="M120 70 165 148H75Z" fill="none" stroke="#ffffff" stroke-width="6" stroke-linejoin="round"/>
+</svg>

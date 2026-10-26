@@ -3,7 +3,7 @@ import {
   escapeHTML as esc,
   pitchSVG,
   sceneGraphics,
-} from "./tactical-model.js?v=english-v1";
+} from "./tactical-model.js?v=broadcast-v1";
 
 export function createTacticalStudio({ stage, onSeek, onClose }) {
   const dialog = document.createElement("dialog");

@@ -21,7 +21,7 @@ The architecture image is an AI-assisted explanatory figure of the project's imp
 
 ## PitchPrism
 
-The active application uses DM Sans from [Google Fonts](https://github.com/google/fonts/tree/main/ofl/dmsans), under the SIL Open Font License. Its license is included at `product/football/watch/fonts/OFL.txt`. The football companion is an original SVG/CSS component; the active app does not mount the historical basketball sprite. System DIN fonts used for the reviewed video are not redistributed; the renderer falls back to bundled DM Sans where unavailable.
+The active application uses DM Sans from [Google Fonts](https://github.com/google/fonts/tree/main/ofl/dmsans), under the SIL Open Font License. Its license is included at `product/football/watch/fonts/OFL.txt`. The football companion is an original SVG/CSS component; the active app does not mount the historical basketball sprite. Barlow Condensed from [Google Fonts](https://github.com/google/fonts/tree/main/ofl/barlowcondensed), under the SIL Open Font License, is bundled for the video renderer's display type; its license is included at `product/football/watch/fonts/OFL-Barlow.txt`. System DIN fonts used for the v1.0.0 video are not redistributed.
 
 Shared interface modules and rendering primitives retain the MIT-licensed [GameBuddy](https://github.com/imhaojie/BroadcastCode-2026) source attribution, snapshot `17d74fd2a5df64a240198a7305312174de7684b0`. Its separate award history is not a PitchPrism award. The original repository is unchanged. [Source provenance](docs/football/MIGRATION.md).
 

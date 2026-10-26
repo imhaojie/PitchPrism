@@ -1,0 +1,238 @@
+{
+  "scope": "Ground-plane measurement of the three reviewed stills from visible pitch markings. Used for the editorial tactical graphics; not tracking, not official coordinates.",
+  "method": "Per still, a planar homography is fitted from visible IFAB Law 1 markings (1920x1080 frame pixels to metres). The reviewed foot anchors in clip.json are projected through it unchanged. Accuracy is approximate (about one metre near the markings, worse far from them).",
+  "units": "ground = [metres from own goal line towards the attacked goal, metres from the far touchline]",
+  "pitch": {
+    "length": 105,
+    "width": 68
+  },
+  "scenes": {
+    "build": {
+      "markings": [
+        {
+          "name": "centre circle, own-half extreme",
+          "image": [
+            128,
+            553
+          ],
+          "ground": [
+            43.35,
+            34
+          ]
+        },
+        {
+          "name": "centre circle, attacking-half extreme",
+          "image": [
+            1206,
+            553
+          ],
+          "ground": [
+            61.65,
+            34
+          ]
+        },
+        {
+          "name": "centre circle, far-side extreme",
+          "image": [
+            672,
+            424
+          ],
+          "ground": [
+            52.5,
+            24.85
+          ]
+        },
+        {
+          "name": "centre circle, near-side extreme",
+          "image": [
+            679,
+            682
+          ],
+          "ground": [
+            52.5,
+            43.15
+          ]
+        },
+        {
+          "name": "halfway line at far touchline",
+          "image": [
+            676,
+            214
+          ],
+          "ground": [
+            52.5,
+            0
+          ]
+        }
+      ]
+    },
+    "combine": {
+      "markings": [
+        {
+          "name": "far corner flag",
+          "image": [
+            1645,
+            282
+          ],
+          "ground": [
+            105,
+            0
+          ]
+        },
+        {
+          "name": "penalty area, far front corner",
+          "image": [
+            1175,
+            430
+          ],
+          "ground": [
+            88.5,
+            13.84
+          ]
+        },
+        {
+          "name": "penalty area far side meets goal line (extrapolated)",
+          "image": [
+            1987,
+            379
+          ],
+          "ground": [
+            105,
+            13.84
+          ]
+        },
+        {
+          "name": "penalty arc meets penalty area line, far side",
+          "image": [
+            1452,
+            558
+          ],
+          "ground": [
+            88.5,
+            26.69
+          ]
+        }
+      ],
+      "checks": [
+        {
+          "name": "penalty arc",
+          "centre": [
+            94,
+            34
+          ],
+          "radius": 9.15,
+          "image": [
+            [
+              1398,
+              615
+            ],
+            [
+              1420,
+              650
+            ],
+            [
+              1500,
+              690
+            ],
+            [
+              1600,
+              718
+            ],
+            [
+              1700,
+              735
+            ]
+          ]
+        }
+      ]
+    },
+    "release": {
+      "markings": [
+        {
+          "name": "penalty area, far front corner",
+          "image": [
+            920,
+            235
+          ],
+          "ground": [
+            88.5,
+            13.84
+          ]
+        },
+        {
+          "name": "goal area, far front corner",
+          "image": [
+            1560,
+            283
+          ],
+          "ground": [
+            99.5,
+            24.84
+          ]
+        },
+        {
+          "name": "penalty arc meets penalty area line, far side",
+          "image": [
+            1142,
+            335
+          ],
+          "ground": [
+            88.5,
+            26.69
+          ]
+        },
+        {
+          "name": "penalty arc meets penalty area line, near side",
+          "image": [
+            1350,
+            470
+          ],
+          "ground": [
+            88.5,
+            41.31
+          ]
+        },
+        {
+          "name": "penalty area far side meets goal line",
+          "image": [
+            1554,
+            193
+          ],
+          "ground": [
+            105,
+            13.84
+          ]
+        }
+      ],
+      "checks": [
+        {
+          "name": "penalty arc",
+          "centre": [
+            94,
+            34
+          ],
+          "radius": 9.15,
+          "image": [
+            [
+              1095,
+              380
+            ],
+            [
+              1110,
+              420
+            ],
+            [
+              1200,
+              455
+            ],
+            [
+              1100,
+              360
+            ]
+          ]
+        }
+      ]
+    }
+  },
+  "tolerance": "Every marking and arc check must fit within 1.2 m, or rendering stops."
+}

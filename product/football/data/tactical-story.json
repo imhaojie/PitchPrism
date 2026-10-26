@@ -4,7 +4,7 @@
   "scenes": {
     "build": {
       "title": "READ THE NEXT OPTION",
-      "subtitle": "Carry. Connect. Compare the width.",
+      "subtitle": "Spot the screen. Find the space.",
       "evidenceId": "clip-build",
       "steps": [
         {
@@ -17,27 +17,60 @@
           "routes": []
         },
         {
-          "title": "FIND THE LINK",
-          "text": "The teammate ahead is a possible link. The dashed arrow illustrates an option, not a completed pass.",
+          "title": "THE LINK IS SCREENED",
+          "text": "A Newcastle player stands in the passing lane to the teammate ahead. That direct link is covered, not open.",
           "focus": [
             "carrier",
+            "press",
             "support"
           ],
-          "routes": [
-            0
+          "routes": [],
+          "labels": {
+            "press": "IN THE LANE"
+          },
+          "layers": [
+            {
+              "type": "covered",
+              "from": "carrier",
+              "to": "support",
+              "by": "press"
+            }
           ]
         },
         {
-          "title": "COMPARE THE FAR SIDE",
-          "text": "Compare the central link with the far-side teammate. The arrows show separate options, not a recorded sequence.",
+          "title": "SPACE TO CARRY",
+          "text": "Open grass lies ahead of the carrier, and the far-side teammate is unmarked. The gold arrow shows space, not a recorded run.",
           "focus": [
             "carrier",
-            "support",
+            "press",
             "wide"
           ],
-          "routes": [
-            0,
-            1
+          "routes": [],
+          "labels": {
+            "press": "IN THE LANE",
+            "wide": "UNMARKED"
+          },
+          "layers": [
+            {
+              "type": "covered",
+              "from": "carrier",
+              "to": "support",
+              "by": "press"
+            },
+            {
+              "type": "carry",
+              "from": "carrier",
+              "offset": [
+                9,
+                1.5
+              ]
+            },
+            {
+              "type": "space",
+              "around": "wide",
+              "radius": 7,
+              "label": "FREE SPACE"
+            }
           ]
         }
       ]
@@ -57,8 +90,8 @@
           "routes": []
         },
         {
-          "title": "LOOK TOWARDS THE ARC",
-          "text": "A City runner is visible nearer the box. Watch the potential connection ahead.",
+          "title": "LOOK INSIDE",
+          "text": "A City runner arrives centrally, level with the ball. The dashed arrow shows an inside option towards the arc.",
           "focus": [
             "carrier",
             "runner"
@@ -69,7 +102,7 @@
         },
         {
           "title": "READ THE DEFENDERS",
-          "text": "Newcastle defenders stand between ball and goal. Check their positions before judging the forward option.",
+          "text": "Three Newcastle defenders are closer to goal than the ball. Check their positions before judging the inside option.",
           "focus": [
             "carrier",
             "runner",
@@ -79,6 +112,18 @@
           ],
           "routes": [
             0
+          ],
+          "layers": [
+            {
+              "type": "goal-side",
+              "ball": "carrier",
+              "defenders": [
+                "cover",
+                "line",
+                "deep"
+              ],
+              "label": "GOAL-SIDE"
+            }
           ]
         }
       ]
@@ -95,7 +140,15 @@
             "carrier",
             "press"
           ],
-          "routes": []
+          "routes": [],
+          "layers": [
+            {
+              "type": "pressure",
+              "around": "carrier",
+              "radius": 3,
+              "label": "PRESSURE"
+            }
+          ]
         },
         {
           "title": "FIND THE RIGHT-SIDE OPTION",
@@ -119,9 +172,18 @@
           ],
           "routes": [
             0
+          ],
+          "layers": [
+            {
+              "type": "pressure",
+              "around": "right",
+              "radius": 5.6,
+              "label": "TIGHT SPACE"
+            }
           ]
         }
       ]
     }
-  }
+  },
+  "geometry": "Tactical layers use the measured ground plane in tactical-geometry.json. Each layer is checked against it before rendering."
 }

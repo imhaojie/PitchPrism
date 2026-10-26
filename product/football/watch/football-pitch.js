@@ -4,7 +4,7 @@ import {
   analysisFor,
   pitchSVG,
   roleName,
-} from "./tactical-model.js?v=english-v1";
+} from "./tactical-model.js?v=broadcast-v1";
 
 export function createFootballPitch({ onMode, onSelect, onTheme, onInspect }) {
   const original = createCourtPanel({ onMode, onSelect, onTheme });

@@ -5,25 +5,25 @@ import {
   paintAmbienceSource,
   stopAmbienceSource,
 } from "./shared/glass/ambience-source.js";
-import { createPlayerControls } from "./shared/media/player-controls.js?v=english-v1";
-import { createDrawer } from "./shared/navigation/drawer.js?v=english-v1";
-import { createContentPanel } from "./shared/content/content-panel.js?v=english-v1";
-import { createInspector } from "./shared/dev/inspector.js?v=english-v1";
-import { mountFootballBuddy } from "./football-buddy.js?v=english-v1";
-import { createTacticalStudio } from "./tactical-studio.js?v=english-v1";
+import { createPlayerControls } from "./shared/media/player-controls.js?v=broadcast-v1";
+import { createDrawer } from "./shared/navigation/drawer.js?v=broadcast-v1";
+import { createContentPanel } from "./shared/content/content-panel.js?v=broadcast-v1";
+import { createInspector } from "./shared/dev/inspector.js?v=broadcast-v1";
+import { mountFootballBuddy } from "./football-buddy.js?v=broadcast-v1";
+import { createTacticalStudio } from "./tactical-studio.js?v=broadcast-v1";
 import {
   outputToSourceTime,
   readPreferences,
   savePreferences,
 } from "./shared/adapters/catalog.js";
-import { createFootballPitch } from "./football-pitch.js?v=english-v1";
+import { createFootballPitch } from "./football-pitch.js?v=broadcast-v1";
 import {
   presentationTimeForSource,
   reviewAt,
 } from "./shared/adapters/editorial-timeline.js";
-import { roleName } from "./tactical-model.js?v=english-v1";
-import { englishInspector } from "./english-inspector.js?v=english-v1";
-import { api } from "./transport.js?v=english-v1";
+import { roleName } from "./tactical-model.js?v=broadcast-v1";
+import { englishInspector } from "./english-inspector.js?v=broadcast-v1";
+import { api } from "./transport.js?v=broadcast-v1";
 
 const $ = (selector) => document.querySelector(selector),
   $$ = (selector) => [...document.querySelectorAll(selector)];
@@ -425,7 +425,7 @@ function switchVideo(next) {
     },
     { once: true },
   );
-  video.src = new URL(`./media/${next}.mp4?v=english-v1`, import.meta.url).href;
+  video.src = new URL(`./media/${next}.mp4?v=broadcast-v1`, import.meta.url).href;
   video.load();
   $("#media-version").textContent =
     next === "enhanced" ? "Switch to source ›" : "Switch to enhanced ›";
@@ -600,7 +600,7 @@ async function init() {
     { once: true },
   );
   video.src = new URL(
-    "./media/enhanced.mp4?v=english-v1",
+    "./media/enhanced.mp4?v=broadcast-v1",
     import.meta.url,
   ).href;
   video.load();

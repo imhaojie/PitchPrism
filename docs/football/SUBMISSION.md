@@ -4,9 +4,15 @@ Software publication and competition submission are separate. The repository doe
 
 Before submitting to Inside the Game, resolve:
 
-- Organizer confirmation of new-work eligibility, including disclosure of prior open-source code and its separate award history. See [source provenance](MIGRATION.md).
-- Permission for the underlying broadcast footage, audio and third-party marks. Code licensing does not supply these rights.
+- Retain organizer confirmation of new-work eligibility, including disclosure of prior open-source code and its separate award history. See [source provenance](MIGRATION.md).
+- Retain permission for the underlying broadcast footage, audio and third-party marks. Code licensing does not supply these rights.
 - A successful real Azure/Foundry run with validated evidence/tool trace if claimed in the entry. The public demo is local editorial mode.
 - An English video strictly under two minutes on an officially supported public video platform. A GitHub Release MP4 is a download, not that platform URL.
+
+## Status — v1.1.0 (2026-10-26)
+
+- Demo video: the v1.1.0 movie, 118.4 s, English, 1920×1080. The submission kit (video, thumbnail, stills, platform metadata and project text) is generated outside Git under `product/football/build/submission/v1.1.0/`.
+- Accepted video platforms per the rules: YouTube, Vimeo, Facebook Video or Youku. The previous YouTube upload of v1.0.0 was blocked worldwide by an FA Premier League visual claim. The owner reports confirmation of footage permission and organizer confirmation of new-work eligibility; supporting records are retained privately and have not been independently reviewed. The prior platform block has not been resolved, and a working public video-platform URL is still required.
+- Deadline per the rules: 27 October 2026, 11:59 pm Pacific Time.
 
 Consult the [official rules](https://github.com/microsoft/insidethegamehackathon/blob/main/OFFICIAL%20RULES.md) and organizer confirmation for the actual submission. No entry is submitted automatically by the repository workflows.

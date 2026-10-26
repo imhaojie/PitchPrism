@@ -1,6 +1,6 @@
 # Media and releases
 
-The current media release is **v1.0.0**, reused unchanged by the English v1.0.1 interface. Its 118.4-second English-captioned movie contains the full 66.6-second source, three 13.2-second tactical freezes, a half-speed replay and football bookends. The MP4 is 1920×1080, 25fps, H.264/yuv420p with AAC audio. Live sections keep broadcast sound; editorial freezes are silent.
+The current media release is **v1.1.0**: the broadcast-package movie with a 3D tactical view, measured tactical layers, a new brand mark and new bookends. Its 118.4-second English-captioned movie contains the full 66.6-second source, three 13.2-second tactical freezes, a half-speed replay and bookends, with the same timing as v1.0.0. The MP4 is 1920×1080, 25fps, H.264/yuv420p with AAC audio. Live sections keep broadcast sound; editorial freezes are silent.
 
 ## Timing
 
@@ -29,16 +29,16 @@ python product/football/scripts/serve_demo.py --port 4181
 
 ## Render an editorial movie
 
-Install Python 3.11+, the dependencies in `product/football/requirements.txt`, and Node.js 22+. The renderer uses FFmpeg or the pinned portable FFmpeg package. It uses bundled DM Sans where system DIN is unavailable; that fallback can change typography and output hashes.
+Install Python 3.11+, the dependencies in `product/football/requirements.txt`, and Node.js 22+. The renderer uses FFmpeg or the pinned portable FFmpeg package. Display type uses the bundled Barlow Condensed and body text the bundled DM Sans, so typography no longer depends on system fonts.
 
 ```bash
 python -m pip install -r product/football/requirements.txt
 npm ci --prefix product/football/watch --ignore-scripts
-node product/football/scripts/export_football_buddy.cjs product/football/build/rendered/football-buddy.png
+node product/football/scripts/export_football_buddy.cjs --mark product/football/build/rendered/pitchprism-mark.png
 python product/football/scripts/render_tactical_video.py --source product/football/build/source.mp4
 ```
 
-The input must be the exact reviewed original or its separately hash-locked lossless remux. A different match requires new observations, reviewed anchors and source identity. The renderer writes a separate MP4, previews and provenance receipt; it does not silently replace the public demo. It checks glyph coverage, measured text bounds, source coverage, frame metadata and full decode.
+The input must be the exact reviewed original or its separately hash-locked lossless remux. A different match requires new observations, reviewed anchors and source identity. The renderer writes a separate MP4, previews and provenance receipt; it does not silently replace the public demo. It checks glyph coverage, measured text bounds, source coverage, frame metadata and full decode. Every frame is also checked for overlapping role labels and labels covered by caption or header panels. The 3D tactical view (`pitch3d.py`) projects the same editorial board positions; its top-down pose equals the flat board, and its figures are anonymous schematic tokens, not tracking or player models. The receipt records its hash separately. Tactical layers use ground positions measured from each still's visible pitch markings (`data/tactical-geometry.json`); `product/football/tactical_geometry.py` refuses any option, covered lane, carry or zone that those positions contradict, and the same check runs in the offline tests.
 
 ## Promote a reviewed render
 

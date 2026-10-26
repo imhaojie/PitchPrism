@@ -6,6 +6,22 @@ from pathlib import Path
 CLIP = json.loads((Path(__file__).parent / 'data/clip.json').read_text())
 
 
+def _measured_board(clip):
+    """Serve board positions measured from each still's pitch markings; keep the reviewed file unchanged."""
+    from . import tactical_geometry
+    geometry = json.loads((Path(__file__).parent / 'data/tactical-geometry.json').read_text())
+    measured = tactical_geometry.measure(clip, geometry)
+    for scene in clip['scenes']:
+        for player in scene['players']:
+            x, y = measured[scene['id']]['ground'][player['id']]
+            player['editorialBoard'] = player['board']
+            player['board'] = [round(x / 1.05, 1), round(min(100, max(0, y / .68)), 1)]
+    return clip
+
+
+CLIP = _measured_board(CLIP)
+
+
 def snapshot(second):
     if isinstance(second, bool) or not isinstance(second, (int, float)):
         raise ValueError('Source time must be numeric')

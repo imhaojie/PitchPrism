@@ -11,7 +11,7 @@ const plans = {
   build: {
     title: "Read the next option",
     tag: "BUILD-UP / COMPARE THE OPTIONS",
-    summary: "Carry. Connect. Compare the width.",
+    summary: "Spot the screen. Find the space.",
     steps: [
       {
         title: "Start with the ball",
@@ -20,16 +20,16 @@ const plans = {
         routes: [],
       },
       {
-        title: "Find the link",
-        text: "The teammate ahead is a possible link. The dashed arrow illustrates an option, not a completed pass.",
-        focus: ["carrier", "support"],
-        routes: [0],
+        title: "The link is screened",
+        text: "A Newcastle player stands in the passing lane to the teammate ahead. That direct link is covered, not open.",
+        focus: ["carrier", "press", "support"],
+        routes: [],
       },
       {
-        title: "Compare the far side",
-        text: "Compare the central link with the far-side teammate. The arrows show separate options, not a recorded sequence.",
-        focus: ["carrier", "support", "wide"],
-        routes: [0, 1],
+        title: "Space to carry",
+        text: "Open grass lies ahead of the carrier, and the far-side teammate is unmarked. The gold arrow shows space, not a recorded run.",
+        focus: ["carrier", "press", "wide"],
+        routes: [],
       },
     ],
     limitation:
@@ -47,14 +47,14 @@ const plans = {
         routes: [],
       },
       {
-        title: "Look towards the arc",
-        text: "A City runner is visible nearer the box. Watch the potential connection ahead.",
+        title: "Look inside",
+        text: "A City runner arrives centrally, level with the ball. The dashed arrow shows an inside option towards the arc.",
         focus: ["carrier", "runner"],
         routes: [0],
       },
       {
         title: "Read the defenders",
-        text: "Newcastle defenders stand between ball and goal. Check their positions before judging the forward option.",
+        text: "Three Newcastle defenders are closer to goal than the ball. Check their positions before judging the inside option.",
         focus: ["carrier", "runner", "cover", "line", "deep"],
         routes: [0],
       },

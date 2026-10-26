@@ -541,7 +541,7 @@
   ],
   "production": {
     "mode": "editorial",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "durationSeconds": 118.4,
     "readingStepSeconds": 4.1,
     "timeline": [

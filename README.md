@@ -6,13 +6,13 @@
 
 **An AI-powered football companion that turns match data into visual stories and personalized insights.**
 
-[Live demo](https://imhaojie.github.io/PitchPrism/) · [Watch / download MP4](https://github.com/imhaojie/PitchPrism/releases/download/v1.0.0/enhanced.mp4) · [Documentation](docs/README.md) · [Releases](https://github.com/imhaojie/PitchPrism/releases)
+[Live demo](https://imhaojie.github.io/PitchPrism/) · [Watch / download MP4](https://github.com/imhaojie/PitchPrism/releases/download/v1.1.0/enhanced.mp4) · [Documentation](docs/README.md) · [Releases](https://github.com/imhaojie/PitchPrism/releases)
 
 [![Quality](https://github.com/imhaojie/PitchPrism/actions/workflows/quality.yml/badge.svg?branch=main)](https://github.com/imhaojie/PitchPrism/actions/workflows/quality.yml)
 [![Demo](https://github.com/imhaojie/PitchPrism/actions/workflows/football.yml/badge.svg?branch=main)](https://github.com/imhaojie/PitchPrism/actions/workflows/football.yml)
 [![License: MIT](https://img.shields.io/badge/code-MIT-a1f5d8)](LICENSE)
 
-![PitchPrism tactical studio](https://github.com/imhaojie/PitchPrism/releases/download/v1.0.1/tactical-studio-english.jpg)
+![PitchPrism tactical studio](https://github.com/imhaojie/PitchPrism/releases/download/v1.1.0/tactical-studio-web.png)
 
 </div>
 
@@ -22,7 +22,7 @@ See the carrier, compare the options, and return to the action. PitchPrism bring
 
 ## Features
 
-- **Tactics inside the video.** A reviewed 118.4-second, 1080p/25fps movie includes animated option arrows, role highlights, nine reading steps, pitch transitions and half-speed replay. English text is burned into the MP4.
+- **Tactics inside the video.** A 118.4-second, 1080p/25fps movie moves from the broadcast into a 3D tactical view across nine reading steps. It shows options, covered lanes, carries and space/pressure zones, checked against approximate single-frame positions estimated from manually marked pitch geometry, plus half-speed replay. English text is burned into the MP4.
 - **An interactive tactical studio.** Explore three reviewed moments with source-frame highlights, a pitch diagram and independent routes, focus-area and label controls.
 - **One source clock.** Six chapters, tactical steps and source/enhanced switching resolve to the same original moment, including freezes and replay.
 - **A personal viewing experience.** Choose immersive, full-pitch or half-pitch layouts; adjust football familiarity and focus on a visible role. A football companion reacts to playback.
