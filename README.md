@@ -6,7 +6,7 @@
 
 **An AI-powered football companion that turns match data into visual stories and personalized insights.**
 
-[Live demo](https://imhaojie.github.io/PitchPrism/) · [Watch / download MP4](https://github.com/imhaojie/PitchPrism/releases/download/v1.1.0/enhanced.mp4) · [Documentation](docs/README.md) · [Releases](https://github.com/imhaojie/PitchPrism/releases)
+[Live demo](https://imhaojie.github.io/PitchPrism/) · [Watch the demo](https://vimeo.com/1239357832) · [Download MP4](https://github.com/imhaojie/PitchPrism/releases/download/v1.1.0/enhanced.mp4) · [Documentation](docs/README.md) · [Releases](https://github.com/imhaojie/PitchPrism/releases)
 
 [![Quality](https://github.com/imhaojie/PitchPrism/actions/workflows/quality.yml/badge.svg?branch=main)](https://github.com/imhaojie/PitchPrism/actions/workflows/quality.yml)
 [![Demo](https://github.com/imhaojie/PitchPrism/actions/workflows/football.yml/badge.svg?branch=main)](https://github.com/imhaojie/PitchPrism/actions/workflows/football.yml)
@@ -52,6 +52,8 @@ The demonstration uses a supplied **66.6-second Manchester City × Newcastle exc
 Selected foot anchors and observations were manually reviewed. Pitch positions and dashed arrows are editorial schematics: an arrow shows an option, not a completed pass or measured open lane. Official events, xG, full-match statistics, continuous tracking and unverified player identities remain unavailable. A separate synthetic analytics fixture is used for tests and is never joined to this footage.
 
 The public demo uses **LOCAL EDITORIAL** explanations. **Live Azure inference and deployment have not been verified.** Adapter tests and infrastructure compilation are separate from cloud execution.
+
+The [Azure integration overview](https://imhaojie.github.io/PitchPrism/azure.html) explains seven implemented platform connections: Microsoft Foundry, Azure AI Content Safety, Blob Storage, Key Vault, Application Insights, Container Apps and Microsoft Entra ID. Supporting adapters are opt-in and off by default. The reviewed movie and Tactical Studio remain the featured demo.
 
 ## Develop and verify
 

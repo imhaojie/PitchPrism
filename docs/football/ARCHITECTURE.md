@@ -21,6 +21,8 @@ The frontend uses native JavaScript modules. Shared stage, controls, glass surfa
 
 `clip.py` creates bounded snapshots and local editorial stories. `foundry.py` implements a separate Azure transport and validated tool loop: read match state, inspect evidence, validate the story. Provider labels reflect the actual result. Configured credentials alone do not prove inference succeeded.
 
+`azure_services.py` adds opt-in Content Safety text analysis, private Blob receipt writes, Key Vault secret resolution and Application Insights metrics. Content Safety gates a cloud answer when enabled; optional operational failures are reported separately. These adapters default to off, acquire credentials only when enabled and keep configuration server-side. Container Apps and Entra identity are configured through the Azure templates. The public [integration overview](../../product/football/watch/azure.html) describes these implemented paths and their unverified cloud status.
+
 ## Delivery
 
 `fetch_media.py` verifies all three release assets against `data/media-lock.json` and checks their data binding. `export_demo.py` checks media hashes and exact timeline agreement before exporting. The static demo needs no model key or server API. Source, enhanced video and release manifest are served as explicit media paths; unlisted build files and account receipts are not web assets.

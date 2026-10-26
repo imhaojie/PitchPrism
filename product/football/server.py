@@ -14,6 +14,7 @@ from urllib.parse import parse_qs, urlsplit
 from .analytics import local_story, snapshot, validate_match
 from .foundry import FoundryError, run_agent, settings
 from . import clip
+from . import azure_services
 
 ROOT = Path(__file__).resolve().parents[2]
 HERE = Path(__file__).resolve().parent
@@ -71,6 +72,7 @@ class Handler(SimpleHTTPRequestHandler):
                 return self.send_json({"ok": True, "service": "PitchPrism", "synthetic": False,
                     "foundryConfigured": config["configured"], "foundryVerified": False,
                     "provider": "azure-foundry" if config["configured"] else "local",
+                    "azureServices": azure_services.status(),
                     "mediaReady": (HERE / "build/enhanced.mp4").is_file()})
             if url.path == "/api/match":
                 return self.send_json(MATCH)
@@ -185,11 +187,12 @@ class Handler(SimpleHTTPRequestHandler):
                 return self.send_json({"error": "Demo's hourly model budget reached. Use local evidence mode."}, 429)
             CALLS.append(now)
             result = run_agent(state, mode, team, player, context=clip.AGENT_CONTEXT if is_clip else None)
+            result = azure_services.enrich_cloud_result(result)
             CACHE[cache_key] = result
             while len(CACHE) > 128:
                 CACHE.popitem(last=False)
             self.send_json(result)
-        except FoundryError as error:
+        except (FoundryError, azure_services.AzureServiceError) as error:
             self.send_json({"error": str(error), "provider": "azure-foundry", "verified": False}, 502)
         finally:
             LOCK.release()
@@ -202,6 +205,7 @@ def main():
     parser.add_argument("--env-file", default=".env")
     args = parser.parse_args()
     load_env(args.env_file)
+    azure_services.load_key_vault_secret()
     server = ThreadingHTTPServer((args.host, args.port), partial(Handler, directory=str(HERE / "watch")))
     print(f"PitchPrism: http://{args.host}:{args.port} | reviewed match excerpt | Foundry configured: {settings()['configured']}", flush=True)
     server.serve_forever()

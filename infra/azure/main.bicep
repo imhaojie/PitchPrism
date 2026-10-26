@@ -8,6 +8,13 @@ param deploymentName string = 'pitchprism-story'
 param capacity int = 1
 // Public, prebuilt image. No dedicated GPU, VM or provisioned model throughput.
 param containerImage string = ''
+// Off by default: no supporting services or usage is enabled implicitly.
+param enableSupportServices bool = false
+
+module services 'services.bicep' = if (enableSupportServices) {
+  name: 'supporting-services'
+  params: { location: location, name: name }
+}
 
 resource foundry 'Microsoft.CognitiveServices/accounts@2025-06-01' = {
   name: name
@@ -67,12 +74,21 @@ resource app 'Microsoft.App/containerApps@2025-01-01' = if (!empty(containerImag
         name: 'pitchprism'
         image: containerImage
         resources: { cpu: json('0.25'), memory: '0.5Gi' }
-        env: [
+        env: concat([
           { name: 'AZURE_OPENAI_ENDPOINT', value: 'https://${foundry.name}.openai.azure.com' }
           { name: 'AZURE_OPENAI_DEPLOYMENT', value: model.name }
           { name: 'AZURE_USE_ENTRA', value: '1' }
           { name: 'PITCHPRISM_MAX_AI_CALLS_HOUR', value: '12' }
-        ]
+        ], enableSupportServices ? [
+          { name: 'PITCHPRISM_ENABLE_CONTENT_SAFETY', value: '1' }
+          { name: 'AZURE_CONTENT_SAFETY_ENDPOINT', value: services!.outputs.contentSafetyEndpoint }
+          { name: 'PITCHPRISM_ENABLE_BLOB_RECEIPTS', value: '1' }
+          { name: 'AZURE_STORAGE_BLOB_ENDPOINT', value: services!.outputs.blobEndpoint }
+          { name: 'AZURE_STORAGE_RECEIPT_CONTAINER', value: 'receipts' }
+          { name: 'PITCHPRISM_ENABLE_TELEMETRY', value: '1' }
+          { name: 'APPLICATIONINSIGHTS_CONNECTION_STRING', value: services!.outputs.insightsConnectionString }
+          { name: 'AZURE_KEY_VAULT_ENDPOINT', value: services!.outputs.keyVaultEndpoint }
+        ] : [])
         probes: [{ type: 'Liveness', httpGet: { path: '/api/health', port: 4180 }, initialDelaySeconds: 10, periodSeconds: 30 }]
       }]
       scale: { minReplicas: 0, maxReplicas: 1, rules: [{ name: 'http', http: { metadata: { concurrentRequests: '10' } } }] }
@@ -90,7 +106,18 @@ resource modelUser 'Microsoft.Authorization/roleAssignments@2022-04-01' = if (!e
   }
 }
 
+// Resource-level identity grants, only when both optional services and hosting are requested.
+module serviceRoles 'service-roles.bicep' = if (enableSupportServices && !empty(containerImage)) {
+  name: 'supporting-service-roles'
+  params: {
+    principalId: app!.identity.principalId
+    contentSafetyName: services!.outputs.contentSafetyName
+    storageName: services!.outputs.storageName
+  }
+}
+
 output endpoint string = 'https://${foundry.name}.openai.azure.com'
 output foundryResourceId string = foundry.id
 output modelDeployment string = model.name
 output demoUrl string = empty(containerImage) ? '' : 'https://${app!.properties.configuration.ingress.fqdn}'
+output supportServicesEnabled bool = enableSupportServices

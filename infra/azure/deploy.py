@@ -39,6 +39,7 @@ def main():
     parser.add_argument('--model', default='gpt-4.1-mini')
     parser.add_argument('--capacity', type=int, default=10, help='On-demand rate quota in thousands of tokens/minute, not provisioned throughput')
     parser.add_argument('--image', default='', help='Optional public container image')
+    parser.add_argument('--support-services', action='store_true', help='Opt in to Content Safety F0, private receipt storage, Key Vault and Application Insights; consumes credit where grants do not apply')
     parser.add_argument('--apply', action='store_true')
     args = parser.parse_args()
     if not 1 <= args.capacity <= 10:
@@ -60,18 +61,20 @@ def main():
             'billingPolicy': subscription.get('subscriptionPolicies', {}),
             'model': chosen['name'], 'version': chosen['version'], 'throughput': f'GlobalStandard capacity={args.capacity}',
             'container': args.image or 'not requested', 'replicas': '0–1, 0.25 vCPU / 0.5 GiB',
+            'supportServices': args.support_services,
             'notes': 'Usage consumes credits or incurs charges. Trial/region/model quota can prevent deployment. This is not a cost guarantee.'}
     print(json.dumps(plan, indent=2))
     if not args.apply:
         print('Read-only plan. Add --apply only after checking the target subscription and remaining trial credit.')
         return
-    for namespace in ['Microsoft.CognitiveServices', *(['Microsoft.App'] if args.image else [])]:
+    for namespace in ['Microsoft.CognitiveServices', *(['Microsoft.App'] if args.image else []),
+                      *(['Microsoft.Storage', 'Microsoft.KeyVault', 'Microsoft.Insights', 'Microsoft.OperationalInsights'] if args.support_services else [])]:
         az('provider', 'register', '--namespace', namespace, '--wait', '--subscription', args.subscription)
     az('group', 'create', '--name', args.group, '--location', args.location, '--subscription', args.subscription,
        '--tags', 'project=PitchPrism', 'purpose=hackathon-demo')
     deployment = az('deployment', 'group', 'create', '--name', 'pitchprism', '--resource-group', args.group,
         '--subscription', args.subscription, '--template-file', str(Path(__file__).with_name('main.bicep')),
-        '--parameters', f'location={args.location}', f'modelName={chosen["name"]}', f'modelVersion={chosen["version"]}', f'capacity={args.capacity}', f'containerImage={args.image}')
+        '--parameters', f'location={args.location}', f'modelName={chosen["name"]}', f'modelVersion={chosen["version"]}', f'capacity={args.capacity}', f'containerImage={args.image}', f'enableSupportServices={str(args.support_services).lower()}')
     outputs = {key: value['value'] for key, value in deployment['properties']['outputs'].items()}
     user = az('ad', 'signed-in-user', 'show')
     az('role', 'assignment', 'create', '--assignee-object-id', user['id'], '--assignee-principal-type', 'User',

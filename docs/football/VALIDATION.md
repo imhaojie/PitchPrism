@@ -6,7 +6,7 @@ v1.1.0 replaces the movie and corrects two tactical readings that measured groun
 
 ## Engineering
 
-The complete offline gate passed **575 behavior tests, no skips**, source privacy checks, syntax checks and 50 preserved offline infrastructure assertions. New regressions cover all six chapter mappings, all nine reading-step jumps, freeze boundaries, replay/rewind, web/video focus and option agreement, altered media bytes, stale timelines, manifest/data identity, and label bounds/collisions across all nine readings. Offline infrastructure assertions do not certify Azure deployment or cloud inference.
+The complete offline gate passed **589 behavior tests, no skips**, source privacy checks, syntax checks and 50 preserved offline infrastructure assertions. Coverage includes the media timeline, tactical graphics and 14 Azure adapter tests for disabled defaults, endpoint validation, fail-closed moderation, minimized operational data, private storage and safe failure handling. Offline infrastructure assertions do not certify Azure deployment or cloud inference. The v1.1.0 media release's original gate passed 575 tests.
 
 The optional companion PNG export and renderer preview command also ran successfully with the documented local tooling. Generated media and QA receipts remain outside Git.
 
@@ -32,3 +32,5 @@ Additional English UI QA covers all 12 appearance-editor groups, the shared cont
 ## Limits
 
 The public demo uses **LOCAL EDITORIAL** explanations. No real Azure inference/deployment is certified by this release. Missing official events, xG, full-match statistics, identities and tracking remain missing. Competition eligibility, broadcast permissions and a supported public video-platform submission URL remain separate [submission requirements](SUBMISSION.md).
+
+The subsequent Microsoft integration update includes an actual **Content Safety F0** check and Entra authentication on one existing English caption. It does not establish generative Foundry inference. See [per-service verification](AZURE-VERIFICATION.md). The selected video is published on Vimeo and its link is saved on the competition project.
